@@ -39,6 +39,7 @@ using Placemark = SharpKml.Dom.Placemark;
 using Point = System.Drawing.Point;
 using System.Text.RegularExpressions;
 using MissionPlanner.Plugin;
+using PathProgram;
 
 namespace MissionPlanner.GCSViews
 {
@@ -7029,6 +7030,47 @@ Column 1: Field type (RALLY is the only one at the moment -- may have RALLY_LAND
             GridPlugin grid = new GridPlugin();
             grid.Host = new PluginHost();
             grid.but_Click(sender, e);
+        }
+
+        private void Path_Programming_button_Click(object sender, EventArgs e)
+        {
+            /*double[] pathlat = new double[Commands.RowCount];
+           double[] pathlng = new double[Commands.RowCount];
+           int[] pathalt = new int[Commands.RowCount];
+           double outlat = 0, outlng = 0;
+           int outalt = 0;
+           for (int i = 0; i < Commands.RowCount; i++)
+           {
+               double lat = (double.Parse(Commands.Rows[i].Cells[Lat.Index].Value.ToString()));
+               double lng = (double.Parse(Commands.Rows[i].Cells[Lon.Index].Value.ToString()));
+               int alt = (int.Parse(Commands.Rows[i].Cells[Alt.Index].Value.ToString()));
+               PathProgramming pathProgrammingdll= new PathProgramming();
+               pathProgrammingdll.math(lat, lng, alt, out outlat, out outlng, out outalt);
+               pathlat[i] = outlat;
+               pathlng[i] = outlng;
+               pathalt[i] = outalt;
+           }
+           Commands.Rows.Clear();
+           for (int j = 0; j < pathlat.Length; j++)
+               AddWPToMap(pathlat[j], pathlng[j], pathalt[j]);*/
+            double[] topathlat = new double[Commands.RowCount];
+            double[] topathlng = new double[Commands.RowCount];
+            int[] topathalt = new int[Commands.RowCount];
+            double[] pathoutlat = new double[Commands.RowCount];
+            double[] pathoutlng = new double[Commands.RowCount];
+            int[] pathoutalt = new int[Commands.RowCount];
+            for (int i = 0; i < Commands.RowCount; i++)
+            {
+                topathlat[i] = (double.Parse(Commands.Rows[i].Cells[Lat.Index].Value.ToString()));
+                topathlng[i] = (double.Parse(Commands.Rows[i].Cells[Lon.Index].Value.ToString()));
+                topathalt[i] = (int.Parse(Commands.Rows[i].Cells[Alt.Index].Value.ToString()));
+            }
+            PathProgramming pathProgrammingdll = new PathProgramming();
+            pathProgrammingdll.math(topathlat, topathlng, topathalt, out pathoutlat, out pathoutlng, out pathoutalt);
+            Commands.Rows.Clear();
+            for (int j = 0; j < pathoutlat.Length; j++)
+                AddWPToMap(pathoutlat[j], pathoutlng[j], pathoutalt[j]);
+            /*selectedrow = Commands.Rows.Add();*/
         }
     }
 }

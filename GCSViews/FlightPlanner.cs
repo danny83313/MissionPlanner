@@ -44,6 +44,7 @@ namespace MissionPlanner.GCSViews
 {
     public partial class FlightPlanner : MyUserControl, IDeactivate, IActivate
     {
+        Auto_Guide.Auto_Guide AutoGuide;
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         int selectedrow;
         public bool quickadd;
@@ -7030,5 +7031,24 @@ Column 1: Field type (RALLY is the only one at the moment -- may have RALLY_LAND
             grid.Host = new PluginHost();
             grid.but_Click(sender, e);
         }
+        public void Getwpdata(int wpnumber)
+        {
+            //if (wpnumber < Commands.RowCount)
+            //{
+            double WPLat = double.Parse(Commands.Rows[wpnumber].Cells[Lat.Index].Value.ToString());
+            double WPLng = double.Parse(Commands.Rows[wpnumber].Cells[Lon.Index].Value.ToString());
+            double WPAlt = double.Parse(Commands.Rows[wpnumber].Cells[Alt.Index].Value.ToString());
+            int RowCount = Commands.RowCount;
+            AutoGuide.getwpdata(WPLat, WPLng, WPAlt, RowCount);
+            //double lat = double.Parse(Commands.Rows[wpnumber].Cells[Lat.Index].Value.ToString());
+            //AutoGuide.getwpdata(lat);
+            // }
+        }
+        public void autoguideform()
+        {
+            AutoGuide = new Auto_Guide.Auto_Guide(this);
+            AutoGuide.Show();
+        }
+
     }
 }

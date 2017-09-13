@@ -50,6 +50,7 @@ namespace MissionPlanner
             this.MenuDonate = new System.Windows.Forms.ToolStripButton();
             this.MenuConnect = new System.Windows.Forms.ToolStripButton();
             this.toolStripConnectionControl = new MissionPlanner.Controls.ToolStripConnectionControl();
+            this.AutoGuide = new System.Windows.Forms.ToolStripMenuItem();
             this.menu = new MissionPlanner.Controls.MyButton();
             this.panel1 = new System.Windows.Forms.Panel();
             this.MainMenu.SuspendLayout();
@@ -74,7 +75,8 @@ namespace MissionPlanner
             this.MenuHelp,
             this.MenuDonate,
             this.MenuConnect,
-            this.toolStripConnectionControl});
+            this.toolStripConnectionControl,
+            this.AutoGuide});
             this.MainMenu.Name = "MainMenu";
             this.MainMenu.ShowItemToolTips = true;
             this.MainMenu.Stretch = false;
@@ -211,6 +213,14 @@ namespace MissionPlanner
             resources.ApplyResources(this.toolStripConnectionControl, "toolStripConnectionControl");
             this.toolStripConnectionControl.MouseLeave += new System.EventHandler(this.MainMenu_MouseLeave);
             // 
+            // AutoGuide
+            // 
+            resources.ApplyResources(this.AutoGuide, "AutoGuide");
+            this.AutoGuide.ForeColor = System.Drawing.Color.White;
+            this.AutoGuide.Image = global::MissionPlanner.Properties.Resources.autoguideicon;
+            this.AutoGuide.Name = "AutoGuide";
+            this.AutoGuide.Click += new System.EventHandler(this.AutoGuide_Click);
+            // 
             // menu
             // 
             resources.ApplyResources(this.menu, "menu");
@@ -267,5 +277,6 @@ namespace MissionPlanner
         private System.Windows.Forms.ToolStripMenuItem fullScreenToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem readonlyToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem connectionOptionsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem AutoGuide;
     }
 }

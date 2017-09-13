@@ -3673,5 +3673,10 @@ namespace MissionPlanner
         {
             new ConnectionOptions().Show(this);
         }
+
+        private void AutoGuide_Click(object sender, EventArgs e)
+        {
+            FlightPlanner.autoguideform();
+        }
     }
 }

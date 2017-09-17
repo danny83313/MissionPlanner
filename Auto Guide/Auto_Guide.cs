@@ -19,6 +19,8 @@ namespace MissionPlanner.Auto_Guide
         Locationwp gotohere = new Locationwp();
         FlightPlanner FlightPlanner = new FlightPlanner();
         PointLatLngAlt WP = new PointLatLngAlt();
+        public delegate void mydalegate();
+        public mydalegate change_text;
         static bool threadrun;
         int wpnumber = 0;
         int Awpnumber = 0;
@@ -46,6 +48,12 @@ namespace MissionPlanner.Auto_Guide
             bindingSource1.DataSource = MainV2.Comports;
 
             Connection_Select.DataSource = bindingSource1;
+            change_text = new mydalegate(Button_start_end);
+        }
+
+        public void Button_start_end()
+        {
+            Button_start.Text = "Start";
         }
         public void getwpdata(double Lat, double Lng, double Alt, int RowCount) //取得從Flight Planner 回傳的經緯度資料
         {
@@ -114,11 +122,7 @@ namespace MissionPlanner.Auto_Guide
 
             //if (SwarmInterface != null)
             {
-                /*((FlightPlanner)this.Tag).Getwpdata(0);
-                   WP.Lat=
-                   WP.Lng               
-                 */
-                new System.Threading.Thread(Mainloop) { IsBackground = true }.Start();
+                new System.Threading.Thread(Mainthread) { IsBackground = true }.Start();
                 Button_start.Text = Strings.Stop;
 
                 ((FlightPlanner)this.Tag).Getwpdata(Awpnumber);
@@ -129,16 +133,13 @@ namespace MissionPlanner.Auto_Guide
                 Cendwpnum = wpcount;
             }
         }
-        private void Mainloop()
+
+        private void Mainthread()
         {
             threadrun = true;
 
             while (threadrun)
             {
-                //testwhileguide();
-                //while1guide();
-                //testifguide();
-                //testplanner();
                 new System.Threading.Thread(ACopter) { IsBackground = true }.Start();
                 new System.Threading.Thread(BCopter) { IsBackground = true }.Start();
                 new System.Threading.Thread(CCopter) { IsBackground = true }.Start();
@@ -146,7 +147,11 @@ namespace MissionPlanner.Auto_Guide
                 //BCopter();
                 //CCopter();
                 System.Threading.Thread.Sleep(450);
-
+                if (Awpnumber == Aendwpnum && Bwpnumber == Bendwpnum && Cwpnumber == Cendwpnum)
+                {
+                    threadrun = false;
+                    Invoke(change_text);
+                }
             }
         }
         private void ACopter()
@@ -204,6 +209,11 @@ namespace MissionPlanner.Auto_Guide
             {
                 Awpnumber++;
                 Anewwp = true;
+                break;
+            }
+            while (Awpnumber == Aendwpnum)
+            {
+                Acopter.setMode("RTL");
                 break;
             }
         }
@@ -264,6 +274,11 @@ namespace MissionPlanner.Auto_Guide
                 Bnewwp = true;
                 break;
             }
+            while (Bwpnumber == Bendwpnum)
+            {
+                Bcopter.setMode("RTL");
+                break;
+            }
         }
         private void CCopter()
         {
@@ -322,6 +337,11 @@ namespace MissionPlanner.Auto_Guide
                 Cnewwp = true;
                 break;
             }
+            while (Cwpnumber == Cendwpnum)
+            {
+                Ccopter.setMode("RTL");
+                break;
+            }
         }
 
         private void Armed_All_Click(object sender, EventArgs e)
@@ -336,141 +356,41 @@ namespace MissionPlanner.Auto_Guide
                     if (CustomMessageBox.Show("Are you sure you want to Disarm?", "Disarm?", MessageBoxButtons.YesNo) !=
                         DialogResult.Yes)
                         return;
-                /*if (Ccopter.MAV.cs.armed)
-                    if (CustomMessageBox.Show("Are you sure you want to Disarm?", "Disarm?", MessageBoxButtons.YesNo) !=
-                        DialogResult.Yes)
-                        return;*/
-                bool Aans = Acopter.doARM(!Acopter.MAV.cs.armed);
-                bool Bans = Bcopter.doARM(!Acopter.MAV.cs.armed);
-                // bool Cans = Ccopter.doARM(!Acopter.MAV.cs.armed);
-                if (Aans == false)
-                    CustomMessageBox.Show(Strings.ErrorRejectedByMAV, Strings.ERROR);
-                if (Bans == false)
-                    CustomMessageBox.Show(Strings.ErrorRejectedByMAV, Strings.ERROR);
-                /*if (Cans == false)
-                    CustomMessageBox.Show(Strings.ErrorRejectedByMAV, Strings.ERROR);*/
-            }
-            catch
-            {
-                CustomMessageBox.Show(Strings.ErrorNoResponce, Strings.ERROR);
-            }
-
-            /*if (!Acopter.BaseStream.IsOpen)
-                return;
-            // arm the MAV
-            try
-            {
-                if (Acopter.MAV.cs.armed)
-                    if (CustomMessageBox.Show("Are you sure you want to Disarm?", "Disarm?", MessageBoxButtons.YesNo) !=
-                        DialogResult.Yes)
-                        return;
-
-                bool ans = Acopter.doARM(!Acopter.MAV.cs.armed);
-                if (ans == false)
-                    CustomMessageBox.Show(Strings.ErrorRejectedByMAV, Strings.ERROR);
-            }
-            catch
-            {
-                CustomMessageBox.Show(Strings.ErrorNoResponce, Strings.ERROR);
-            }
-            if (!Bcopter.BaseStream.IsOpen)
-                return;
-            // arm the MAV
-            try
-            {
-                if (Bcopter.MAV.cs.armed)
-                    if (CustomMessageBox.Show("Are you sure you want to Disarm?", "Disarm?", MessageBoxButtons.YesNo) !=
-                        DialogResult.Yes)
-                        return;
-
-                bool ans = Bcopter.doARM(!Bcopter.MAV.cs.armed);
-                if (ans == false)
-                    CustomMessageBox.Show(Strings.ErrorRejectedByMAV, Strings.ERROR);
-            }
-            catch
-            {
-                CustomMessageBox.Show(Strings.ErrorNoResponce, Strings.ERROR);
-            }
-            /*if (!Ccopter.BaseStream.IsOpen)
-                return;
-            // arm the MAV
-            try
-            {
                 if (Ccopter.MAV.cs.armed)
                     if (CustomMessageBox.Show("Are you sure you want to Disarm?", "Disarm?", MessageBoxButtons.YesNo) !=
                         DialogResult.Yes)
                         return;
-
-                bool ans = Ccopter.doARM(!Ccopter.MAV.cs.armed);
-                if (ans == false)
+                bool Aans = Acopter.doARM(!Acopter.MAV.cs.armed);
+                bool Bans = Bcopter.doARM(!Acopter.MAV.cs.armed);
+                 bool Cans = Ccopter.doARM(!Acopter.MAV.cs.armed);
+                if (Aans == false)
+                    CustomMessageBox.Show(Strings.ErrorRejectedByMAV, Strings.ERROR);
+                if (Bans == false)
+                    CustomMessageBox.Show(Strings.ErrorRejectedByMAV, Strings.ERROR);
+                if (Cans == false)
                     CustomMessageBox.Show(Strings.ErrorRejectedByMAV, Strings.ERROR);
             }
             catch
             {
                 CustomMessageBox.Show(Strings.ErrorNoResponce, Strings.ERROR);
-            }*/
+            }   
         }
 
         private void Takeoff_All_Click(object sender, EventArgs e)
         {
             Acopter.setMode("GUIDED");
             Bcopter.setMode("GUIDED");
-            //Ccopter.setMode("GUIDED");
+            Ccopter.setMode("GUIDED");
             try
             {
                 Acopter.doCommand(MAVLink.MAV_CMD.TAKEOFF, 0, 0, 0, 0, 0, 0, 5);  //A機起飛高度5米
                 Bcopter.doCommand(MAVLink.MAV_CMD.TAKEOFF, 0, 0, 0, 0, 0, 0, 5);  //B機起飛高度5米
-                //Ccopter.doCommand(MAVLink.MAV_CMD.TAKEOFF, 0, 0, 0, 0, 0, 0, 5);  //C機起飛高度5米
+                Ccopter.doCommand(MAVLink.MAV_CMD.TAKEOFF, 0, 0, 0, 0, 0, 0, 5);  //C機起飛高度5米
             }
             catch
             {
                 CustomMessageBox.Show(Strings.CommandFailed, Strings.ERROR);
             }
-            /*if (Acopter.BaseStream.IsOpen)
-            {
-               // FlightData.flyToHereAltToolStripMenuItem_Click(null, null);
-
-                Acopter.setMode("GUIDED");
-
-                try
-                {
-                    Acopter.doCommand(MAVLink.MAV_CMD.TAKEOFF, 0, 0, 0, 0, 0, 0, 5);  //起飛高度5米
-                }
-                catch
-                {
-                    CustomMessageBox.Show(Strings.CommandFailed, Strings.ERROR);
-                }
-            }
-            if (Bcopter.BaseStream.IsOpen)
-            {
-               // FlightData.flyToHereAltToolStripMenuItem_Click(null, null);
-
-                Bcopter.setMode("GUIDED");
-
-                try
-                {
-                    Bcopter.doCommand(MAVLink.MAV_CMD.TAKEOFF, 0, 0, 0, 0, 0, 0, 5);  //起飛高度5米
-                }
-                catch
-                {
-                    CustomMessageBox.Show(Strings.CommandFailed, Strings.ERROR);
-                }
-            }
-            /*if (Ccopter.BaseStream.IsOpen)
-            {
-                //FlightData.flyToHereAltToolStripMenuItem_Click(null, null);
-
-                Ccopter.setMode("GUIDED");
-
-                try
-                {
-                    Ccopter.doCommand(MAVLink.MAV_CMD.TAKEOFF, 0, 0, 0, 0, 0, 0, 5);
-                }
-                catch
-                {
-                    CustomMessageBox.Show(Strings.CommandFailed, Strings.ERROR);
-                }
-            }*/
         }
 
         private void Armed_and_Takeoff_All_Click(object sender, EventArgs e)

@@ -785,4 +785,10 @@
   <data name="Path_Programming_button.Text" xml:space="preserve">
     <value>路徑規劃</value>
   </data>
+  <data name="Group.HeaderText" xml:space="preserve">
+    <value>隸屬群</value>
+  </data>
+  <data name="Groupcount_label.Text" xml:space="preserve">
+    <value>群數</value>
+  </data>
 </root>

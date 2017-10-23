@@ -7058,7 +7058,7 @@ Column 1: Field type (RALLY is the only one at the moment -- may have RALLY_LAND
             int[] topathalt = new int[Commands.RowCount];
             double[] pathoutlat = new double[Commands.RowCount];
             double[] pathoutlng = new double[Commands.RowCount];
-            int[] pathoutalt = new int[Commands.RowCount];
+            int[] pathoutalt = new int[Commands.RowCount]; 
             for (int i = 0; i < Commands.RowCount; i++)
             {
                 topathlat[i] = (double.Parse(Commands.Rows[i].Cells[Lat.Index].Value.ToString()));
@@ -7070,7 +7070,7 @@ Column 1: Field type (RALLY is the only one at the moment -- may have RALLY_LAND
             Commands.Rows.Clear();
             for (int j = 0; j < pathoutlat.Length; j++)
                 AddWPToMap(pathoutlat[j], pathoutlng[j], pathoutalt[j]);
-            /*selectedrow = Commands.Rows.Add();*/
         }
+
     }
 }

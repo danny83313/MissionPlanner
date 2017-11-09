@@ -425,7 +425,7 @@
     <value>50</value>
   </data>
   <data name="Commands.Size" type="System.Drawing.Size, System.Drawing">
-    <value>762, 79</value>
+    <value>896, 79</value>
   </data>
   <data name="Commands.TabIndex" type="System.Int32, mscorlib">
     <value>6</value>
@@ -434,7 +434,7 @@
     <value>Commands</value>
   </data>
   <data name="&gt;&gt;Commands.Type" xml:space="preserve">
-    <value>MissionPlanner.Controls.MyDataGridView, MissionPlanner, Version=1.1.6502.23227, Culture=neutral, PublicKeyToken=null</value>
+    <value>MissionPlanner.Controls.MyDataGridView, MissionPlanner, Version=1.1.6513.27898, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;Commands.Parent" xml:space="preserve">
     <value>panelWaypoints</value>
@@ -1023,10 +1023,10 @@
     <value>NoControl</value>
   </data>
   <data name="splitter1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 324</value>
+    <value>0, 472</value>
   </data>
   <data name="splitter1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>769, 3</value>
+    <value>903, 3</value>
   </data>
   <data name="splitter1.TabIndex" type="System.Int32, mscorlib">
     <value>50</value>
@@ -1188,13 +1188,13 @@
     <value>Bottom</value>
   </data>
   <data name="panelWaypoints.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 327</value>
+    <value>0, 475</value>
   </data>
   <data name="panelWaypoints.MinimumSize" type="System.Drawing.Size, System.Drawing">
     <value>21, 21</value>
   </data>
   <data name="panelWaypoints.Size" type="System.Drawing.Size, System.Drawing">
-    <value>769, 134</value>
+    <value>903, 134</value>
   </data>
   <data name="panelWaypoints.TabIndex" type="System.Int32, mscorlib">
     <value>49</value>
@@ -1218,10 +1218,10 @@
     <value>Right</value>
   </data>
   <data name="splitter2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>766, 0</value>
+    <value>900, 0</value>
   </data>
   <data name="splitter2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>3, 324</value>
+    <value>3, 472</value>
   </data>
   <data name="splitter2.TabIndex" type="System.Int32, mscorlib">
     <value>52</value>
@@ -1559,6 +1559,30 @@
   <data name="&gt;&gt;panel6.ZOrder" xml:space="preserve">
     <value>5</value>
   </data>
+  <data name="TestButton.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 482</value>
+  </data>
+  <data name="TestButton.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 23</value>
+  </data>
+  <data name="TestButton.TabIndex" type="System.Int32, mscorlib">
+    <value>55</value>
+  </data>
+  <data name="TestButton.Text" xml:space="preserve">
+    <value>Test</value>
+  </data>
+  <data name="&gt;&gt;TestButton.Name" xml:space="preserve">
+    <value>TestButton</value>
+  </data>
+  <data name="&gt;&gt;TestButton.Type" xml:space="preserve">
+    <value>MissionPlanner.Controls.MyButton, MissionPlanner.Controls, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;TestButton.Parent" xml:space="preserve">
+    <value>flowLayoutPanel1</value>
+  </data>
+  <data name="&gt;&gt;TestButton.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
   <data name="flowLayoutPanel1.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
@@ -1566,7 +1590,7 @@
     <value>1, 22</value>
   </data>
   <data name="flowLayoutPanel1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>129, 438</value>
+    <value>129, 586</value>
   </data>
   <data name="flowLayoutPanel1.TabIndex" type="System.Int32, mscorlib">
     <value>51</value>
@@ -1587,13 +1611,13 @@
     <value>Right</value>
   </data>
   <data name="panelAction.Location" type="System.Drawing.Point, System.Drawing">
-    <value>769, 0</value>
+    <value>903, 0</value>
   </data>
   <data name="panelAction.MinimumSize" type="System.Drawing.Size, System.Drawing">
     <value>21, 21</value>
   </data>
   <data name="panelAction.Size" type="System.Drawing.Size, System.Drawing">
-    <value>131, 461</value>
+    <value>131, 609</value>
   </data>
   <data name="panelAction.TabIndex" type="System.Int32, mscorlib">
     <value>50</value>
@@ -1612,6 +1636,93 @@
   </data>
   <data name="&gt;&gt;panelAction.ZOrder" xml:space="preserve">
     <value>4</value>
+  </data>
+  <data name="lbl_distance_C.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lbl_distance_C.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="lbl_distance_C.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 80</value>
+  </data>
+  <data name="lbl_distance_C.Size" type="System.Drawing.Size, System.Drawing">
+    <value>58, 12</value>
+  </data>
+  <data name="lbl_distance_C.TabIndex" type="System.Int32, mscorlib">
+    <value>53</value>
+  </data>
+  <data name="lbl_distance_C.Text" xml:space="preserve">
+    <value>Distance_C</value>
+  </data>
+  <data name="&gt;&gt;lbl_distance_C.Name" xml:space="preserve">
+    <value>lbl_distance_C</value>
+  </data>
+  <data name="&gt;&gt;lbl_distance_C.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lbl_distance_C.Parent" xml:space="preserve">
+    <value>panelMap</value>
+  </data>
+  <data name="&gt;&gt;lbl_distance_C.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="lbl_distance_B.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lbl_distance_B.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="lbl_distance_B.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 68</value>
+  </data>
+  <data name="lbl_distance_B.Size" type="System.Drawing.Size, System.Drawing">
+    <value>58, 12</value>
+  </data>
+  <data name="lbl_distance_B.TabIndex" type="System.Int32, mscorlib">
+    <value>52</value>
+  </data>
+  <data name="lbl_distance_B.Text" xml:space="preserve">
+    <value>Distance_B</value>
+  </data>
+  <data name="&gt;&gt;lbl_distance_B.Name" xml:space="preserve">
+    <value>lbl_distance_B</value>
+  </data>
+  <data name="&gt;&gt;lbl_distance_B.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lbl_distance_B.Parent" xml:space="preserve">
+    <value>panelMap</value>
+  </data>
+  <data name="&gt;&gt;lbl_distance_B.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="lbl_distance_A.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lbl_distance_A.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 54</value>
+  </data>
+  <data name="lbl_distance_A.Size" type="System.Drawing.Size, System.Drawing">
+    <value>58, 12</value>
+  </data>
+  <data name="lbl_distance_A.TabIndex" type="System.Int32, mscorlib">
+    <value>51</value>
+  </data>
+  <data name="lbl_distance_A.Text" xml:space="preserve">
+    <value>Distance_A</value>
+  </data>
+  <data name="&gt;&gt;lbl_distance_A.Name" xml:space="preserve">
+    <value>lbl_distance_A</value>
+  </data>
+  <data name="&gt;&gt;lbl_distance_A.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lbl_distance_A.Parent" xml:space="preserve">
+    <value>panelMap</value>
+  </data>
+  <data name="&gt;&gt;lbl_distance_A.ZOrder" xml:space="preserve">
+    <value>2</value>
   </data>
   <data name="lbl_distance.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1641,7 +1752,7 @@
     <value>panelMap</value>
   </data>
   <data name="&gt;&gt;lbl_distance.ZOrder" xml:space="preserve">
-    <value>0</value>
+    <value>3</value>
   </data>
   <data name="lbl_homedist.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1671,7 +1782,7 @@
     <value>panelMap</value>
   </data>
   <data name="&gt;&gt;lbl_homedist.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>4</value>
   </data>
   <data name="lbl_prevdist.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1701,7 +1812,7 @@
     <value>panelMap</value>
   </data>
   <data name="&gt;&gt;lbl_prevdist.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>5</value>
   </data>
   <data name="MainMap.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Bottom, Left, Right</value>
@@ -2150,7 +2261,7 @@
 </value>
   </data>
   <data name="MainMap.Size" type="System.Drawing.Size, System.Drawing">
-    <value>729, 320</value>
+    <value>863, 468</value>
   </data>
   <data name="MainMap.TabIndex" type="System.Int32, mscorlib">
     <value>45</value>
@@ -2165,7 +2276,7 @@
     <value>panelMap</value>
   </data>
   <data name="&gt;&gt;MainMap.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>6</value>
   </data>
   <data name="trackBar1.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Bottom, Right</value>
@@ -2174,13 +2285,13 @@
     <value>NoControl</value>
   </data>
   <data name="trackBar1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>738, 21</value>
+    <value>872, 21</value>
   </data>
   <data name="trackBar1.Orientation" type="System.Windows.Forms.Orientation, System.Windows.Forms">
     <value>Vertical</value>
   </data>
   <data name="trackBar1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>45, 300</value>
+    <value>45, 448</value>
   </data>
   <data name="trackBar1.TabIndex" type="System.Int32, mscorlib">
     <value>46</value>
@@ -2195,7 +2306,7 @@
     <value>panelMap</value>
   </data>
   <data name="&gt;&gt;trackBar1.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>7</value>
   </data>
   <data name="label11.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Right</value>
@@ -2207,7 +2318,7 @@
     <value>NoControl</value>
   </data>
   <data name="label11.Location" type="System.Drawing.Point, System.Drawing">
-    <value>735, 5</value>
+    <value>869, 5</value>
   </data>
   <data name="label11.Size" type="System.Drawing.Size, System.Drawing">
     <value>33, 12</value>
@@ -2228,7 +2339,7 @@
     <value>panelMap</value>
   </data>
   <data name="&gt;&gt;label11.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>8</value>
   </data>
   <data name="panelMap.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -2240,7 +2351,7 @@
     <value>27, 27</value>
   </data>
   <data name="panelMap.Size" type="System.Drawing.Size, System.Drawing">
-    <value>769, 327</value>
+    <value>903, 475</value>
   </data>
   <data name="panelMap.TabIndex" type="System.Int32, mscorlib">
     <value>51</value>
@@ -2267,7 +2378,7 @@
     <value>0, 0</value>
   </data>
   <data name="panelBASE.Size" type="System.Drawing.Size, System.Drawing">
-    <value>900, 461</value>
+    <value>1034, 609</value>
   </data>
   <data name="panelBASE.TabIndex" type="System.Int32, mscorlib">
     <value>52</value>
@@ -2297,7 +2408,133 @@
     <value>0, 0, 0, 0</value>
   </data>
   <data name="$this.Size" type="System.Drawing.Size, System.Drawing">
-    <value>900, 461</value>
+    <value>1034, 609</value>
+  </data>
+  <data name="&gt;&gt;Command.Name" xml:space="preserve">
+    <value>Command</value>
+  </data>
+  <data name="&gt;&gt;Command.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewComboBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;Param1.Name" xml:space="preserve">
+    <value>Param1</value>
+  </data>
+  <data name="&gt;&gt;Param1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;Param2.Name" xml:space="preserve">
+    <value>Param2</value>
+  </data>
+  <data name="&gt;&gt;Param2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;Param3.Name" xml:space="preserve">
+    <value>Param3</value>
+  </data>
+  <data name="&gt;&gt;Param3.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;Param4.Name" xml:space="preserve">
+    <value>Param4</value>
+  </data>
+  <data name="&gt;&gt;Param4.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;Lat.Name" xml:space="preserve">
+    <value>Lat</value>
+  </data>
+  <data name="&gt;&gt;Lat.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;Lon.Name" xml:space="preserve">
+    <value>Lon</value>
+  </data>
+  <data name="&gt;&gt;Lon.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;Alt.Name" xml:space="preserve">
+    <value>Alt</value>
+  </data>
+  <data name="&gt;&gt;Alt.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;coordZone.Name" xml:space="preserve">
+    <value>coordZone</value>
+  </data>
+  <data name="&gt;&gt;coordZone.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;coordEasting.Name" xml:space="preserve">
+    <value>coordEasting</value>
+  </data>
+  <data name="&gt;&gt;coordEasting.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;coordNorthing.Name" xml:space="preserve">
+    <value>coordNorthing</value>
+  </data>
+  <data name="&gt;&gt;coordNorthing.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;MGRS.Name" xml:space="preserve">
+    <value>MGRS</value>
+  </data>
+  <data name="&gt;&gt;MGRS.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;Delete.Name" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="&gt;&gt;Delete.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewButtonColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;Up.Name" xml:space="preserve">
+    <value>Up</value>
+  </data>
+  <data name="&gt;&gt;Up.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewImageColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;Down.Name" xml:space="preserve">
+    <value>Down</value>
+  </data>
+  <data name="&gt;&gt;Down.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewImageColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;Grad.Name" xml:space="preserve">
+    <value>Grad</value>
+  </data>
+  <data name="&gt;&gt;Grad.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;Angle.Name" xml:space="preserve">
+    <value>Angle</value>
+  </data>
+  <data name="&gt;&gt;Angle.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;Dist.Name" xml:space="preserve">
+    <value>Dist</value>
+  </data>
+  <data name="&gt;&gt;Dist.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;AZ.Name" xml:space="preserve">
+    <value>AZ</value>
+  </data>
+  <data name="&gt;&gt;AZ.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;TagData.Name" xml:space="preserve">
+    <value>TagData</value>
+  </data>
+  <data name="&gt;&gt;TagData.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;Group.Name" xml:space="preserve">
+    <value>Group</value>
+  </data>
+  <data name="&gt;&gt;Group.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;dataGridViewImageColumn1.Name" xml:space="preserve">
     <value>dataGridViewImageColumn1</value>
@@ -2748,132 +2985,6 @@
   </data>
   <data name="&gt;&gt;timer1.Type" xml:space="preserve">
     <value>System.Windows.Forms.Timer, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;Command.Name" xml:space="preserve">
-    <value>Command</value>
-  </data>
-  <data name="&gt;&gt;Command.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewComboBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;Param1.Name" xml:space="preserve">
-    <value>Param1</value>
-  </data>
-  <data name="&gt;&gt;Param1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;Param2.Name" xml:space="preserve">
-    <value>Param2</value>
-  </data>
-  <data name="&gt;&gt;Param2.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;Param3.Name" xml:space="preserve">
-    <value>Param3</value>
-  </data>
-  <data name="&gt;&gt;Param3.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;Param4.Name" xml:space="preserve">
-    <value>Param4</value>
-  </data>
-  <data name="&gt;&gt;Param4.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;Lat.Name" xml:space="preserve">
-    <value>Lat</value>
-  </data>
-  <data name="&gt;&gt;Lat.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;Lon.Name" xml:space="preserve">
-    <value>Lon</value>
-  </data>
-  <data name="&gt;&gt;Lon.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;Alt.Name" xml:space="preserve">
-    <value>Alt</value>
-  </data>
-  <data name="&gt;&gt;Alt.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;coordZone.Name" xml:space="preserve">
-    <value>coordZone</value>
-  </data>
-  <data name="&gt;&gt;coordZone.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;coordEasting.Name" xml:space="preserve">
-    <value>coordEasting</value>
-  </data>
-  <data name="&gt;&gt;coordEasting.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;coordNorthing.Name" xml:space="preserve">
-    <value>coordNorthing</value>
-  </data>
-  <data name="&gt;&gt;coordNorthing.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;MGRS.Name" xml:space="preserve">
-    <value>MGRS</value>
-  </data>
-  <data name="&gt;&gt;MGRS.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;Delete.Name" xml:space="preserve">
-    <value>Delete</value>
-  </data>
-  <data name="&gt;&gt;Delete.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewButtonColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;Up.Name" xml:space="preserve">
-    <value>Up</value>
-  </data>
-  <data name="&gt;&gt;Up.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewImageColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;Down.Name" xml:space="preserve">
-    <value>Down</value>
-  </data>
-  <data name="&gt;&gt;Down.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewImageColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;Grad.Name" xml:space="preserve">
-    <value>Grad</value>
-  </data>
-  <data name="&gt;&gt;Grad.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;Angle.Name" xml:space="preserve">
-    <value>Angle</value>
-  </data>
-  <data name="&gt;&gt;Angle.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;Dist.Name" xml:space="preserve">
-    <value>Dist</value>
-  </data>
-  <data name="&gt;&gt;Dist.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;AZ.Name" xml:space="preserve">
-    <value>AZ</value>
-  </data>
-  <data name="&gt;&gt;AZ.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;TagData.Name" xml:space="preserve">
-    <value>TagData</value>
-  </data>
-  <data name="&gt;&gt;TagData.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;Group.Name" xml:space="preserve">
-    <value>Group</value>
-  </data>
-  <data name="&gt;&gt;Group.Type" xml:space="preserve">
-    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>FlightPlanner</value>

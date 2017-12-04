@@ -434,7 +434,7 @@
     <value>Commands</value>
   </data>
   <data name="&gt;&gt;Commands.Type" xml:space="preserve">
-    <value>MissionPlanner.Controls.MyDataGridView, MissionPlanner, Version=1.1.6513.27898, Culture=neutral, PublicKeyToken=null</value>
+    <value>MissionPlanner.Controls.MyDataGridView, MissionPlanner, Version=1.1.6535.20469, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;Commands.Parent" xml:space="preserve">
     <value>panelWaypoints</value>
@@ -1463,6 +1463,33 @@
   <data name="&gt;&gt;panel2.ZOrder" xml:space="preserve">
     <value>2</value>
   </data>
+  <data name="lbl_distance_E.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lbl_distance_E.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 112</value>
+  </data>
+  <data name="lbl_distance_E.Size" type="System.Drawing.Size, System.Drawing">
+    <value>57, 12</value>
+  </data>
+  <data name="lbl_distance_E.TabIndex" type="System.Int32, mscorlib">
+    <value>55</value>
+  </data>
+  <data name="lbl_distance_E.Text" xml:space="preserve">
+    <value>Distance_E</value>
+  </data>
+  <data name="&gt;&gt;lbl_distance_E.Name" xml:space="preserve">
+    <value>lbl_distance_E</value>
+  </data>
+  <data name="&gt;&gt;lbl_distance_E.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lbl_distance_E.Parent" xml:space="preserve">
+    <value>panel6</value>
+  </data>
+  <data name="&gt;&gt;lbl_distance_E.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
   <data name="Groupcountset.Location" type="System.Drawing.Point, System.Drawing">
     <value>86, 9</value>
   </data>
@@ -1482,7 +1509,34 @@
     <value>panel6</value>
   </data>
   <data name="&gt;&gt;Groupcountset.ZOrder" xml:space="preserve">
-    <value>0</value>
+    <value>1</value>
+  </data>
+  <data name="lbl_distance_D.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lbl_distance_D.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 101</value>
+  </data>
+  <data name="lbl_distance_D.Size" type="System.Drawing.Size, System.Drawing">
+    <value>58, 12</value>
+  </data>
+  <data name="lbl_distance_D.TabIndex" type="System.Int32, mscorlib">
+    <value>54</value>
+  </data>
+  <data name="lbl_distance_D.Text" xml:space="preserve">
+    <value>Distance_D</value>
+  </data>
+  <data name="&gt;&gt;lbl_distance_D.Name" xml:space="preserve">
+    <value>lbl_distance_D</value>
+  </data>
+  <data name="&gt;&gt;lbl_distance_D.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lbl_distance_D.Parent" xml:space="preserve">
+    <value>panel6</value>
+  </data>
+  <data name="&gt;&gt;lbl_distance_D.ZOrder" xml:space="preserve">
+    <value>2</value>
   </data>
   <data name="Groupcount_label.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Right</value>
@@ -1491,7 +1545,7 @@
     <value>True</value>
   </data>
   <data name="Groupcount_label.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 12</value>
+    <value>2, 12</value>
   </data>
   <data name="Groupcount_label.Size" type="System.Drawing.Size, System.Drawing">
     <value>73, 12</value>
@@ -1512,7 +1566,37 @@
     <value>panel6</value>
   </data>
   <data name="&gt;&gt;Groupcount_label.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>3</value>
+  </data>
+  <data name="lbl_distance_C.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lbl_distance_C.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="lbl_distance_C.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 89</value>
+  </data>
+  <data name="lbl_distance_C.Size" type="System.Drawing.Size, System.Drawing">
+    <value>58, 12</value>
+  </data>
+  <data name="lbl_distance_C.TabIndex" type="System.Int32, mscorlib">
+    <value>53</value>
+  </data>
+  <data name="lbl_distance_C.Text" xml:space="preserve">
+    <value>Distance_C</value>
+  </data>
+  <data name="&gt;&gt;lbl_distance_C.Name" xml:space="preserve">
+    <value>lbl_distance_C</value>
+  </data>
+  <data name="&gt;&gt;lbl_distance_C.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lbl_distance_C.Parent" xml:space="preserve">
+    <value>panel6</value>
+  </data>
+  <data name="&gt;&gt;lbl_distance_C.ZOrder" xml:space="preserve">
+    <value>4</value>
   </data>
   <data name="Path_Programming_button.Location" type="System.Drawing.Point, System.Drawing">
     <value>6, 36</value>
@@ -1536,13 +1620,70 @@
     <value>panel6</value>
   </data>
   <data name="&gt;&gt;Path_Programming_button.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>5</value>
+  </data>
+  <data name="lbl_distance_B.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lbl_distance_B.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="lbl_distance_B.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 77</value>
+  </data>
+  <data name="lbl_distance_B.Size" type="System.Drawing.Size, System.Drawing">
+    <value>58, 12</value>
+  </data>
+  <data name="lbl_distance_B.TabIndex" type="System.Int32, mscorlib">
+    <value>52</value>
+  </data>
+  <data name="lbl_distance_B.Text" xml:space="preserve">
+    <value>Distance_B</value>
+  </data>
+  <data name="&gt;&gt;lbl_distance_B.Name" xml:space="preserve">
+    <value>lbl_distance_B</value>
+  </data>
+  <data name="&gt;&gt;lbl_distance_B.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lbl_distance_B.Parent" xml:space="preserve">
+    <value>panel6</value>
+  </data>
+  <data name="&gt;&gt;lbl_distance_B.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="lbl_distance_A.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lbl_distance_A.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 65</value>
+  </data>
+  <data name="lbl_distance_A.Size" type="System.Drawing.Size, System.Drawing">
+    <value>58, 12</value>
+  </data>
+  <data name="lbl_distance_A.TabIndex" type="System.Int32, mscorlib">
+    <value>51</value>
+  </data>
+  <data name="lbl_distance_A.Text" xml:space="preserve">
+    <value>Distance_A</value>
+  </data>
+  <data name="&gt;&gt;lbl_distance_A.Name" xml:space="preserve">
+    <value>lbl_distance_A</value>
+  </data>
+  <data name="&gt;&gt;lbl_distance_A.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lbl_distance_A.Parent" xml:space="preserve">
+    <value>panel6</value>
+  </data>
+  <data name="&gt;&gt;lbl_distance_A.ZOrder" xml:space="preserve">
+    <value>7</value>
   </data>
   <data name="panel6.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 376</value>
   </data>
   <data name="panel6.Size" type="System.Drawing.Size, System.Drawing">
-    <value>200, 100</value>
+    <value>200, 135</value>
   </data>
   <data name="panel6.TabIndex" type="System.Int32, mscorlib">
     <value>54</value>
@@ -1558,30 +1699,6 @@
   </data>
   <data name="&gt;&gt;panel6.ZOrder" xml:space="preserve">
     <value>5</value>
-  </data>
-  <data name="TestButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 482</value>
-  </data>
-  <data name="TestButton.Size" type="System.Drawing.Size, System.Drawing">
-    <value>75, 23</value>
-  </data>
-  <data name="TestButton.TabIndex" type="System.Int32, mscorlib">
-    <value>55</value>
-  </data>
-  <data name="TestButton.Text" xml:space="preserve">
-    <value>Test</value>
-  </data>
-  <data name="&gt;&gt;TestButton.Name" xml:space="preserve">
-    <value>TestButton</value>
-  </data>
-  <data name="&gt;&gt;TestButton.Type" xml:space="preserve">
-    <value>MissionPlanner.Controls.MyButton, MissionPlanner.Controls, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</value>
-  </data>
-  <data name="&gt;&gt;TestButton.Parent" xml:space="preserve">
-    <value>flowLayoutPanel1</value>
-  </data>
-  <data name="&gt;&gt;TestButton.ZOrder" xml:space="preserve">
-    <value>6</value>
   </data>
   <data name="flowLayoutPanel1.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -1637,93 +1754,6 @@
   <data name="&gt;&gt;panelAction.ZOrder" xml:space="preserve">
     <value>4</value>
   </data>
-  <data name="lbl_distance_C.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="lbl_distance_C.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="lbl_distance_C.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 80</value>
-  </data>
-  <data name="lbl_distance_C.Size" type="System.Drawing.Size, System.Drawing">
-    <value>58, 12</value>
-  </data>
-  <data name="lbl_distance_C.TabIndex" type="System.Int32, mscorlib">
-    <value>53</value>
-  </data>
-  <data name="lbl_distance_C.Text" xml:space="preserve">
-    <value>Distance_C</value>
-  </data>
-  <data name="&gt;&gt;lbl_distance_C.Name" xml:space="preserve">
-    <value>lbl_distance_C</value>
-  </data>
-  <data name="&gt;&gt;lbl_distance_C.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;lbl_distance_C.Parent" xml:space="preserve">
-    <value>panelMap</value>
-  </data>
-  <data name="&gt;&gt;lbl_distance_C.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="lbl_distance_B.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="lbl_distance_B.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="lbl_distance_B.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 68</value>
-  </data>
-  <data name="lbl_distance_B.Size" type="System.Drawing.Size, System.Drawing">
-    <value>58, 12</value>
-  </data>
-  <data name="lbl_distance_B.TabIndex" type="System.Int32, mscorlib">
-    <value>52</value>
-  </data>
-  <data name="lbl_distance_B.Text" xml:space="preserve">
-    <value>Distance_B</value>
-  </data>
-  <data name="&gt;&gt;lbl_distance_B.Name" xml:space="preserve">
-    <value>lbl_distance_B</value>
-  </data>
-  <data name="&gt;&gt;lbl_distance_B.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;lbl_distance_B.Parent" xml:space="preserve">
-    <value>panelMap</value>
-  </data>
-  <data name="&gt;&gt;lbl_distance_B.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="lbl_distance_A.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="lbl_distance_A.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 54</value>
-  </data>
-  <data name="lbl_distance_A.Size" type="System.Drawing.Size, System.Drawing">
-    <value>58, 12</value>
-  </data>
-  <data name="lbl_distance_A.TabIndex" type="System.Int32, mscorlib">
-    <value>51</value>
-  </data>
-  <data name="lbl_distance_A.Text" xml:space="preserve">
-    <value>Distance_A</value>
-  </data>
-  <data name="&gt;&gt;lbl_distance_A.Name" xml:space="preserve">
-    <value>lbl_distance_A</value>
-  </data>
-  <data name="&gt;&gt;lbl_distance_A.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;lbl_distance_A.Parent" xml:space="preserve">
-    <value>panelMap</value>
-  </data>
-  <data name="&gt;&gt;lbl_distance_A.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
   <data name="lbl_distance.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
@@ -1752,7 +1782,7 @@
     <value>panelMap</value>
   </data>
   <data name="&gt;&gt;lbl_distance.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>0</value>
   </data>
   <data name="lbl_homedist.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1782,7 +1812,7 @@
     <value>panelMap</value>
   </data>
   <data name="&gt;&gt;lbl_homedist.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>1</value>
   </data>
   <data name="lbl_prevdist.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1812,7 +1842,7 @@
     <value>panelMap</value>
   </data>
   <data name="&gt;&gt;lbl_prevdist.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>2</value>
   </data>
   <data name="MainMap.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Bottom, Left, Right</value>
@@ -2276,7 +2306,7 @@
     <value>panelMap</value>
   </data>
   <data name="&gt;&gt;MainMap.ZOrder" xml:space="preserve">
-    <value>6</value>
+    <value>3</value>
   </data>
   <data name="trackBar1.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Bottom, Right</value>
@@ -2306,7 +2336,7 @@
     <value>panelMap</value>
   </data>
   <data name="&gt;&gt;trackBar1.ZOrder" xml:space="preserve">
-    <value>7</value>
+    <value>4</value>
   </data>
   <data name="label11.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Right</value>
@@ -2339,7 +2369,7 @@
     <value>panelMap</value>
   </data>
   <data name="&gt;&gt;label11.ZOrder" xml:space="preserve">
-    <value>8</value>
+    <value>5</value>
   </data>
   <data name="panelMap.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>

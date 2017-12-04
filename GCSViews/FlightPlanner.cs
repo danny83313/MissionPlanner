@@ -62,22 +62,26 @@ namespace MissionPlanner.GCSViews
 
         public List<PointLatLngAlt> pointlist = new List<PointLatLngAlt>(); // used to calc distance
         public List<PointLatLngAlt> fullpointlist = new List<PointLatLngAlt>();
-        public List<PointLatLngAlt> GroupApointlist = new List<PointLatLngAlt>();
-        public List<PointLatLngAlt> GroupBpointlist = new List<PointLatLngAlt>();
-        public List<PointLatLngAlt> GroupCpointlist = new List<PointLatLngAlt>();
-        public List<PointLatLngAlt> Allpointlist = new List<PointLatLngAlt>();
-        public List<PointLatLngAlt> Apointlist = new List<PointLatLngAlt>();
+
+        public List<PointLatLngAlt> Allpointlist = new List<PointLatLngAlt>(); //Input wp list
+        public List<PointLatLngAlt> Apointlist = new List<PointLatLngAlt>(); //Output wp from dll groupA
         public List<PointLatLngAlt> Bpointlist = new List<PointLatLngAlt>();
         public List<PointLatLngAlt> Cpointlist = new List<PointLatLngAlt>();
+        public List<PointLatLngAlt> Dpointlist = new List<PointLatLngAlt>();
+        public List<PointLatLngAlt> Epointlist = new List<PointLatLngAlt>();
         public List<PointLatLngAlt> noflypointlist = new List<PointLatLngAlt>();
         public GMapRoute route = new GMapRoute("wp route");
-        public GMapRoute Aroute = new GMapRoute("Awp route");//A路徑線路資料
-        public GMapRoute Broute = new GMapRoute("Bwp route");//B路徑線路資料
-        public GMapRoute Croute = new GMapRoute("Cwp route");//C路徑線路資料
+        public GMapRoute Aroute = new GMapRoute("Awp route");//A path route data
+        public GMapRoute Broute = new GMapRoute("Bwp route");//B path route data
+        public GMapRoute Croute = new GMapRoute("Cwp route");//C path route data
+        public GMapRoute Droute = new GMapRoute("Dwp route");//D path route data
+        public GMapRoute Eroute = new GMapRoute("Ewp route");//E path route data
         public GMapRoute homeroute = new GMapRoute("home route");
-        public GMapRoute Ahomeroute = new GMapRoute("Ahome route");//A Home虛線路線資料
-        public GMapRoute Bhomeroute = new GMapRoute("Bhome route");//B Home虛線路線資料
-        public GMapRoute Chomeroute = new GMapRoute("Chome route");//B Home虛線路線資料
+        public GMapRoute Ahomeroute = new GMapRoute("Ahome route");//A Home route data
+        public GMapRoute Bhomeroute = new GMapRoute("Bhome route");//B Homeroute data
+        public GMapRoute Chomeroute = new GMapRoute("Chome route");//C Homeroute data
+        public GMapRoute Dhomeroute = new GMapRoute("Dhome route");//C Homeroute data
+        public GMapRoute Ehomeroute = new GMapRoute("Ehome route");//C Homeroute data
         static public Object thisLock = new Object();
         private ComponentResourceManager rm = new ComponentResourceManager(typeof(FlightPlanner));
 
@@ -7048,192 +7052,156 @@ Column 1: Field type (RALLY is the only one at the moment -- may have RALLY_LAND
 
         private void Path_Programming_button_Click(object sender, EventArgs e)
         {
-            /*double[] pathlat = new double[Commands.RowCount];
-           double[] pathlng = new double[Commands.RowCount];
-           int[] pathalt = new int[Commands.RowCount];
-           double outlat = 0, outlng = 0;
-           int outalt = 0;
-           for (int i = 0; i < Commands.RowCount; i++)
-           {
-               double lat = (double.Parse(Commands.Rows[i].Cells[Lat.Index].Value.ToString()));
-               double lng = (double.Parse(Commands.Rows[i].Cells[Lon.Index].Value.ToString()));
-               int alt = (int.Parse(Commands.Rows[i].Cells[Alt.Index].Value.ToString()));
-               PathProgramming pathProgrammingdll= new PathProgramming();
-               pathProgrammingdll.math(lat, lng, alt, out outlat, out outlng, out outalt);
-               pathlat[i] = outlat;
-               pathlng[i] = outlng;
-               pathalt[i] = outalt;
-           }
-           Commands.Rows.Clear();
-           for (int j = 0; j < pathlat.Length; j++)
-               AddWPToMap(pathlat[j], pathlng[j], pathalt[j]);*/
-            /*
-                        double[] topathlat = new double[Commands.RowCount];
-                        double[] topathlng = new double[Commands.RowCount];
-                        int[] topathalt = new int[Commands.RowCount];
-                        double[] pathoutlat = new double[Commands.RowCount];
-                        double[] pathoutlng = new double[Commands.RowCount];
-                        int[] pathoutalt = new int[Commands.RowCount];
-                        for (int i = 0; i < Commands.RowCount; i++)
-                        {
-                            topathlat[i] = (double.Parse(Commands.Rows[i].Cells[Lat.Index].Value.ToString()));
-                            topathlng[i] = (double.Parse(Commands.Rows[i].Cells[Lon.Index].Value.ToString()));
-                            topathalt[i] = (int.Parse(Commands.Rows[i].Cells[Alt.Index].Value.ToString()));
-                        }
-                        PathProgramming pathProgrammingdll = new PathProgramming();
-                        double homelat = double.Parse(TXT_homelat.Text.ToString());
-                        double homelng = double.Parse(TXT_homelng.Text.ToString());
-                        pathProgrammingdll.math(homelat,homelng,topathlat, topathlng, topathalt, out pathoutlat, out pathoutlng, out pathoutalt);
-                        Commands.Rows.Clear();
-                        for (int j = 0; j < pathoutlat.Length; j++)
-                            AddWPToMap(pathoutlat[j], pathoutlng[j], pathoutalt[j]);*/
-            /***************************用List進出************************************/
-            /*double[] topathlat = new double[Commands.RowCount];
-            double[] topathlng = new double[Commands.RowCount];
-            int[] topathalt = new int[Commands.RowCount];
-            double[] pathoutlat = new double[Commands.RowCount];
-            double[] pathoutlng = new double[Commands.RowCount];
-            int[] pathoutalt = new int[Commands.RowCount];*/
-
-            /*int groupset = 0;
-            Allpointlist.Clear();
-            Apointlist.Clear();
-            noflypointlist.Clear();
-            Allpointlist.Add(new PointLatLngAlt(double.Parse(TXT_homelat.Text.ToString()), double.Parse(TXT_homelng.Text.ToString()), 0));
-            for (int i = 0; i < Commands.RowCount; i++)//將waypoint點座標存入list
+            int groupset = 0;  //variable groupset will be the number for the user to input how many group 
+            double distance = 0, totaldistance = 0;  // distance is the function calculate the path distance,totaldistance is the sum of each path distance 
+            Allpointlist.Clear();  //clear the WP data list which will input to dll
+            Apointlist.Clear();    //clear the WP data list which dll ouput Path A
+            Bpointlist.Clear();    //clear the WP data list which dll ouput Path B
+            Cpointlist.Clear();    //clear the WP data list which dll ouput Path C
+            Dpointlist.Clear();    //clear the WP data list which dll ouput Path D
+            Epointlist.Clear();    //clear the WP data list which dll ouput Path E
+            noflypointlist.Clear(); // clear the no-fly zone GPS data which will input to dll
+            Aroute.Clear();      //clear path A route overlay
+            Ahomeroute.Clear();  //clear path A home route overlay
+            Broute.Clear();      //clear path B route overlay
+            Bhomeroute.Clear();  //clear path B home route overlay
+            Croute.Clear();      //clear path C route overlay
+            Chomeroute.Clear();  //clear path C home route overlay
+            Droute.Clear();      //clear path D route overlay
+            Dhomeroute.Clear();  //clear path D home route overlay
+            Eroute.Clear();      //clear path E route overlay
+            Ehomeroute.Clear();  //clear path E home route overlay
+            Allpointlist.Add(new PointLatLngAlt(double.Parse(TXT_homelat.Text.ToString()), double.Parse(TXT_homelng.Text.ToString()), 0));  //add home location to list
+            for (int i = 0; i < Commands.RowCount; i++)//add waypoint from DataGridView to list
             {
                 Allpointlist.Add(new PointLatLngAlt(double.Parse(Commands.Rows[i].Cells[Lat.Index].Value.ToString()),
                                                     double.Parse(Commands.Rows[i].Cells[Lon.Index].Value.ToString()),
                                                     double.Parse(Commands.Rows[i].Cells[Alt.Index].Value.ToString())));
             }
-            for (int j = 0; j < drawnpolygon.Points.Count; j++)//將禁航區座標存入noflylist
+            for (int j = 0; j < drawnpolygon.Points.Count; j++)//add no-fly zone GPS data to list
                 noflypointlist.Add(new PointLatLngAlt(drawnpolygon.Points[j].Lat, drawnpolygon.Points[j].Lng, 0));
-            if (Groupcountset.Text == string.Empty)
+            if (Groupcountset.Text == string.Empty)   //if groupcountset textbox empty ,will display message and set the variable to default "1"
             {
-                CustomMessageBox.Show("Please input group number!");
+                CustomMessageBox.Show("Please input group number or default single group !");
+                groupset = 1;
             }
-            else
+            else  //if groupcountset textbox have input then set the variable to the input value
 
             {
-                groupset = int.Parse(Groupcountset.Text);//將輸入群數轉成int
+                groupset = int.Parse(Groupcountset.Text);
             }
             PathProgramming pathProgrammingdll = new PathProgramming();
-            pathProgrammingdll.math(groupset, Allpointlist, noflypointlist, ref Apointlist, ref Bpointlist, ref Cpointlist);
-            Commands.Rows.Clear();
+            pathProgrammingdll.math(groupset, Allpointlist, noflypointlist, ref Apointlist, ref Bpointlist, ref Cpointlist,ref Dpointlist,ref Epointlist);
+            Commands.Rows.Clear();  //clear the DatGRidView 
+            writeKML(); //refresh Flight Planner page
+            if (Apointlist.Count!=0)  //if Apointlist has WP
+            {
+                WP_Marker_Route_function(Apointlist, "A",out distance);  //call function to add WP marker and route the path for A path then recieve the A path distance
+                lbl_distance_A.Text = rm.GetString("lbl_distance_A.Text") + ": " + FormatDistance(distance, false); //make A path distance show with KM
+                lbl_distance_A.ForeColor = System.Drawing.Color.Yellow; //make A path distance dislpay by yellow
+                totaldistance += distance;  //add A path distance to total distance
+            }
+            else if (Apointlist.Count == 0)  //if Apointlist is empty
+            {
+                lbl_distance_A.Text = rm.GetString("lbl_distance_A.Text"); //clear labelA distance
+                lbl_distance_A.ForeColor = System.Drawing.SystemColors.ControlText; //make labelA color to black
+            }
 
-            for (int j = 0; j < Apointlist.Count; j++)
-                AddWPToMap(Apointlist[j].Lat, Apointlist[j].Lng, int.Parse((Apointlist[j].Alt).ToString()));
-                */
-            int groupset = 0;
-            double distance = 0, totaldistance = 0; ;
-            Allpointlist.Clear();
-            Apointlist.Clear();
-            noflypointlist.Clear();
-            Allpointlist.Add(new PointLatLngAlt(double.Parse(TXT_homelat.Text.ToString()), double.Parse(TXT_homelng.Text.ToString()), 0));
-            for (int i = 0; i < Commands.RowCount; i++)//將waypoint點座標存入list
+            if (Bpointlist.Count != 0)  //if Bpointlist has WP
             {
-                Allpointlist.Add(new PointLatLngAlt(double.Parse(Commands.Rows[i].Cells[Lat.Index].Value.ToString()),
-                                                    double.Parse(Commands.Rows[i].Cells[Lon.Index].Value.ToString()),
-                                                    double.Parse(Commands.Rows[i].Cells[Alt.Index].Value.ToString())));
+                WP_Marker_Route_function(Bpointlist, "B", out distance);  //call function to add WP marker and route the path for B path then recieve the B path distance
+                lbl_distance_B.Text = rm.GetString("lbl_distance_B.Text") + ": " + FormatDistance(distance, false);  //make B path distance show with KM
+                lbl_distance_B.ForeColor = System.Drawing.Color.Red;  //make B path distance dislpay by red
+                totaldistance += distance;  //add B path distance to total distance
             }
-            for (int j = 0; j < drawnpolygon.Points.Count; j++)//將禁航區座標存入noflylist
-                noflypointlist.Add(new PointLatLngAlt(drawnpolygon.Points[j].Lat, drawnpolygon.Points[j].Lng, 0));
-            if (Groupcountset.Text == string.Empty)
+            else if (Bpointlist.Count == 0)  //if Bpointlist is empty
             {
-                CustomMessageBox.Show("Please input group number!");
+                lbl_distance_B.Text = rm.GetString("lbl_distance_B.Text");  //clear labelB distance
+                lbl_distance_B.ForeColor = System.Drawing.SystemColors.ControlText;  //make labelB color to black
             }
-            else
 
+            if (Cpointlist.Count != 0)  //if Cpointlist has WP
             {
-                groupset = int.Parse(Groupcountset.Text);//將輸入群數轉成int
+                WP_Marker_Route_function(Cpointlist, "C", out distance);  //call function to add WP marker and route the path for C path then recieve the C path distance
+                lbl_distance_C.Text = rm.GetString("lbl_distance_C.Text") + ": " + FormatDistance(distance, false);  //make C path distance show with KM
+                lbl_distance_C.ForeColor = System.Drawing.Color.Cyan;  ////make C path distance dislpay by cyan
+                totaldistance += distance;  //add C path distance to total distance
             }
-            PathProgramming pathProgrammingdll = new PathProgramming();
-            pathProgrammingdll.math(groupset, Allpointlist, noflypointlist, ref Apointlist, ref Bpointlist, ref Cpointlist);
-            Commands.Rows.Clear();
-            writeKML();
-            if (Apointlist.Count!=0)
+            else if (Cpointlist.Count == 0)  //if Cpointlist is empty
             {
-                //A();
-                Testfunction(Apointlist, "A",out distance);
-                lbl_distance_A.Text = rm.GetString("lbl_distance_A.Text") + ": " + FormatDistance(distance, false);
-                totaldistance += distance;
+                lbl_distance_C.Text = rm.GetString("lbl_distance_C.Text");  //clear labelC distance
+                lbl_distance_C.ForeColor = System.Drawing.SystemColors.ControlText;  //make labelC color to black
             }
-            if (Bpointlist.Count != 0)
+
+            if (Dpointlist.Count != 0)  //if Dpointlist has WP
             {
-                Testfunction(Bpointlist, "B", out distance);
-                lbl_distance_B.Text = rm.GetString("lbl_distance_B.Text") + ": " + FormatDistance(distance, false);
-                totaldistance += distance;
+                WP_Marker_Route_function(Dpointlist, "D", out distance);  //call function to add WP marker and route the path for D path then recieve the D path distance
+                lbl_distance_D.Text = rm.GetString("lbl_distance_D.Text") + ": " + FormatDistance(distance, false);  //make D path distance show with KM
+                lbl_distance_D.ForeColor = System.Drawing.Color.Tomato;  ////make D path distance dislpay by tomato
+                totaldistance += distance;  //add D path distance to total distance
             }
-            if (Cpointlist.Count != 0)
+            else if (Dpointlist.Count == 0)  //if Dpointlist is empty
             {
-                Testfunction(Cpointlist, "C", out distance);
-                lbl_distance_C.Text = rm.GetString("lbl_distance_C.Text") + ": " + FormatDistance(distance, false);
-                totaldistance += distance;
+                lbl_distance_D.Text = rm.GetString("lbl_distance_D.Text");  //clear labelD distance
+                lbl_distance_D.ForeColor = System.Drawing.SystemColors.ControlText;  //make labelD color to black
             }
-            lbl_distance.Text = rm.GetString("lbl_distance.Text") + ": " + FormatDistance(totaldistance, false);
+
+            if (Epointlist.Count != 0)  //if Epointlist has WP
+            {
+                WP_Marker_Route_function(Epointlist, "E", out distance);  //call function to add WP marker and route the path for E path then recieve the E path distance
+                lbl_distance_E.Text = rm.GetString("lbl_distance_E.Text") + ": " + FormatDistance(distance, false);  //make E path distance show with KM
+                lbl_distance_E.ForeColor = System.Drawing.Color.DeepPink;  ////make E path distance dislpay by deeppink
+                totaldistance += distance;  //add E path distance to total distance
+            }
+            else if (Epointlist.Count == 0)  //if Epointlist is empty
+            {
+                lbl_distance_E.Text = rm.GetString("lbl_distance_E.Text");  //clear labelE distance
+                lbl_distance_E.ForeColor = System.Drawing.SystemColors.ControlText;  //make labelEcolor to black
+            }
+            lbl_distance.Text = rm.GetString("lbl_distance.Text") + ": " + FormatDistance(totaldistance, false);  //make total distance show with KM
         }
-        private void Testfunction(List<PointLatLngAlt> sourcepointlist,string group,out double distance)
+
+
+        private void WP_Marker_Route_function(List<PointLatLngAlt> sourcepointlist,string group,out double distance)
         {
-            for (int i = 0; i < sourcepointlist.Count - 2; i++)
+            for (int i = 0; i < sourcepointlist.Count - 2; i++) //input source list have the home location in begin and end ,so have to minus 2 point
             {
                 
-                selectedrow = Commands.Rows.Add();
+                selectedrow = Commands.Rows.Add();  //add new DataGridView row
                 DataGridViewTextBoxCell cell;
                 if (Commands.Columns[Lat.Index].HeaderText.Equals(cmdParamNames["WAYPOINT"][4] /*"Lat"*/))
                 {
                     cell = Commands.Rows[selectedrow].Cells[Lat.Index] as DataGridViewTextBoxCell;
-                    cell.Value = sourcepointlist[i + 1].Lat.ToString();   //用List list第0欄為home點
+                    cell.Value = sourcepointlist[i + 1].Lat.ToString();   //put source list "Lat" to DataGridView ,because of list[0] is the home location so need to add 1 for the first WP 
                     cell.DataGridView.EndEdit();
                 }
                 if (Commands.Columns[Lon.Index].HeaderText.Equals(cmdParamNames["WAYPOINT"][5] /*"Long"*/))
                 {
                     cell = Commands.Rows[selectedrow].Cells[Lon.Index] as DataGridViewTextBoxCell;
-                    cell.Value = sourcepointlist[i + 1].Lng.ToString();   //用List
+                    cell.Value = sourcepointlist[i + 1].Lng.ToString();    //put source list "Lng" to DataGridView ,because of list[0] is the home location so need to add 1 for the first WP
                     cell.DataGridView.EndEdit();
                 }
                 if (Commands.Columns[Alt.Index].HeaderText.Equals(cmdParamNames["WAYPOINT"][6] /*"Alt"*/))
                 {
                     cell = Commands.Rows[selectedrow].Cells[Alt.Index] as DataGridViewTextBoxCell;
-                    cell.Value = sourcepointlist[i + 1].Alt.ToString();   //用List
+                    cell.Value = sourcepointlist[i + 1].Alt.ToString();    //put source list "Alt" to DataGridView ,because of list[0] is the home location so need to add 1 for the first WP
                     cell.DataGridView.EndEdit();
                 }
                 cell = Commands.Rows[selectedrow].Cells[Group.Index] as DataGridViewTextBoxCell;/*Group*/
-                cell.Value = group;
+                cell.Value = group;   //put the group value to the column "group" ,the value will be "A"、"B"、"C"、"D"、"E"
                 cell.DataGridView.EndEdit();
 
-                updateRowNumbers();  //加入行數標籤
+                updateRowNumbers();  //call function to add row numer to DataGridView 
                 addpolygonmarker((selectedrow+1).ToString(), sourcepointlist[i + 1].Lng, sourcepointlist[i + 1].Lat,
-                                    sourcepointlist[i + 1].Alt, null);  //建立標記點 最後一欄為顏色 Color.Green 或null=白色
+                                    sourcepointlist[i + 1].Alt, null);  //build WP marker from source list
             }
-                if (group == "A")
-                {
-                    Aroute.Clear();
-                    Ahomeroute.Clear();
-                }
-                if (group == "B")
-                {
-                    Broute.Clear();
-                    Bhomeroute.Clear();
-                }
-                if (group == "C")
-                {
-                    Croute.Clear();
-                    Chomeroute.Clear();
-                }
-                route.Clear();
-                homeroute.Clear();
-
-                polygonsoverlay.Routes.Clear();
-
+                /* MP spline route no use in this function*/
                 PointLatLngAlt lastpnt = fullpointlist[0];
                 PointLatLngAlt lastpnt2 = fullpointlist[0];
                 PointLatLngAlt lastnonspline = fullpointlist[0];
                 List<PointLatLngAlt> splinepnts = new List<PointLatLngAlt>();
                 List<PointLatLngAlt> wproute = new List<PointLatLngAlt>();
-
-                // add home - this causeszx the spline to always have a straight finish
-                //fullpointlist.Add(fullpointlist[0]);
-
+              
                 for (int a = 0; a < sourcepointlist.Count; a++)
                 {
                     if (sourcepointlist[a] == null)
@@ -7330,101 +7298,140 @@ Column 1: Field type (RALLY is the only one at the moment -- may have RALLY_LAND
                 PointLatLngAlt homepoint = new PointLatLngAlt();
                 PointLatLngAlt firstpoint = new PointLatLngAlt();
                 PointLatLngAlt lastpoint = new PointLatLngAlt();
-                if (count > 2)
+                if (count > 2) //if wproute have value
                 {
                     // homeroute = last, home, first
                     wproute.ForEach(x =>
                     {
                         counter++;
-                        if (counter == 1)
+                        if (counter == 1)   //first waypoint is the home location
                         {
-                            homepoint = x;
+                            homepoint = x;  
                             return;
                         }
-                        if (counter == 2)
+                        if (counter == 2)   //second waypointfrom sourcepointlist is the first point waypoint
                         {
                             firstpoint = x;
                         }
-                        if (counter == count - 1)
+                        if (counter == count - 1)  //the second last waypoint 
                         {
                             lastpoint = x;
                         }
-                        if (counter == count && group=="A")
+                        if (counter == count && group=="A")  //if input group is A then do Ahomeroute data
                         {
-                            Ahomeroute.Points.Add(lastpoint);
-                            Ahomeroute.Points.Add(homepoint);
-                            Ahomeroute.Points.Add(firstpoint);
+                            Ahomeroute.Points.Add(lastpoint);  //add gorup A lastpoint to Ahomeroute overlay
+                            Ahomeroute.Points.Add(homepoint);  //add gorup A home location to Ahomeroute overlay
+                            Ahomeroute.Points.Add(firstpoint); //add gorup A firstpoint to Ahomeroute overlay
                             return;
                         }
-                        if (counter == count && group == "B")
+                        if (counter == count && group == "B")  //if input group is B then do Bhomeroute data
                         {
-                            Bhomeroute.Points.Add(lastpoint);
-                            Bhomeroute.Points.Add(homepoint);
-                            Bhomeroute.Points.Add(firstpoint);
+                            Bhomeroute.Points.Add(lastpoint);  //add gorup B firstpoint to Bhomeroute overlay
+                            Bhomeroute.Points.Add(homepoint);  //add gorup B home location to Bhomeroute overlay
+                            Bhomeroute.Points.Add(firstpoint); //add gorup B lastpoint to Bhomeroute overlay
                             return;
                         }
-                        if (counter == count && group == "C")
+                        if (counter == count && group == "C")  //if input group is C then do Chomeroute data
                         {
-                            Chomeroute.Points.Add(lastpoint);
-                            Chomeroute.Points.Add(homepoint);
-                            Chomeroute.Points.Add(firstpoint);
+                            Chomeroute.Points.Add(lastpoint);  //add gorup C firstpoint to Chomeroute overlay
+                            Chomeroute.Points.Add(homepoint);  //add gorup C home location to Chomeroute overlay
+                            Chomeroute.Points.Add(firstpoint); //add gorup C lastpoint to Chomeroute overlay
                             return;
                         }
-                        if (group == "A")
-                            Aroute.Points.Add(x);
-                        if (group == "B")
-                            Broute.Points.Add(x);
-                        if (group == "C")
-                            Croute.Points.Add(x);
+                        if (counter == count && group == "D")  //if input group is D then do Dhomeroute data
+                        {
+                            Dhomeroute.Points.Add(lastpoint);  //add gorup D firstpoint to Dhomeroute overlay
+                            Dhomeroute.Points.Add(homepoint);  //add gorup D home location to Dhomeroute overlay
+                            Dhomeroute.Points.Add(firstpoint); //add gorup D lastpoint to Dhomeroute overlay
+                            return;
+                        }
+                        if (counter == count && group == "E")  //if input group is E then do Ehomeroute data
+                        {
+                            Ehomeroute.Points.Add(lastpoint);  //add gorup E firstpoint to Ehomeroute overlay
+                            Ehomeroute.Points.Add(homepoint);  //add gorup E home location to Ehomeroute overlay
+                            Ehomeroute.Points.Add(firstpoint); //add gorup E lastpoint to Ehomeroute overlay
+                            return;
+                        }
+                        if (group == "A")  //if input group is A then do Aroute data
+                            Aroute.Points.Add(x);  //add waypoint data except home 、firstpoint and lastpoint to Aroute 
+                        if (group == "B")  //if input group is B then do Aroute data
+                            Broute.Points.Add(x);  //add waypoint data except home 、firstpoint and lastpoint to Broute 
+                        if (group == "C")  //if input group is C then do Aroute data
+                            Croute.Points.Add(x);  //add waypoint data except home 、firstpoint and lastpoint to Croute 
+                        if (group == "D")  //if input group is D then do Aroute data
+                            Droute.Points.Add(x);  //add waypoint data except home 、firstpoint and lastpoint to Droute 
+                        if (group == "E")  //if input group is E then do Aroute data
+                            Eroute.Points.Add(x);  //add waypoint data except home 、firstpoint and lastpoint to Eroute 
                     });
-                    
-                    Ahomeroute.Stroke = new Pen(Color.Yellow, 2);
+
+                    /*Group Apath route,Apath=Ahomeroute+Aroute*/
+
+                    Ahomeroute.Stroke = new Pen(Color.Yellow, 2); //set Ahomeroute overlay color to Yellow and width 2
                     // if we have a large distance between home and the first/last point, it hangs on the draw of a the dashed line.
                     if (homepoint.GetDistance(lastpoint) < 5000 && homepoint.GetDistance(firstpoint) < 5000)
-                         Ahomeroute.Stroke.DashStyle = DashStyle.Dash;
+                         Ahomeroute.Stroke.DashStyle = DashStyle.Dash;  //set Ahomeroute overlay to dash
+                    polygonsoverlay.Routes.Add(Ahomeroute);  //draw Ahomeroute overlay
+                    Aroute.Stroke = new Pen(Color.Yellow, 4);  //set Aroute overlay color to Yellow and width 4
+                    Aroute.Stroke.DashStyle = DashStyle.Custom;  //set Aroute overlay to line
+                    polygonsoverlay.Routes.Add(Aroute);  //draw Aroute overlay
 
-                    polygonsoverlay.Routes.Add(Ahomeroute);
+                    /*Group Bpath route,Bpath=Bhomeroute+Broute*/
 
-                    Aroute.Stroke = new Pen(Color.Yellow, 4);
-                    Aroute.Stroke.DashStyle = DashStyle.Custom;
-                    polygonsoverlay.Routes.Add(Aroute);
-                   
-                    Bhomeroute.Stroke = new Pen(Color.Red, 2);
+                    Bhomeroute.Stroke = new Pen(Color.Red, 2); //set Bhomeroute overlay color to Red and width 2
                     // if we have a large distance between home and the first/last point, it hangs on the draw of a the dashed line.
                     if (homepoint.GetDistance(lastpoint) < 5000 && homepoint.GetDistance(firstpoint) < 5000)
-                    Bhomeroute.Stroke.DashStyle = DashStyle.Dash;
+                    Bhomeroute.Stroke.DashStyle = DashStyle.Dash;  //set Bhomeroute overlay to dash
+                    polygonsoverlay.Routes.Add(Bhomeroute);  //draw Bhomeroute overlay
+                    Broute.Stroke = new Pen(Color.Red, 4);  //set Broute overlay color to Red and width 4
+                    Broute.Stroke.DashStyle = DashStyle.Custom;   //set Broute overlay to line
+                    polygonsoverlay.Routes.Add(Broute);  //draw Broute overlay
 
-                    polygonsoverlay.Routes.Add(Bhomeroute);
+                    /*Group Cpath route,Cpath=Chomeroute+Croute*/
 
-                    Broute.Stroke = new Pen(Color.Red, 4);
-                    Broute.Stroke.DashStyle = DashStyle.Custom;
-                    polygonsoverlay.Routes.Add(Broute);
-
-                    Chomeroute.Stroke = new Pen(Color.Cyan, 2);
+                    Chomeroute.Stroke = new Pen(Color.Cyan, 2); //set Chomeroute overlay color to Cyan and width 2
                     // if we have a large distance between home and the first/last point, it hangs on the draw of a the dashed line.
                     if (homepoint.GetDistance(lastpoint) < 5000 && homepoint.GetDistance(firstpoint) < 5000)
-                        Chomeroute.Stroke.DashStyle = DashStyle.Dash;
+                        Chomeroute.Stroke.DashStyle = DashStyle.Dash;  //set Chomeroute overlay to dash
+                    polygonsoverlay.Routes.Add(Chomeroute);  //draw Chomeroute overlay
+                    Croute.Stroke = new Pen(Color.Cyan, 4); //set Croute overlay color to Cyan and width 4
+                    Croute.Stroke.DashStyle = DashStyle.Custom;  //set Croute overlay to line
+                    polygonsoverlay.Routes.Add(Croute);  //draw Croute overlay
 
-                    polygonsoverlay.Routes.Add(Chomeroute);
+                    /*Group Dpath route,Dpath=Dhomeroute+Droute*/
 
-                    Croute.Stroke = new Pen(Color.Cyan, 4);
-                    Croute.Stroke.DashStyle = DashStyle.Custom;
-                    polygonsoverlay.Routes.Add(Croute);
+                    Dhomeroute.Stroke = new Pen(Color.Tomato, 2); //set Dhomeroute overlay color to Tomato and width 2
+                    // if we have a large distance between home and the first/last point, it hangs on the draw of a the dashed line.
+                    if (homepoint.GetDistance(lastpoint) < 5000 && homepoint.GetDistance(firstpoint) < 5000)
+                        Dhomeroute.Stroke.DashStyle = DashStyle.Dash;  //set Ahomeroute overlay to dash
+                    polygonsoverlay.Routes.Add(Dhomeroute);  //draw Ahomeroute overlay
+                    Droute.Stroke = new Pen(Color.Tomato, 4);  //set Droute overlay color to Tomato and width 4
+                    Droute.Stroke.DashStyle = DashStyle.Custom;  //set Droute overlay to line
+                    polygonsoverlay.Routes.Add(Droute);  //draw Droute overlay
+
+                    /*Group Epath route,Epath=Ehomeroute+Eroute*/
+
+                    Ehomeroute.Stroke = new Pen(Color.DeepPink, 2); //set Ehomeroute overlay color to DeepPink and width 2
+                    // if we have a large distance between home and the first/last point, it hangs on the draw of a the dashed line.
+                    if (homepoint.GetDistance(lastpoint) < 5000 && homepoint.GetDistance(firstpoint) < 5000)
+                        Ehomeroute.Stroke.DashStyle = DashStyle.Dash;  //set Ahomeroute overlay to dash
+                    polygonsoverlay.Routes.Add(Ehomeroute);  //draw Ahomeroute overlay
+                    Eroute.Stroke = new Pen(Color.DeepPink, 4);  //set Eroute overlay color to DeepPink and width 4
+                    Eroute.Stroke.DashStyle = DashStyle.Custom;  //set Eroute overlay to line
+                    polygonsoverlay.Routes.Add(Eroute);  //draw Eroute overlay
 
             }
-            //if (sourcepointlist.Count > 0)
-           // {
+                /*calculate path distance*/
                 double homedist = 0;
                 string home = string.Format("{0},{1},{2}\r\n", TXT_homelng.Text, TXT_homelat.Text, TXT_DefaultAlt.Text);
-                if (home.Length > 5)
+                if (home.Length > 5) //if home has been set
                 {
                     homedist = MainMap.MapProvider.Projection.GetDistance(sourcepointlist[sourcepointlist.Count - 1],
-                        sourcepointlist[0]);
+                        sourcepointlist[0]);  //calculate last waypoint and home distance
                 }
 
                 double dist = 0;
 
-                for (int a = 1; a < sourcepointlist.Count; a++)
+                for (int a = 1; a < sourcepointlist.Count; a++)  //calculate each two point distance 
                 {
                     if (sourcepointlist[a - 1] == null)
                         continue;
@@ -7432,465 +7439,14 @@ Column 1: Field type (RALLY is the only one at the moment -- may have RALLY_LAND
                     if (sourcepointlist[a] == null)
                         continue;
 
-                    dist += MainMap.MapProvider.Projection.GetDistance(sourcepointlist[a - 1], sourcepointlist[a]);
+                    dist += MainMap.MapProvider.Projection.GetDistance(sourcepointlist[a - 1], sourcepointlist[a]);  //add each two point distance to dist
                 }
 
-                //lbl_distance_B.Text = rm.GetString("lbl_distance_B.Text") + ": " +
-                //                    FormatDistance(dist + homedist, false);
-                distance = dist + homedist;
-            //}
+                distance = dist + homedist;  //total the dist and homedist 
+            
             
         }
 
-        public void A()
-        {
-            //Apointlist.Add(new PointLatLngAlt(double.Parse(TXT_homelat.Text.ToString()), double.Parse(TXT_homelng.Text.ToString()), double.Parse(TXT_homealt.Text.ToString()))); //add home to list head
-            for (int i = 0; i < Apointlist.Count-2; i++)
-            {
-                selectedrow = Commands.Rows.Add();
-                DataGridViewTextBoxCell cell;
-                if (Commands.Columns[Lat.Index].HeaderText.Equals(cmdParamNames["WAYPOINT"][4] /*"Lat"*/))
-                {
-                    cell = Commands.Rows[selectedrow].Cells[Lat.Index] as DataGridViewTextBoxCell;
-                    cell.Value = Apointlist[i + 1].Lat.ToString();   //用List list第0欄為home點
-                    //cell.Value = lat[i].ToString();   //用矩陣
-                    cell.DataGridView.EndEdit();
-                }
-                if (Commands.Columns[Lon.Index].HeaderText.Equals(cmdParamNames["WAYPOINT"][5] /*"Long"*/))
-                {
-                    cell = Commands.Rows[selectedrow].Cells[Lon.Index] as DataGridViewTextBoxCell;
-                    cell.Value = Apointlist[i + 1].Lng.ToString();   //用List
-                    //cell.Value = lng[i].ToString();     //用矩陣
-                    cell.DataGridView.EndEdit();
-                }
-                if (Commands.Columns[Alt.Index].HeaderText.Equals(cmdParamNames["WAYPOINT"][6] /*"Alt"*/))
-                {
-                    cell = Commands.Rows[selectedrow].Cells[Alt.Index] as DataGridViewTextBoxCell;
-                    cell.Value = Apointlist[i + 1].Alt.ToString();   //用List
-                    //cell.Value = alt[i].ToString();    //用矩陣
-                    cell.DataGridView.EndEdit();
-                }
-                cell = Commands.Rows[selectedrow].Cells[Group.Index] as DataGridViewTextBoxCell;/*Group*/
-                cell.Value = "A";
-                cell.DataGridView.EndEdit();
-
-                updateRowNumbers();  //加入行數標籤
-                addpolygonmarker((i + 1).ToString(), Apointlist[i + 1].Lng, Apointlist[i + 1].Lat,
-                                    Apointlist[i + 1].Alt, null);  //建立標記點 最後一欄為顏色 Color.Green 或null=白色
-            }
-
-            //GroupApointlist.Add(new PointLatLngAlt(double.Parse(TXT_homelat.Text.ToString()), double.Parse(TXT_homelng.Text.ToString()), double.Parse(TXT_homealt.Text.ToString()))); //add home to list tail
-
-            /*
-            List<PointLatLng> list = new List<PointLatLng>();
-            fullpointlist.ForEach(x => { list.Add(x); });
-            route.Points.AddRange(list);
-            */
-            // route is full need to get 1, 2 and last point as "HOME" route
-            Aroute.Points.Clear();
-            Ahomeroute.Points.Clear();
-            int Acount = Apointlist.Count;
-            int Acounter = 0;
-            PointLatLngAlt Ahomepoint = new PointLatLngAlt();
-            PointLatLngAlt Afirstpoint = new PointLatLngAlt();
-            PointLatLngAlt Alastpoint = new PointLatLngAlt();
-            if (Acount > 2)
-            {
-                // homeroute = last, home, first
-                Apointlist.ForEach(x =>
-                {
-                    Acounter++;
-                    if (Acounter == 1)
-                    {
-                        Ahomepoint = x;
-                        return;
-                    }
-                    if (Acounter == 2)
-                    {
-                        Afirstpoint = x;
-                    }
-                    if (Acounter == Acount - 1)
-                    {
-                        Alastpoint = x;
-                    }
-                    if (Acounter == Acount)
-                    {
-                        Ahomeroute.Points.Add(Alastpoint);
-                        Ahomeroute.Points.Add(Ahomepoint);
-                        Ahomeroute.Points.Add(Afirstpoint);
-                        return;
-                    }
-                    Aroute.Points.Add(x);
-                });
-
-                Ahomeroute.Stroke = new Pen(Color.Yellow, 2);
-                // if we have a large distance between home and the first/last point, it hangs on the draw of a the dashed line.
-                if (Ahomepoint.GetDistance(Alastpoint) < 5000 && Ahomepoint.GetDistance(Afirstpoint) < 5000)
-                    Ahomeroute.Stroke.DashStyle = DashStyle.Dash;
-
-                polygonsoverlay.Routes.Add(Ahomeroute);
-
-                Aroute.Stroke = new Pen(Color.Yellow, 4);
-                Aroute.Stroke.DashStyle = DashStyle.Custom;
-                polygonsoverlay.Routes.Add(Aroute);
-
-                if (Apointlist.Count > 0)
-                {
-                    double A_homedist = 0;
-                    string Ahome = string.Format("{0},{1},{2}\r\n", TXT_homelng.Text, TXT_homelat.Text, TXT_DefaultAlt.Text);
-                    if (Ahome.Length > 5)
-                    {
-                        A_homedist = MainMap.MapProvider.Projection.GetDistance(Apointlist[Apointlist.Count - 1],
-                            Apointlist[0]);
-                    }
-
-                    double A_dist = 0;
-
-                    for (int a = 1; a < Apointlist.Count; a++)
-                    {
-                        if (Apointlist[a - 1] == null)
-                            continue;
-
-                        if (Apointlist[a] == null)
-                            continue;
-
-                        A_dist += MainMap.MapProvider.Projection.GetDistance(Apointlist[a - 1], Apointlist[a]);
-                    }
-
-                    lbl_distance_A.Text = rm.GetString("lbl_distance_A.Text") + ": " +
-                                        FormatDistance(A_dist + A_homedist, false);
-                    A_distance = A_dist + A_homedist;
-                }
-            }
-        }
-        private void TestButton_Click(object sender, EventArgs e)
-        {
-            Commands.Rows.Clear();
-            writeKML();
-            GroupApointlist.Clear();
-            GroupBpointlist.Clear();
-            double distance=0 , totaldistance=0;
-            //AGroup();
-            //BGroup();
-            GroupAtest();
-            GroupBtest();
-            GroupCtest();
-            Testfunction(GroupApointlist, "A",out distance);
-            lbl_distance_A.Text = rm.GetString("lbl_distance_A.Text") + ": " + FormatDistance(distance, false);
-            totaldistance += distance;
-            lbl_distance.Text = rm.GetString("lbl_distance.Text") + ": " + FormatDistance(totaldistance, false);
-            Testfunction(GroupBpointlist, "B",out distance);
-            lbl_distance_B.Text = rm.GetString("lbl_distance_B.Text") + ": " + FormatDistance(distance, false);
-            totaldistance += distance;
-            lbl_distance.Text = rm.GetString("lbl_distance.Text") + ": " + FormatDistance(totaldistance, false);
-            Testfunction(GroupCpointlist, "C", out distance);
-            lbl_distance_C.Text = rm.GetString("lbl_distance_C.Text") + ": " + FormatDistance(distance, false);
-            totaldistance += distance;
-            lbl_distance.Text = rm.GetString("lbl_distance.Text") + ": " + FormatDistance(totaldistance, false);
-            //lbl_distance.Text = rm.GetString("lbl_distance.Text") + ": " + FormatDistance(A_distance + B_distance, false);
-            //GroupApointlist.Add(new PointLatLngAlt(140.222, 23.0123, 456));
-            // CustomMessageBox.Show((GroupApointlist[5].Lat).ToString());
-            //CustomMessageBox.Show((drawnpolygon.Points[0].Lat).ToString());  //多邊形polygon位置
-
-
-        }
-        public void AGroup()
-        {
-            /**************************用List***********************************/
-            //pointlist.Add(new PointLatLngAlt(double.Parse(cell3), double.Parse(cell4),
-            //                       double.Parse(cell2) + homealt, (a + 1).ToString()));
-            double[] Alat = new double[] { -35.3619748, -35.3625698, -35.3637466, -35.3643197, -35.3642409, -35.3634272 };//操場
-            double[] Alng = new double[] { 149.1664624, 149.1678250, 149.1676694, 149.1664839, 149.1649067, 149.1638660 }; //操場
-            double[] Aalt = new double[] { 10, 20, 30, 40, 50, 60 };
-            GroupApointlist.Add(new PointLatLngAlt(double.Parse(TXT_homelat.Text.ToString()), double.Parse(TXT_homelng.Text.ToString()), double.Parse(TXT_homealt.Text.ToString()))); //add home to list head
-            for (int i = 0; i < Alat.Length; i++)
-            {
-                GroupApointlist.Add(new PointLatLngAlt(Alat[i], Alng[i], Aalt[i]));
-                selectedrow = Commands.Rows.Add();
-                DataGridViewTextBoxCell cell;
-                if (Commands.Columns[Lat.Index].HeaderText.Equals(cmdParamNames["WAYPOINT"][4] /*"Lat"*/))
-               {
-                    cell = Commands.Rows[selectedrow].Cells[Lat.Index] as DataGridViewTextBoxCell;
-                    cell.Value = GroupApointlist[i + 1].Lat.ToString();   //用List list第0欄為home點
-                    //cell.Value = lat[i].ToString();   //用矩陣
-                    cell.DataGridView.EndEdit();
-                }
-                if (Commands.Columns[Lon.Index].HeaderText.Equals(cmdParamNames["WAYPOINT"][5] /*"Long"*/))
-                {
-                    cell = Commands.Rows[selectedrow].Cells[Lon.Index] as DataGridViewTextBoxCell;
-                    cell.Value = GroupApointlist[i + 1].Lng.ToString();   //用List
-                    //cell.Value = lng[i].ToString();     //用矩陣
-                    cell.DataGridView.EndEdit();
-                }
-                if (Commands.Columns[Alt.Index].HeaderText.Equals(cmdParamNames["WAYPOINT"][6] /*"Alt"*/))
-                {
-                    cell = Commands.Rows[selectedrow].Cells[Alt.Index] as DataGridViewTextBoxCell;
-                    cell.Value = GroupApointlist[i + 1].Alt.ToString();   //用List
-                    //cell.Value = alt[i].ToString();    //用矩陣
-                    cell.DataGridView.EndEdit();
-                }
-                cell = Commands.Rows[selectedrow].Cells[Group.Index] as DataGridViewTextBoxCell;/*Group*/
-                cell.Value = "A";
-                cell.DataGridView.EndEdit();
-
-                updateRowNumbers();  //加入行數標籤
-                addpolygonmarker((i + 1).ToString(), GroupApointlist[i + 1].Lng, GroupApointlist[i + 1].Lat,
-                                    GroupApointlist[i + 1].Alt, null);  //建立標記點 最後一欄為顏色 Color.Green 或null=白色
-            }
-
-            GroupApointlist.Add(new PointLatLngAlt(double.Parse(TXT_homelat.Text.ToString()), double.Parse(TXT_homelng.Text.ToString()), double.Parse(TXT_homealt.Text.ToString()))); //add home to list tail
-
-            /*
-            List<PointLatLng> list = new List<PointLatLng>();
-            fullpointlist.ForEach(x => { list.Add(x); });
-            route.Points.AddRange(list);
-            */
-            // route is full need to get 1, 2 and last point as "HOME" route
-            Aroute.Points.Clear();
-            Ahomeroute.Points.Clear();
-            int Acount = GroupApointlist.Count;
-            int Acounter = 0;
-            PointLatLngAlt Ahomepoint = new PointLatLngAlt();
-            PointLatLngAlt Afirstpoint = new PointLatLngAlt();
-            PointLatLngAlt Alastpoint = new PointLatLngAlt();
-            if (Acount > 2)
-            {
-                // homeroute = last, home, first
-                GroupApointlist.ForEach(x =>
-                {
-                    Acounter++;
-                    if (Acounter == 1)
-                    {
-                        Ahomepoint = x;
-                        return;
-                    }
-                    if (Acounter == 2)
-                    {
-                        Afirstpoint = x;
-                    }
-                    if (Acounter == Acount - 1)
-                    {
-                        Alastpoint = x;
-                    }
-                    if (Acounter == Acount)
-                    {
-                        Ahomeroute.Points.Add(Alastpoint);
-                        Ahomeroute.Points.Add(Ahomepoint);
-                        Ahomeroute.Points.Add(Afirstpoint);
-                        return;
-                    }
-                    Aroute.Points.Add(x);
-                });
-
-                Ahomeroute.Stroke = new Pen(Color.Yellow, 2);
-                // if we have a large distance between home and the first/last point, it hangs on the draw of a the dashed line.
-                if (Ahomepoint.GetDistance(Alastpoint) < 5000 && Ahomepoint.GetDistance(Afirstpoint) < 5000)
-                    Ahomeroute.Stroke.DashStyle = DashStyle.Dash;
-
-                polygonsoverlay.Routes.Add(Ahomeroute);
-
-                Aroute.Stroke = new Pen(Color.Yellow, 4);
-                Aroute.Stroke.DashStyle = DashStyle.Custom;
-                polygonsoverlay.Routes.Add(Aroute);
-
-                if (GroupApointlist.Count > 0)
-                {
-                    double A_homedist = 0;
-                    string Ahome = string.Format("{0},{1},{2}\r\n", TXT_homelng.Text, TXT_homelat.Text, TXT_DefaultAlt.Text);
-                    if (Ahome.Length > 5)
-                    {
-                        A_homedist = MainMap.MapProvider.Projection.GetDistance(GroupApointlist[GroupApointlist.Count - 1],
-                            GroupApointlist[0]);
-                    }
-
-                    double A_dist = 0;
-
-                    for (int a = 1; a < GroupApointlist.Count; a++)
-                    {
-                        if (GroupApointlist[a - 1] == null)
-                            continue;
-
-                        if (GroupApointlist[a] == null)
-                            continue;
-
-                        A_dist += MainMap.MapProvider.Projection.GetDistance(GroupApointlist[a - 1], GroupApointlist[a]);
-                    }
-
-                    lbl_distance_A.Text = rm.GetString("lbl_distance_A.Text") + ": " +
-                                        FormatDistance(A_dist + A_homedist, false);
-                    A_distance = A_dist + A_homedist;
-                }
-            }
-        }
-        public void BGroup()
-        {
-            /**************************用List***********************************/
-            //pointlist.Add(new PointLatLngAlt(double.Parse(cell3), double.Parse(cell4),
-            //                       double.Parse(cell2) + homealt, (a + 1).ToString()));
-            double[] Blat = new double[] { -35.361476, -35.359464, -35.359236, -35.360181, -35.361091, -35.362386 };//操場
-            double[] Blng = new double[] { 149.165239, 149.164681, 149.163287, 149.161656, 149.161527, 149.162214 }; //操場
-            double[] Balt = new double[] { 70, 80, 90, 100, 110, 120 };
-            GroupBpointlist.Add(new PointLatLngAlt(double.Parse(TXT_homelat.Text.ToString()), double.Parse(TXT_homelng.Text.ToString()), double.Parse(TXT_homealt.Text.ToString()))); //add home to list head
-            for (int i = 0; i < Blat.Length; i++)//將矩陣存入List 及建立Datagridview資料
-            {
-                GroupBpointlist.Add(new PointLatLngAlt(Blat[i], Blng[i], Balt[i]));
-                selectedrow = Commands.Rows.Add();
-                DataGridViewTextBoxCell cell;
-                if (Commands.Columns[Lat.Index].HeaderText.Equals(cmdParamNames["WAYPOINT"][4] /*"Lat"**/))
-                {
-                    cell = Commands.Rows[selectedrow].Cells[Lat.Index] as DataGridViewTextBoxCell;
-                    cell.Value = GroupBpointlist[i + 1].Lat.ToString();   //用List list第0欄為home點
-                    //cell.Value = lat[i].ToString();   //用矩陣
-                    cell.DataGridView.EndEdit();
-                }
-                if (Commands.Columns[Lon.Index].HeaderText.Equals(cmdParamNames["WAYPOINT"][5] /*"Long"*/))
-                {
-                    cell = Commands.Rows[selectedrow].Cells[Lon.Index] as DataGridViewTextBoxCell;
-                    cell.Value = GroupBpointlist[i + 1].Lng.ToString();   //用List
-                    //cell.Value = lng[i].ToString();     //用矩陣
-                    cell.DataGridView.EndEdit();
-                }
-                if (Commands.Columns[Alt.Index].HeaderText.Equals(cmdParamNames["WAYPOINT"][6] /*"Alt"*/))
-                {
-                    cell = Commands.Rows[selectedrow].Cells[Alt.Index] as DataGridViewTextBoxCell;
-                    cell.Value = GroupBpointlist[i + 1].Alt.ToString();   //用List
-                    //cell.Value = alt[i].ToString();    //用矩陣
-                    cell.DataGridView.EndEdit();
-                }
-                cell = Commands.Rows[selectedrow].Cells[Group.Index] as DataGridViewTextBoxCell;/*Group*/
-                cell.Value = "B";
-                cell.DataGridView.EndEdit();
-
-                updateRowNumbers();  //加入行數標籤
-                addpolygonmarker((i + 7).ToString(), GroupBpointlist[i + 1].Lng, GroupBpointlist[i + 1].Lat,
-                                    GroupBpointlist[i + 1].Alt, null);  //建立標記點 最後一欄為顏色 Color.Green 或null=白色
-            }
-
-            GroupBpointlist.Add(new PointLatLngAlt(double.Parse(TXT_homelat.Text.ToString()), double.Parse(TXT_homelng.Text.ToString()), double.Parse(TXT_homealt.Text.ToString()))); //add home to list tail
-
-            /*
-            List<PointLatLng> list = new List<PointLatLng>();
-            fullpointlist.ForEach(x => { list.Add(x); });
-            route.Points.AddRange(list);
-            */
-            // route is full need to get 1, 2 and last point as "HOME" route 
-            Broute.Points.Clear();
-            Bhomeroute.Points.Clear();
-            int Bcount = GroupBpointlist.Count;
-            int Bcounter = 0;
-            PointLatLngAlt Bhomepoint = new PointLatLngAlt();
-            PointLatLngAlt Bfirstpoint = new PointLatLngAlt();
-            PointLatLngAlt Blastpoint = new PointLatLngAlt();
-            if (Bcount > 2)
-            {
-                // homeroute = last, home, first
-                GroupBpointlist.ForEach(x =>
-                {
-                    Bcounter++;
-                    if (Bcounter == 1)
-                    {
-                        Bhomepoint = x;
-                        return;
-                    }
-                    if (Bcounter == 2)
-                    {
-                        Bfirstpoint = x;
-                    }
-                    if (Bcounter == Bcount - 1)
-                    {
-                        Blastpoint = x;
-                    }
-                    if (Bcounter == Bcount)
-                    {
-                        Bhomeroute.Points.Add(Blastpoint);
-                        Bhomeroute.Points.Add(Bhomepoint);
-                        Bhomeroute.Points.Add(Bfirstpoint);
-                        return;
-                    }
-                    Broute.Points.Add(x);
-                });
-
-                Bhomeroute.Stroke = new Pen(Color.Red, 2);
-                // if we have a large distance between home and the first/last point, it hangs on the draw of a the dashed line.
-                if (Bhomepoint.GetDistance(Blastpoint) < 5000 && Bhomepoint.GetDistance(Bfirstpoint) < 5000)
-                    Bhomeroute.Stroke.DashStyle = DashStyle.Dash;
-
-                polygonsoverlay.Routes.Add(Bhomeroute);
-
-                Broute.Stroke = new Pen(Color.Red, 4);
-                Broute.Stroke.DashStyle = DashStyle.Custom;
-                polygonsoverlay.Routes.Add(Broute);
-
-                if (GroupBpointlist.Count > 0)
-                {
-                    double B_homedist = 0;
-                    string Bhome = string.Format("{0},{1},{2}\r\n", TXT_homelng.Text, TXT_homelat.Text, TXT_DefaultAlt.Text);
-                    if (Bhome.Length > 5)
-                    {
-                        B_homedist = MainMap.MapProvider.Projection.GetDistance(GroupBpointlist[GroupBpointlist.Count - 1],
-                            GroupBpointlist[0]);
-                    }
-
-                    double B_dist = 0;
-
-                    for (int a = 1; a < GroupBpointlist.Count; a++)
-                    {
-                        if (GroupBpointlist[a - 1] == null)
-                            continue;
-
-                        if (GroupBpointlist[a] == null)
-                            continue;
-
-                        B_dist += MainMap.MapProvider.Projection.GetDistance(GroupBpointlist[a - 1], GroupBpointlist[a]);
-                    }
-
-                    lbl_distance_B.Text = rm.GetString("lbl_distance_B.Text") + ": " +
-                                        FormatDistance(B_dist + B_homedist, false);
-                    B_distance = B_dist + B_homedist;
-                }
-            }
-        }
-        private void GroupAtest()
-        {
-            double[] Alat = new double[] { -35.3621761, -35.3606361, -35.3602512, -35.3616861, -35.3630160, -35.3630685 };//操場
-            double[] Alng = new double[] { 149.1647029, 149.1641021, 149.1615486, 149.1604543, 149.1607332, 149.1627073 }; //操場
-            double[] Aalt = new double[] { 10, 20, 30, 40, 50, 60 };
-            GroupApointlist.Add(new PointLatLngAlt(double.Parse(TXT_homelat.Text.ToString()), double.Parse(TXT_homelng.Text.ToString()), double.Parse(TXT_homealt.Text.ToString()))); //add home to list head
-            for (int i = 0; i < Alat.Length; i++)
-            {
-                GroupApointlist.Add(new PointLatLngAlt(Alat[i], Alng[i], Aalt[i]));
-            }
-            GroupApointlist.Add(new PointLatLngAlt(double.Parse(TXT_homelat.Text.ToString()), double.Parse(TXT_homelng.Text.ToString()), double.Parse(TXT_homealt.Text.ToString()))); //add home to list tail
-        }
-        private void GroupBtest()
-        {
-            double[] Blat = new double[] { -35.3638209, -35.3655183, -35.3666907, -35.3670056, -35.3658158, -35.3638734 };//操場
-            double[] Blng = new double[] { 149.1635871, 149.1617632, 149.1631579, 149.1653895, 149.1665912, 149.1655183 }; //操場
-            double[] Balt = new double[] { 70, 80, 90, 100, 110, 120 };
-            GroupBpointlist.Add(new PointLatLngAlt(double.Parse(TXT_homelat.Text.ToString()), double.Parse(TXT_homelng.Text.ToString()), double.Parse(TXT_homealt.Text.ToString()))); //add home to list head
-            for (int i = 0; i < Blat.Length; i++)
-            {
-                GroupBpointlist.Add(new PointLatLngAlt(Blat[i], Blng[i], Balt[i]));
-            }
-            GroupBpointlist.Add(new PointLatLngAlt(double.Parse(TXT_homelat.Text.ToString()), double.Parse(TXT_homelng.Text.ToString()), double.Parse(TXT_homealt.Text.ToString()))); //add home to list tail
-        }
-        private void GroupCtest()
-        {
-            double[] Clat = new double[] { -35.3631560, -35.3623510, -35.3611261, -35.3599012, -35.3603911, -35.3617036 };//操場
-            double[] Clng = new double[] { 149.1668272, 149.1714406, 149.1718698, 149.1707325, 149.1679645, 149.1661835 }; //操場
-            double[] Calt = new double[] { 130, 140, 150, 160, 170, 180 };
-            GroupCpointlist.Add(new PointLatLngAlt(double.Parse(TXT_homelat.Text.ToString()), double.Parse(TXT_homelng.Text.ToString()), double.Parse(TXT_homealt.Text.ToString()))); //add home to list head
-            for (int i = 0; i < Clat.Length; i++)
-            {
-                GroupCpointlist.Add(new PointLatLngAlt(Clat[i], Clng[i], Calt[i]));
-            }
-            GroupCpointlist.Add(new PointLatLngAlt(double.Parse(TXT_homelat.Text.ToString()), double.Parse(TXT_homelng.Text.ToString()), double.Parse(TXT_homealt.Text.ToString()))); //add home to list tail
-        }
     }
-        /* public class Group_A
-         {
-             public double lat;
-             public double lng;
-             public int alt;
-         }*/
+        
     }

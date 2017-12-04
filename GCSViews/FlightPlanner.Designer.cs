@@ -126,13 +126,15 @@ namespace MissionPlanner.GCSViews
             this.BUT_loadwpfile = new MissionPlanner.Controls.MyButton();
             this.BUT_saveWPFile = new MissionPlanner.Controls.MyButton();
             this.panel6 = new System.Windows.Forms.Panel();
+            this.lbl_distance_E = new System.Windows.Forms.Label();
             this.Groupcountset = new System.Windows.Forms.TextBox();
+            this.lbl_distance_D = new System.Windows.Forms.Label();
             this.Groupcount_label = new System.Windows.Forms.Label();
+            this.lbl_distance_C = new System.Windows.Forms.Label();
             this.Path_Programming_button = new MissionPlanner.Controls.MyButton();
-            this.TestButton = new MissionPlanner.Controls.MyButton();
-            this.panelMap = new System.Windows.Forms.Panel();
             this.lbl_distance_B = new System.Windows.Forms.Label();
             this.lbl_distance_A = new System.Windows.Forms.Label();
+            this.panelMap = new System.Windows.Forms.Panel();
             this.lbl_distance = new System.Windows.Forms.Label();
             this.lbl_homedist = new System.Windows.Forms.Label();
             this.lbl_prevdist = new System.Windows.Forms.Label();
@@ -214,7 +216,6 @@ namespace MissionPlanner.GCSViews
             this.panelBASE = new System.Windows.Forms.Panel();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.lbl_distance_C = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.Commands)).BeginInit();
             this.panel5.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -719,7 +720,6 @@ namespace MissionPlanner.GCSViews
             this.flowLayoutPanel1.Controls.Add(this.panel5);
             this.flowLayoutPanel1.Controls.Add(this.panel1);
             this.flowLayoutPanel1.Controls.Add(this.panel6);
-            this.flowLayoutPanel1.Controls.Add(this.TestButton);
             resources.ApplyResources(this.flowLayoutPanel1, "flowLayoutPanel1");
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             // 
@@ -789,21 +789,44 @@ namespace MissionPlanner.GCSViews
             // 
             // panel6
             // 
+            this.panel6.Controls.Add(this.lbl_distance_E);
             this.panel6.Controls.Add(this.Groupcountset);
+            this.panel6.Controls.Add(this.lbl_distance_D);
             this.panel6.Controls.Add(this.Groupcount_label);
+            this.panel6.Controls.Add(this.lbl_distance_C);
             this.panel6.Controls.Add(this.Path_Programming_button);
+            this.panel6.Controls.Add(this.lbl_distance_B);
+            this.panel6.Controls.Add(this.lbl_distance_A);
             resources.ApplyResources(this.panel6, "panel6");
             this.panel6.Name = "panel6";
+            // 
+            // lbl_distance_E
+            // 
+            resources.ApplyResources(this.lbl_distance_E, "lbl_distance_E");
+            this.lbl_distance_E.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.lbl_distance_E.Name = "lbl_distance_E";
             // 
             // Groupcountset
             // 
             resources.ApplyResources(this.Groupcountset, "Groupcountset");
             this.Groupcountset.Name = "Groupcountset";
             // 
+            // lbl_distance_D
+            // 
+            resources.ApplyResources(this.lbl_distance_D, "lbl_distance_D");
+            this.lbl_distance_D.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.lbl_distance_D.Name = "lbl_distance_D";
+            // 
             // Groupcount_label
             // 
             resources.ApplyResources(this.Groupcount_label, "Groupcount_label");
             this.Groupcount_label.Name = "Groupcount_label";
+            // 
+            // lbl_distance_C
+            // 
+            resources.ApplyResources(this.lbl_distance_C, "lbl_distance_C");
+            this.lbl_distance_C.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.lbl_distance_C.Name = "lbl_distance_C";
             // 
             // Path_Programming_button
             // 
@@ -812,18 +835,22 @@ namespace MissionPlanner.GCSViews
             this.Path_Programming_button.UseVisualStyleBackColor = true;
             this.Path_Programming_button.Click += new System.EventHandler(this.Path_Programming_button_Click);
             // 
-            // TestButton
+            // lbl_distance_B
             // 
-            resources.ApplyResources(this.TestButton, "TestButton");
-            this.TestButton.Name = "TestButton";
-            this.TestButton.UseVisualStyleBackColor = true;
-            this.TestButton.Click += new System.EventHandler(this.TestButton_Click);
+            resources.ApplyResources(this.lbl_distance_B, "lbl_distance_B");
+            this.lbl_distance_B.BackColor = System.Drawing.Color.Transparent;
+            this.lbl_distance_B.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.lbl_distance_B.Name = "lbl_distance_B";
+            // 
+            // lbl_distance_A
+            // 
+            resources.ApplyResources(this.lbl_distance_A, "lbl_distance_A");
+            this.lbl_distance_A.BackColor = System.Drawing.Color.Transparent;
+            this.lbl_distance_A.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.lbl_distance_A.Name = "lbl_distance_A";
             // 
             // panelMap
             // 
-            this.panelMap.Controls.Add(this.lbl_distance_C);
-            this.panelMap.Controls.Add(this.lbl_distance_B);
-            this.panelMap.Controls.Add(this.lbl_distance_A);
             this.panelMap.Controls.Add(this.lbl_distance);
             this.panelMap.Controls.Add(this.lbl_homedist);
             this.panelMap.Controls.Add(this.lbl_prevdist);
@@ -834,16 +861,6 @@ namespace MissionPlanner.GCSViews
             this.panelMap.ForeColor = System.Drawing.SystemColors.ControlText;
             this.panelMap.Name = "panelMap";
             this.panelMap.Resize += new System.EventHandler(this.panelMap_Resize);
-            // 
-            // lbl_distance_B
-            // 
-            resources.ApplyResources(this.lbl_distance_B, "lbl_distance_B");
-            this.lbl_distance_B.Name = "lbl_distance_B";
-            // 
-            // lbl_distance_A
-            // 
-            resources.ApplyResources(this.lbl_distance_A, "lbl_distance_A");
-            this.lbl_distance_A.Name = "lbl_distance_A";
             // 
             // lbl_distance
             // 
@@ -1425,11 +1442,6 @@ namespace MissionPlanner.GCSViews
             this.timer1.Interval = 1200;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // lbl_distance_C
-            // 
-            resources.ApplyResources(this.lbl_distance_C, "lbl_distance_C");
-            this.lbl_distance_C.Name = "lbl_distance_C";
-            // 
             // FlightPlanner
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -1617,9 +1629,10 @@ namespace MissionPlanner.GCSViews
         private System.Windows.Forms.Label Groupcount_label;
         private System.Windows.Forms.TextBox Groupcountset;
         private System.Windows.Forms.Panel panel6;
-        private MyButton TestButton;
         private System.Windows.Forms.Label lbl_distance_A;
         private System.Windows.Forms.Label lbl_distance_B;
         private System.Windows.Forms.Label lbl_distance_C;
+        private System.Windows.Forms.Label lbl_distance_E;
+        private System.Windows.Forms.Label lbl_distance_D;
     }
 }

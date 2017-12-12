@@ -4789,6 +4789,10 @@
       <Project>{B46F6C6C-9184-41AF-8F8B-E0084752CA7C}</Project>
       <Name>MetaDataExtractor</Name>
     </ProjectReference>
+    <ProjectReference Include="ExtLibs\PathProgram\PathProgram.csproj">
+      <Project>{a006817e-7164-40e0-97d9-7d82b3da9ec2}</Project>
+      <Name>PathProgram</Name>
+    </ProjectReference>
     <ProjectReference Include="ExtLibs\px4uploader\px4uploader.csproj">
       <Project>{664FC484-2A94-4B0D-808F-A71F88E06B11}</Project>
       <Name>px4uploader</Name>

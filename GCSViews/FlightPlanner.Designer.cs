@@ -82,6 +82,7 @@ namespace MissionPlanner.GCSViews
             this.Dist = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.AZ = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TagData = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Group = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.CHK_verifyheight = new System.Windows.Forms.CheckBox();
             this.TXT_WPRad = new System.Windows.Forms.TextBox();
             this.TXT_DefaultAlt = new System.Windows.Forms.TextBox();
@@ -124,6 +125,15 @@ namespace MissionPlanner.GCSViews
             this.lbl_wpfile = new System.Windows.Forms.Label();
             this.BUT_loadwpfile = new MissionPlanner.Controls.MyButton();
             this.BUT_saveWPFile = new MissionPlanner.Controls.MyButton();
+            this.panel6 = new System.Windows.Forms.Panel();
+            this.lbl_distance_E = new System.Windows.Forms.Label();
+            this.Groupcountset = new System.Windows.Forms.TextBox();
+            this.lbl_distance_D = new System.Windows.Forms.Label();
+            this.Groupcount_label = new System.Windows.Forms.Label();
+            this.lbl_distance_C = new System.Windows.Forms.Label();
+            this.Path_Programming_button = new MissionPlanner.Controls.MyButton();
+            this.lbl_distance_B = new System.Windows.Forms.Label();
+            this.lbl_distance_A = new System.Windows.Forms.Label();
             this.panelMap = new System.Windows.Forms.Panel();
             this.lbl_distance = new System.Windows.Forms.Label();
             this.lbl_homedist = new System.Windows.Forms.Label();
@@ -176,6 +186,7 @@ namespace MissionPlanner.GCSViews
             this.areaToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.textToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.createCircleSurveyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.surveyGridToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mapToolToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ContextMeasure = new System.Windows.Forms.ToolStripMenuItem();
             this.rotateMapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -205,7 +216,6 @@ namespace MissionPlanner.GCSViews
             this.panelBASE = new System.Windows.Forms.Panel();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.surveyGridToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.Commands)).BeginInit();
             this.panel5.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -215,6 +225,7 @@ namespace MissionPlanner.GCSViews
             this.panel4.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel2.SuspendLayout();
+            this.panel6.SuspendLayout();
             this.panelMap.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
@@ -254,7 +265,8 @@ namespace MissionPlanner.GCSViews
             this.Angle,
             this.Dist,
             this.AZ,
-            this.TagData});
+            this.TagData,
+            this.Group});
             this.Commands.Name = "Commands";
             dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Control;
@@ -418,6 +430,12 @@ namespace MissionPlanner.GCSViews
             resources.ApplyResources(this.TagData, "TagData");
             this.TagData.Name = "TagData";
             this.TagData.ReadOnly = true;
+            // 
+            // Group
+            // 
+            resources.ApplyResources(this.Group, "Group");
+            this.Group.Name = "Group";
+            this.Group.ReadOnly = true;
             // 
             // CHK_verifyheight
             // 
@@ -701,6 +719,7 @@ namespace MissionPlanner.GCSViews
             this.flowLayoutPanel1.Controls.Add(this.panel2);
             this.flowLayoutPanel1.Controls.Add(this.panel5);
             this.flowLayoutPanel1.Controls.Add(this.panel1);
+            this.flowLayoutPanel1.Controls.Add(this.panel6);
             resources.ApplyResources(this.flowLayoutPanel1, "flowLayoutPanel1");
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             // 
@@ -767,6 +786,68 @@ namespace MissionPlanner.GCSViews
             this.BUT_saveWPFile.Name = "BUT_saveWPFile";
             this.BUT_saveWPFile.UseVisualStyleBackColor = true;
             this.BUT_saveWPFile.Click += new System.EventHandler(this.BUT_saveWPFile_Click);
+            // 
+            // panel6
+            // 
+            this.panel6.Controls.Add(this.lbl_distance_E);
+            this.panel6.Controls.Add(this.Groupcountset);
+            this.panel6.Controls.Add(this.lbl_distance_D);
+            this.panel6.Controls.Add(this.Groupcount_label);
+            this.panel6.Controls.Add(this.lbl_distance_C);
+            this.panel6.Controls.Add(this.Path_Programming_button);
+            this.panel6.Controls.Add(this.lbl_distance_B);
+            this.panel6.Controls.Add(this.lbl_distance_A);
+            resources.ApplyResources(this.panel6, "panel6");
+            this.panel6.Name = "panel6";
+            // 
+            // lbl_distance_E
+            // 
+            resources.ApplyResources(this.lbl_distance_E, "lbl_distance_E");
+            this.lbl_distance_E.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.lbl_distance_E.Name = "lbl_distance_E";
+            // 
+            // Groupcountset
+            // 
+            resources.ApplyResources(this.Groupcountset, "Groupcountset");
+            this.Groupcountset.Name = "Groupcountset";
+            // 
+            // lbl_distance_D
+            // 
+            resources.ApplyResources(this.lbl_distance_D, "lbl_distance_D");
+            this.lbl_distance_D.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.lbl_distance_D.Name = "lbl_distance_D";
+            // 
+            // Groupcount_label
+            // 
+            resources.ApplyResources(this.Groupcount_label, "Groupcount_label");
+            this.Groupcount_label.Name = "Groupcount_label";
+            // 
+            // lbl_distance_C
+            // 
+            resources.ApplyResources(this.lbl_distance_C, "lbl_distance_C");
+            this.lbl_distance_C.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.lbl_distance_C.Name = "lbl_distance_C";
+            // 
+            // Path_Programming_button
+            // 
+            resources.ApplyResources(this.Path_Programming_button, "Path_Programming_button");
+            this.Path_Programming_button.Name = "Path_Programming_button";
+            this.Path_Programming_button.UseVisualStyleBackColor = true;
+            this.Path_Programming_button.Click += new System.EventHandler(this.Path_Programming_button_Click);
+            // 
+            // lbl_distance_B
+            // 
+            resources.ApplyResources(this.lbl_distance_B, "lbl_distance_B");
+            this.lbl_distance_B.BackColor = System.Drawing.Color.Transparent;
+            this.lbl_distance_B.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.lbl_distance_B.Name = "lbl_distance_B";
+            // 
+            // lbl_distance_A
+            // 
+            resources.ApplyResources(this.lbl_distance_A, "lbl_distance_A");
+            this.lbl_distance_A.BackColor = System.Drawing.Color.Transparent;
+            this.lbl_distance_A.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.lbl_distance_A.Name = "lbl_distance_A";
             // 
             // panelMap
             // 
@@ -1161,6 +1242,12 @@ namespace MissionPlanner.GCSViews
             resources.ApplyResources(this.createCircleSurveyToolStripMenuItem, "createCircleSurveyToolStripMenuItem");
             this.createCircleSurveyToolStripMenuItem.Click += new System.EventHandler(this.createCircleSurveyToolStripMenuItem_Click);
             // 
+            // surveyGridToolStripMenuItem
+            // 
+            this.surveyGridToolStripMenuItem.Name = "surveyGridToolStripMenuItem";
+            resources.ApplyResources(this.surveyGridToolStripMenuItem, "surveyGridToolStripMenuItem");
+            this.surveyGridToolStripMenuItem.Click += new System.EventHandler(this.surveyGridToolStripMenuItem_Click);
+            // 
             // mapToolToolStripMenuItem
             // 
             this.mapToolToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -1355,12 +1442,6 @@ namespace MissionPlanner.GCSViews
             this.timer1.Interval = 1200;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // surveyGridToolStripMenuItem
-            // 
-            this.surveyGridToolStripMenuItem.Name = "surveyGridToolStripMenuItem";
-            resources.ApplyResources(this.surveyGridToolStripMenuItem, "surveyGridToolStripMenuItem");
-            this.surveyGridToolStripMenuItem.Click += new System.EventHandler(this.surveyGridToolStripMenuItem_Click);
-            // 
             // FlightPlanner
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -1384,6 +1465,8 @@ namespace MissionPlanner.GCSViews
             this.panel3.PerformLayout();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
+            this.panel6.ResumeLayout(false);
+            this.panel6.PerformLayout();
             this.panelMap.ResumeLayout(false);
             this.panelMap.PerformLayout();
             this.contextMenuStrip1.ResumeLayout(false);
@@ -1517,6 +1600,11 @@ namespace MissionPlanner.GCSViews
         private System.Windows.Forms.ToolStripMenuItem areaToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem setHomeHereToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem areaToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem clearToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem createCircleSurveyToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem currentPositionToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem surveyGridToolStripMenuItem;
+        private MyButton Path_Programming_button;
         private System.Windows.Forms.DataGridViewComboBoxColumn Command;
         private System.Windows.Forms.DataGridViewTextBoxColumn Param1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Param2;
@@ -1537,9 +1625,14 @@ namespace MissionPlanner.GCSViews
         private System.Windows.Forms.DataGridViewTextBoxColumn Dist;
         private System.Windows.Forms.DataGridViewTextBoxColumn AZ;
         private System.Windows.Forms.DataGridViewTextBoxColumn TagData;
-        private System.Windows.Forms.ToolStripMenuItem clearToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem createCircleSurveyToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem currentPositionToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem surveyGridToolStripMenuItem;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Group;
+        private System.Windows.Forms.Label Groupcount_label;
+        private System.Windows.Forms.TextBox Groupcountset;
+        private System.Windows.Forms.Panel panel6;
+        private System.Windows.Forms.Label lbl_distance_A;
+        private System.Windows.Forms.Label lbl_distance_B;
+        private System.Windows.Forms.Label lbl_distance_C;
+        private System.Windows.Forms.Label lbl_distance_E;
+        private System.Windows.Forms.Label lbl_distance_D;
     }
 }

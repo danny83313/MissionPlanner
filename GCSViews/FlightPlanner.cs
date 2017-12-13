@@ -45,6 +45,7 @@ namespace MissionPlanner.GCSViews
 {
     public partial class FlightPlanner : MyUserControl, IDeactivate, IActivate
     {
+        Auto_Guide.Auto_Guide AutoGuide;
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         int selectedrow;
         public bool quickadd;
@@ -63,25 +64,25 @@ namespace MissionPlanner.GCSViews
         public List<PointLatLngAlt> pointlist = new List<PointLatLngAlt>(); // used to calc distance
         public List<PointLatLngAlt> fullpointlist = new List<PointLatLngAlt>();
 
-        public List<PointLatLngAlt> Allpointlist = new List<PointLatLngAlt>(); //Input wp list
-        public List<PointLatLngAlt> Apointlist = new List<PointLatLngAlt>(); //Output wp from dll groupA
-        public List<PointLatLngAlt> Bpointlist = new List<PointLatLngAlt>();
-        public List<PointLatLngAlt> Cpointlist = new List<PointLatLngAlt>();
-        public List<PointLatLngAlt> Dpointlist = new List<PointLatLngAlt>();
-        public List<PointLatLngAlt> Epointlist = new List<PointLatLngAlt>();
-        public List<PointLatLngAlt> noflypointlist = new List<PointLatLngAlt>();
+        public List<PointLatLngAlt> Allpointlist = new List<PointLatLngAlt>(); //宣告Allpointlist，是給DLL的清單
+        public List<PointLatLngAlt> Apointlist = new List<PointLatLngAlt>(); //宣告Apointlist，是DLL輸出運算後A群路徑航點清單
+        public List<PointLatLngAlt> Bpointlist = new List<PointLatLngAlt>(); //宣告Bpointlist，是DLL輸出運算後A群路徑航點清單
+        public List<PointLatLngAlt> Cpointlist = new List<PointLatLngAlt>(); //宣告Cpointlist，是DLL輸出運算後A群路徑航點清單
+        public List<PointLatLngAlt> Dpointlist = new List<PointLatLngAlt>(); //宣告Dpointlist，是DLL輸出運算後A群路徑航點清單
+        public List<PointLatLngAlt> Epointlist = new List<PointLatLngAlt>(); //宣告Epointlist，是DLL輸出運算後A群路徑航點清單
+        public List<PointLatLngAlt> noflypointlist = new List<PointLatLngAlt>(); //宣告noflypointlist，是給DLL的禁航區座標清單
         public GMapRoute route = new GMapRoute("wp route");
-        public GMapRoute Aroute = new GMapRoute("Awp route");//A path route data
-        public GMapRoute Broute = new GMapRoute("Bwp route");//B path route data
-        public GMapRoute Croute = new GMapRoute("Cwp route");//C path route data
-        public GMapRoute Droute = new GMapRoute("Dwp route");//D path route data
-        public GMapRoute Eroute = new GMapRoute("Ewp route");//E path route data
+        public GMapRoute Aroute = new GMapRoute("Awp route");//A群路徑線路資料
+        public GMapRoute Broute = new GMapRoute("Bwp route");//B群路徑線路資料
+        public GMapRoute Croute = new GMapRoute("Cwp route");//C群路徑線路資料
+        public GMapRoute Droute = new GMapRoute("Dwp route");//D群路徑線路資料
+        public GMapRoute Eroute = new GMapRoute("Ewp route");//E群路徑線路資料
         public GMapRoute homeroute = new GMapRoute("home route");
-        public GMapRoute Ahomeroute = new GMapRoute("Ahome route");//A Home route data
-        public GMapRoute Bhomeroute = new GMapRoute("Bhome route");//B Homeroute data
-        public GMapRoute Chomeroute = new GMapRoute("Chome route");//C Homeroute data
-        public GMapRoute Dhomeroute = new GMapRoute("Dhome route");//C Homeroute data
-        public GMapRoute Ehomeroute = new GMapRoute("Ehome route");//C Homeroute data
+        public GMapRoute Ahomeroute = new GMapRoute("Ahome route");//A Home虛線路線資料
+        public GMapRoute Bhomeroute = new GMapRoute("Bhome route");//B Home虛線路線資料
+        public GMapRoute Chomeroute = new GMapRoute("Chome route");//C Home虛線路線資料
+        public GMapRoute Dhomeroute = new GMapRoute("Dhome route");//C Home虛線路線資料
+        public GMapRoute Ehomeroute = new GMapRoute("Ehome route");//C Home虛線路線資料
         static public Object thisLock = new Object();
         private ComponentResourceManager rm = new ComponentResourceManager(typeof(FlightPlanner));
 
@@ -7049,153 +7050,154 @@ Column 1: Field type (RALLY is the only one at the moment -- may have RALLY_LAND
             grid.Host = new PluginHost();
             grid.but_Click(sender, e);
         }
-
+        /****路徑規劃功能****/
         private void Path_Programming_button_Click(object sender, EventArgs e)
         {
-            int groupset = 0;  //variable groupset will be the number for the user to input how many group 
-            double distance = 0, totaldistance = 0;  // distance is the function calculate the path distance,totaldistance is the sum of each path distance 
-            Allpointlist.Clear();  //clear the WP data list which will input to dll
-            Apointlist.Clear();    //clear the WP data list which dll ouput Path A
-            Bpointlist.Clear();    //clear the WP data list which dll ouput Path B
-            Cpointlist.Clear();    //clear the WP data list which dll ouput Path C
-            Dpointlist.Clear();    //clear the WP data list which dll ouput Path D
-            Epointlist.Clear();    //clear the WP data list which dll ouput Path E
-            noflypointlist.Clear(); // clear the no-fly zone GPS data which will input to dll
-            Aroute.Clear();      //clear path A route overlay
-            Ahomeroute.Clear();  //clear path A home route overlay
-            Broute.Clear();      //clear path B route overlay
-            Bhomeroute.Clear();  //clear path B home route overlay
-            Croute.Clear();      //clear path C route overlay
-            Chomeroute.Clear();  //clear path C home route overlay
-            Droute.Clear();      //clear path D route overlay
-            Dhomeroute.Clear();  //clear path D home route overlay
-            Eroute.Clear();      //clear path E route overlay
-            Ehomeroute.Clear();  //clear path E home route overlay
-            Allpointlist.Add(new PointLatLngAlt(double.Parse(TXT_homelat.Text.ToString()), double.Parse(TXT_homelng.Text.ToString()), 0));  //add home location to list
-            for (int i = 0; i < Commands.RowCount; i++)//add waypoint from DataGridView to list
+            int groupset = 0;  //設定群數變數 
+            double distance = 0, totaldistance = 0;  // distance 是用來回傳單群航程距離的變數2，totaldistance 是拿來計算總航程的變數
+            Allpointlist.Clear();  //清除Allpointlist，Allpointlist是要給演算法dll的航點資料清單
+            Apointlist.Clear();    //清除A群路徑資料清單
+            Bpointlist.Clear();    //清除B群路徑資料清單
+            Cpointlist.Clear();    //清除C群路徑資料清單
+            Dpointlist.Clear();    //清除D群路徑資料清單
+            Epointlist.Clear();    //清除E群路徑資料清單
+            noflypointlist.Clear(); // 清除禁航區航點資料
+            Aroute.Clear();      //清除A路徑路線圖層
+            Ahomeroute.Clear();  //清除A路徑虛線圖層
+            Broute.Clear();      //清除B路徑路線圖層
+            Bhomeroute.Clear();  //清除B路徑虛線圖層
+            Croute.Clear();      //清除C路徑路線圖層
+            Chomeroute.Clear();  //清除C路徑虛線圖層
+            Droute.Clear();      //清除D路徑路線圖層
+            Dhomeroute.Clear();  //清除D路徑虛線圖層
+            Eroute.Clear();      //清除E路徑路線圖層
+            Ehomeroute.Clear();  //清除E路徑虛線圖層
+            Allpointlist.Add(new PointLatLngAlt(double.Parse(TXT_homelat.Text.ToString()), double.Parse(TXT_homelng.Text.ToString()), 0));  //將home點座標存入list
+            for (int i = 0; i < Commands.RowCount; i++)//將waypoint點座標存入list
             {
                 Allpointlist.Add(new PointLatLngAlt(double.Parse(Commands.Rows[i].Cells[Lat.Index].Value.ToString()),
                                                     double.Parse(Commands.Rows[i].Cells[Lon.Index].Value.ToString()),
                                                     double.Parse(Commands.Rows[i].Cells[Alt.Index].Value.ToString())));
             }
-            for (int j = 0; j < drawnpolygon.Points.Count; j++)//add no-fly zone GPS data to list
+            for (int j = 0; j < drawnpolygon.Points.Count; j++)//將禁航區座標存入noflypointlist
                 noflypointlist.Add(new PointLatLngAlt(drawnpolygon.Points[j].Lat, drawnpolygon.Points[j].Lng, 0));
-            if (Groupcountset.Text == string.Empty)   //if groupcountset textbox empty ,will display message and set the variable to default "1"
+            if (Groupcountset.Text == string.Empty)   //如果未輸入欲分群數量跳出提示，並以預設值"1"做運算
             {
                 CustomMessageBox.Show("Please input group number or default single group !");
                 groupset = 1;
             }
-            else  //if groupcountset textbox have input then set the variable to the input value
+            else  //若有輸入分群數量則轉換變數存入groupset
 
             {
-                groupset = int.Parse(Groupcountset.Text);
+                groupset = int.Parse(Groupcountset.Text);  //將輸入群數轉成int
             }
             PathProgramming pathProgrammingdll = new PathProgramming();
             pathProgrammingdll.math(groupset, Allpointlist, noflypointlist, ref Apointlist, ref Bpointlist, ref Cpointlist,ref Dpointlist,ref Epointlist);
-            Commands.Rows.Clear();  //clear the DatGRidView 
-            writeKML(); //refresh Flight Planner page
-            if (Apointlist.Count!=0)  //if Apointlist has WP
+            Commands.Rows.Clear();  //清除DataGridView所有欄位
+            writeKML(); //刷新地圖
+            if (Apointlist.Count!=0)  //若A群清單有航點
             {
-                WP_Marker_Route_function(Apointlist, "A",out distance);  //call function to add WP marker and route the path for A path then recieve the A path distance
-                lbl_distance_A.Text = rm.GetString("lbl_distance_A.Text") + ": " + FormatDistance(distance, false); //make A path distance show with KM
-                lbl_distance_A.ForeColor = System.Drawing.Color.Yellow; //make A path distance dislpay by yellow
-                totaldistance += distance;  //add A path distance to total distance
+                WP_Marker_Route_function(Apointlist, "A",out distance);  //呼叫 WP_Marker_Route_function副程式，並代入Apointlist及群組A做建航點、畫路徑及新增DataGridView資料，並回傳A群路徑長度
+                lbl_distance_A.Text = rm.GetString("lbl_distance_A.Text") + ": " + FormatDistance(distance, false); //A群路徑長度以KM為單位做表示
+                lbl_distance_A.ForeColor = System.Drawing.Color.Yellow; //A群路徑長度以黃色表示
+                totaldistance += distance;  //總航程距離加上A群路徑長度
             }
-            else if (Apointlist.Count == 0)  //if Apointlist is empty
+            else if (Apointlist.Count == 0)  //若A群清單無航點
             {
-                lbl_distance_A.Text = rm.GetString("lbl_distance_A.Text"); //clear labelA distance
-                lbl_distance_A.ForeColor = System.Drawing.SystemColors.ControlText; //make labelA color to black
-            }
-
-            if (Bpointlist.Count != 0)  //if Bpointlist has WP
-            {
-                WP_Marker_Route_function(Bpointlist, "B", out distance);  //call function to add WP marker and route the path for B path then recieve the B path distance
-                lbl_distance_B.Text = rm.GetString("lbl_distance_B.Text") + ": " + FormatDistance(distance, false);  //make B path distance show with KM
-                lbl_distance_B.ForeColor = System.Drawing.Color.Red;  //make B path distance dislpay by red
-                totaldistance += distance;  //add B path distance to total distance
-            }
-            else if (Bpointlist.Count == 0)  //if Bpointlist is empty
-            {
-                lbl_distance_B.Text = rm.GetString("lbl_distance_B.Text");  //clear labelB distance
-                lbl_distance_B.ForeColor = System.Drawing.SystemColors.ControlText;  //make labelB color to black
+                lbl_distance_A.Text = rm.GetString("lbl_distance_A.Text"); //清除A群路徑長度顯示資料
+                lbl_distance_A.ForeColor = System.Drawing.SystemColors.ControlText; //A群路徑長度顯示為黑色
             }
 
-            if (Cpointlist.Count != 0)  //if Cpointlist has WP
+            if (Bpointlist.Count != 0)  //若B群清單有航點
             {
-                WP_Marker_Route_function(Cpointlist, "C", out distance);  //call function to add WP marker and route the path for C path then recieve the C path distance
-                lbl_distance_C.Text = rm.GetString("lbl_distance_C.Text") + ": " + FormatDistance(distance, false);  //make C path distance show with KM
-                lbl_distance_C.ForeColor = System.Drawing.Color.Cyan;  ////make C path distance dislpay by cyan
-                totaldistance += distance;  //add C path distance to total distance
+                WP_Marker_Route_function(Bpointlist, "B", out distance);  //呼叫 WP_Marker_Route_function副程式，並代入Bpointlist及群組B做建航點、畫路徑及新增DataGridView資料，並回傳B群路徑長度
+                lbl_distance_B.Text = rm.GetString("lbl_distance_B.Text") + ": " + FormatDistance(distance, false);  //B群路徑長度以KM為單位做表示
+                lbl_distance_B.ForeColor = System.Drawing.Color.Red;  //B群路徑長度以紅色表示
+                totaldistance += distance;  //總航程距離加上B群路徑長度
             }
-            else if (Cpointlist.Count == 0)  //if Cpointlist is empty
+            else if (Bpointlist.Count == 0)  //若B群清單無航點
             {
-                lbl_distance_C.Text = rm.GetString("lbl_distance_C.Text");  //clear labelC distance
-                lbl_distance_C.ForeColor = System.Drawing.SystemColors.ControlText;  //make labelC color to black
-            }
-
-            if (Dpointlist.Count != 0)  //if Dpointlist has WP
-            {
-                WP_Marker_Route_function(Dpointlist, "D", out distance);  //call function to add WP marker and route the path for D path then recieve the D path distance
-                lbl_distance_D.Text = rm.GetString("lbl_distance_D.Text") + ": " + FormatDistance(distance, false);  //make D path distance show with KM
-                lbl_distance_D.ForeColor = System.Drawing.Color.Tomato;  ////make D path distance dislpay by tomato
-                totaldistance += distance;  //add D path distance to total distance
-            }
-            else if (Dpointlist.Count == 0)  //if Dpointlist is empty
-            {
-                lbl_distance_D.Text = rm.GetString("lbl_distance_D.Text");  //clear labelD distance
-                lbl_distance_D.ForeColor = System.Drawing.SystemColors.ControlText;  //make labelD color to black
+                lbl_distance_B.Text = rm.GetString("lbl_distance_B.Text");  //清除B群路徑長度顯示資料
+                lbl_distance_B.ForeColor = System.Drawing.SystemColors.ControlText;  //B群路徑長度顯示為黑色
             }
 
-            if (Epointlist.Count != 0)  //if Epointlist has WP
+            if (Cpointlist.Count != 0)  //若C群清單有航點
             {
-                WP_Marker_Route_function(Epointlist, "E", out distance);  //call function to add WP marker and route the path for E path then recieve the E path distance
-                lbl_distance_E.Text = rm.GetString("lbl_distance_E.Text") + ": " + FormatDistance(distance, false);  //make E path distance show with KM
-                lbl_distance_E.ForeColor = System.Drawing.Color.DeepPink;  ////make E path distance dislpay by deeppink
-                totaldistance += distance;  //add E path distance to total distance
+                WP_Marker_Route_function(Cpointlist, "C", out distance);  //呼叫 WP_Marker_Route_function副程式，並代入Cpointlist及群組C做建航點、畫路徑及新增DataGridView資料，並回傳C群路徑長度
+                lbl_distance_C.Text = rm.GetString("lbl_distance_C.Text") + ": " + FormatDistance(distance, false);  //C群路徑長度以KM為單位做表示
+                lbl_distance_C.ForeColor = System.Drawing.Color.Cyan;  //C群路徑長度以亮藍色表示
+                totaldistance += distance;  //總航程距離加上C群路徑長度
             }
-            else if (Epointlist.Count == 0)  //if Epointlist is empty
+            else if (Cpointlist.Count == 0)  //若C群清單無航點
             {
-                lbl_distance_E.Text = rm.GetString("lbl_distance_E.Text");  //clear labelE distance
-                lbl_distance_E.ForeColor = System.Drawing.SystemColors.ControlText;  //make labelEcolor to black
+                lbl_distance_C.Text = rm.GetString("lbl_distance_C.Text");  //清除C群路徑長度顯示資料
+                lbl_distance_C.ForeColor = System.Drawing.SystemColors.ControlText;  //C群路徑長度顯示為黑色
             }
-            lbl_distance.Text = rm.GetString("lbl_distance.Text") + ": " + FormatDistance(totaldistance, false);  //make total distance show with KM
+
+            if (Dpointlist.Count != 0)  //若D群清單有航點
+            {
+                WP_Marker_Route_function(Dpointlist, "D", out distance);  //呼叫 WP_Marker_Route_function副程式，並代入Dpointlist及群組D做建航點、畫路徑及新增DataGridView資料，並回傳群D路徑長度
+                lbl_distance_D.Text = rm.GetString("lbl_distance_D.Text") + ": " + FormatDistance(distance, false);  //D群路徑長度以KM為單位做表示
+                lbl_distance_D.ForeColor = System.Drawing.Color.Tomato;  //D群路徑長度以橘色表示
+                totaldistance += distance;  //總航程距離加上D群路徑長度
+            }
+            else if (Dpointlist.Count == 0)  //若D群清單無航點
+            {
+                lbl_distance_D.Text = rm.GetString("lbl_distance_D.Text");  //清除D群路徑長度顯示資料
+                lbl_distance_D.ForeColor = System.Drawing.SystemColors.ControlText;  //D群路徑長度顯示為黑色
+            }
+
+            if (Epointlist.Count != 0)  //若E群清單有航點
+            {
+                WP_Marker_Route_function(Epointlist, "E", out distance);  //呼叫 WP_Marker_Route_function副程式，並代入Epointlist及群組E做建航點、畫路徑及新增DataGridView資料，並回傳群E路徑長度
+                lbl_distance_E.Text = rm.GetString("lbl_distance_E.Text") + ": " + FormatDistance(distance, false);  //E群路徑長度以KM為單位做表示
+                lbl_distance_E.ForeColor = System.Drawing.Color.DeepPink;  //E群路徑長度以粉紅色表示
+                totaldistance += distance;  //總航程距離加上E群路徑長度
+            }
+            else if (Epointlist.Count == 0)  //若E群清單無航點
+            {
+                lbl_distance_E.Text = rm.GetString("lbl_distance_E.Text");  //清除E群路徑長度顯示資料
+                lbl_distance_E.ForeColor = System.Drawing.SystemColors.ControlText;  //E群路徑長度顯示為黑色
+            }
+            lbl_distance.Text = rm.GetString("lbl_distance.Text") + ": " + FormatDistance(totaldistance, false);  //總航程距離以KM為單位表示
         }
 
-
+        /****建立航點、畫航線、新增DataGridView資料 副程式****/
         private void WP_Marker_Route_function(List<PointLatLngAlt> sourcepointlist,string group,out double distance)
         {
-            for (int i = 0; i < sourcepointlist.Count - 2; i++) //input source list have the home location in begin and end ,so have to minus 2 point
+            for (int i = 0; i < sourcepointlist.Count - 2; i++) //代入之來源清單開頭與結尾都為Home點因此該群路徑航點總數需減掉2筆資料，剩餘數量為該群路徑航點總數
+                                                                //來源清單資料內容範例 [home,1,2,3,4,......,home]
             {
                 
-                selectedrow = Commands.Rows.Add();  //add new DataGridView row
+                selectedrow = Commands.Rows.Add();  //新增DataGridView 資料列
                 DataGridViewTextBoxCell cell;
                 if (Commands.Columns[Lat.Index].HeaderText.Equals(cmdParamNames["WAYPOINT"][4] /*"Lat"*/))
                 {
                     cell = Commands.Rows[selectedrow].Cells[Lat.Index] as DataGridViewTextBoxCell;
-                    cell.Value = sourcepointlist[i + 1].Lat.ToString();   //put source list "Lat" to DataGridView ,because of list[0] is the home location so need to add 1 for the first WP 
+                    cell.Value = sourcepointlist[i + 1].Lat.ToString();   //將來源清單Lat資料新增至DataGridView Lat欄位，list[0] 為 home 點所以需加1才會是第一個航點 
                     cell.DataGridView.EndEdit();
                 }
                 if (Commands.Columns[Lon.Index].HeaderText.Equals(cmdParamNames["WAYPOINT"][5] /*"Long"*/))
                 {
                     cell = Commands.Rows[selectedrow].Cells[Lon.Index] as DataGridViewTextBoxCell;
-                    cell.Value = sourcepointlist[i + 1].Lng.ToString();    //put source list "Lng" to DataGridView ,because of list[0] is the home location so need to add 1 for the first WP
+                    cell.Value = sourcepointlist[i + 1].Lng.ToString();    //將來源清單Lng資料新增至DataGridView Lon欄位，list[0] 為 home 點所以需加1才會是第一個航點
                     cell.DataGridView.EndEdit();
                 }
                 if (Commands.Columns[Alt.Index].HeaderText.Equals(cmdParamNames["WAYPOINT"][6] /*"Alt"*/))
                 {
                     cell = Commands.Rows[selectedrow].Cells[Alt.Index] as DataGridViewTextBoxCell;
-                    cell.Value = sourcepointlist[i + 1].Alt.ToString();    //put source list "Alt" to DataGridView ,because of list[0] is the home location so need to add 1 for the first WP
+                    cell.Value = sourcepointlist[i + 1].Alt.ToString();    //將來源清單Alt資料新增至DataGridView Alt欄位，list[0] 為 home 點所以需加1才會是第一個航點
                     cell.DataGridView.EndEdit();
                 }
                 cell = Commands.Rows[selectedrow].Cells[Group.Index] as DataGridViewTextBoxCell;/*Group*/
-                cell.Value = group;   //put the group value to the column "group" ,the value will be "A"、"B"、"C"、"D"、"E"
+                cell.Value = group;   //將群組分類依照來源新增至 "group" 欄位，內容為 "A"、"B"、"C"、"D"、"E"
                 cell.DataGridView.EndEdit();
 
-                updateRowNumbers();  //call function to add row numer to DataGridView 
+                updateRowNumbers();  //加入行數標籤
                 addpolygonmarker((selectedrow+1).ToString(), sourcepointlist[i + 1].Lng, sourcepointlist[i + 1].Lat,
-                                    sourcepointlist[i + 1].Alt, null);  //build WP marker from source list
+                                    sourcepointlist[i + 1].Alt, null);  //建立標記點(marker)，最後一欄為marker下方圓圈顏色 Color.Green 或null=白色
             }
-                /* MP spline route no use in this function*/
+                /* MP spline (圓弧畫線方式，此部分未在路徑規劃功能內用上*/
                 PointLatLngAlt lastpnt = fullpointlist[0];
                 PointLatLngAlt lastpnt2 = fullpointlist[0];
                 PointLatLngAlt lastnonspline = fullpointlist[0];
@@ -7298,155 +7300,169 @@ Column 1: Field type (RALLY is the only one at the moment -- may have RALLY_LAND
                 PointLatLngAlt homepoint = new PointLatLngAlt();
                 PointLatLngAlt firstpoint = new PointLatLngAlt();
                 PointLatLngAlt lastpoint = new PointLatLngAlt();
-                if (count > 2) //if wproute have value
+                if (count > 2) //若總航點數量(含home點)大於2個
                 {
                     // homeroute = last, home, first
                     wproute.ForEach(x =>
                     {
                         counter++;
-                        if (counter == 1)   //first waypoint is the home location
+                        if (counter == 1)   //第一筆航點資料為home點
                         {
                             homepoint = x;  
                             return;
                         }
-                        if (counter == 2)   //second waypointfrom sourcepointlist is the first point waypoint
+                        if (counter == 2)   //第二筆航點資料為第一個導航點
                         {
                             firstpoint = x;
                         }
-                        if (counter == count - 1)  //the second last waypoint 
+                        if (counter == count - 1)  //倒數第二筆航點資料為最後一個導航點
                         {
                             lastpoint = x;
                         }
-                        if (counter == count && group=="A")  //if input group is A then do Ahomeroute data
+                        if (counter == count && group=="A")  //計數器與航點計數相同時及群組代號為A時
                         {
-                            Ahomeroute.Points.Add(lastpoint);  //add gorup A lastpoint to Ahomeroute overlay
-                            Ahomeroute.Points.Add(homepoint);  //add gorup A home location to Ahomeroute overlay
-                            Ahomeroute.Points.Add(firstpoint); //add gorup A firstpoint to Ahomeroute overlay
+                            Ahomeroute.Points.Add(lastpoint);  //將最後一個導航點資料新增至A群home 虛線路徑資料
+                            Ahomeroute.Points.Add(homepoint);  //將home點資料新增至A群home 虛線路徑資料
+                            Ahomeroute.Points.Add(firstpoint); //將第一個導航點資料新增至A群home 虛線路徑資料
                             return;
                         }
-                        if (counter == count && group == "B")  //if input group is B then do Bhomeroute data
+                        if (counter == count && group == "B")  //計數器與航點計數相同時及群組代號為B時
                         {
-                            Bhomeroute.Points.Add(lastpoint);  //add gorup B firstpoint to Bhomeroute overlay
-                            Bhomeroute.Points.Add(homepoint);  //add gorup B home location to Bhomeroute overlay
-                            Bhomeroute.Points.Add(firstpoint); //add gorup B lastpoint to Bhomeroute overlay
+                            Bhomeroute.Points.Add(lastpoint);  ///將最後一個導航點資料新增至B群home 虛線路徑資料
+                            Bhomeroute.Points.Add(homepoint);  //將home點資料新增至B群home 虛線路徑資料
+                            Bhomeroute.Points.Add(firstpoint); //將第一個導航點資料新增至B群home 虛線路徑資料
                             return;
                         }
-                        if (counter == count && group == "C")  //if input group is C then do Chomeroute data
+                        if (counter == count && group == "C")  //計數器與航點計數相同時及群組代號為C時
                         {
-                            Chomeroute.Points.Add(lastpoint);  //add gorup C firstpoint to Chomeroute overlay
-                            Chomeroute.Points.Add(homepoint);  //add gorup C home location to Chomeroute overlay
-                            Chomeroute.Points.Add(firstpoint); //add gorup C lastpoint to Chomeroute overlay
+                            Chomeroute.Points.Add(lastpoint);  //將最後一個導航點資料新增至C群home 虛線路徑資料
+                            Chomeroute.Points.Add(homepoint);  //將home點資料新增至C群home 虛線路徑資料
+                            Chomeroute.Points.Add(firstpoint); //將第一個導航點資料新增至C群home 虛線路徑資料
                             return;
                         }
-                        if (counter == count && group == "D")  //if input group is D then do Dhomeroute data
+                        if (counter == count && group == "D")  //計數器與航點計數相同時及群組代號為D時
                         {
-                            Dhomeroute.Points.Add(lastpoint);  //add gorup D firstpoint to Dhomeroute overlay
-                            Dhomeroute.Points.Add(homepoint);  //add gorup D home location to Dhomeroute overlay
-                            Dhomeroute.Points.Add(firstpoint); //add gorup D lastpoint to Dhomeroute overlay
+                            Dhomeroute.Points.Add(lastpoint);  //將最後一個導航點資料新增至D群home 虛線路徑資料
+                            Dhomeroute.Points.Add(homepoint);  //將home點資料新增至D群home 虛線路徑資料
+                            Dhomeroute.Points.Add(firstpoint); //將第一個導航點資料新增至D群home 虛線路徑資料
                             return;
                         }
-                        if (counter == count && group == "E")  //if input group is E then do Ehomeroute data
+                        if (counter == count && group == "E")  //計數器與航點計數相同時及群組代號為E時
                         {
-                            Ehomeroute.Points.Add(lastpoint);  //add gorup E firstpoint to Ehomeroute overlay
-                            Ehomeroute.Points.Add(homepoint);  //add gorup E home location to Ehomeroute overlay
-                            Ehomeroute.Points.Add(firstpoint); //add gorup E lastpoint to Ehomeroute overlay
+                            Ehomeroute.Points.Add(lastpoint);  //將最後一個導航點資料新增至E群home 虛線路徑資料
+                            Ehomeroute.Points.Add(homepoint);  //將home點資料新增至E群home 虛線路徑資料
+                            Ehomeroute.Points.Add(firstpoint); //將第一個導航點資料新增至E群home 虛線路徑資料
                             return;
                         }
-                        if (group == "A")  //if input group is A then do Aroute data
-                            Aroute.Points.Add(x);  //add waypoint data except home 、firstpoint and lastpoint to Aroute 
-                        if (group == "B")  //if input group is B then do Aroute data
-                            Broute.Points.Add(x);  //add waypoint data except home 、firstpoint and lastpoint to Broute 
-                        if (group == "C")  //if input group is C then do Aroute data
-                            Croute.Points.Add(x);  //add waypoint data except home 、firstpoint and lastpoint to Croute 
-                        if (group == "D")  //if input group is D then do Aroute data
-                            Droute.Points.Add(x);  //add waypoint data except home 、firstpoint and lastpoint to Droute 
-                        if (group == "E")  //if input group is E then do Aroute data
-                            Eroute.Points.Add(x);  //add waypoint data except home 、firstpoint and lastpoint to Eroute 
+                        if (group == "A")  //群組代號為A時
+                            Aroute.Points.Add(x);  //將計數器之對應導航點新增至A群路線資料 
+                        if (group == "B")  //群組代號為B時
+                            Broute.Points.Add(x);  //將計數器之對應導航點新增至B群路線資料 
+                        if (group == "C")  //群組代號為C時
+                            Croute.Points.Add(x);  //將計數器之對應導航點新增至C群路線資料  
+                        if (group == "D")  //群組代號為D時
+                            Droute.Points.Add(x);  //將計數器之對應導航點新增至D群路線資料 
+                        if (group == "E")  //群組代號為E時
+                            Eroute.Points.Add(x);  //將計數器之對應導航點新增至E群路線資料 
                     });
 
-                    /*Group Apath route,Apath=Ahomeroute+Aroute*/
+                    /****畫航線，一群航線=home虛線(homeroute)+實線(route)****/
 
-                    Ahomeroute.Stroke = new Pen(Color.Yellow, 2); //set Ahomeroute overlay color to Yellow and width 2
+                    Ahomeroute.Stroke = new Pen(Color.Yellow, 2); //設置A群home路線為黃色，粗度為2
                     // if we have a large distance between home and the first/last point, it hangs on the draw of a the dashed line.
                     if (homepoint.GetDistance(lastpoint) < 5000 && homepoint.GetDistance(firstpoint) < 5000)
-                         Ahomeroute.Stroke.DashStyle = DashStyle.Dash;  //set Ahomeroute overlay to dash
-                    polygonsoverlay.Routes.Add(Ahomeroute);  //draw Ahomeroute overlay
-                    Aroute.Stroke = new Pen(Color.Yellow, 4);  //set Aroute overlay color to Yellow and width 4
-                    Aroute.Stroke.DashStyle = DashStyle.Custom;  //set Aroute overlay to line
-                    polygonsoverlay.Routes.Add(Aroute);  //draw Aroute overlay
+                         Ahomeroute.Stroke.DashStyle = DashStyle.Dash;  //設置A群home路線為虛線
+                    polygonsoverlay.Routes.Add(Ahomeroute);  //畫A群home虛線
+                    Aroute.Stroke = new Pen(Color.Yellow, 4);  //設置A群路線為黃色，粗度為4
+                    Aroute.Stroke.DashStyle = DashStyle.Custom;  //設置A群路線為實線
+                    polygonsoverlay.Routes.Add(Aroute);  //畫A群路線
 
-                    /*Group Bpath route,Bpath=Bhomeroute+Broute*/
+ 
 
-                    Bhomeroute.Stroke = new Pen(Color.Red, 2); //set Bhomeroute overlay color to Red and width 2
+                    Bhomeroute.Stroke = new Pen(Color.Red, 2); //設置B群home路線為紅色，粗度為2
+                                                               // if we have a large distance between home and the first/last point, it hangs on the draw of a the dashed line.
+                   if (homepoint.GetDistance(lastpoint) < 5000 && homepoint.GetDistance(firstpoint) < 5000)
+                        Bhomeroute.Stroke.DashStyle = DashStyle.Dash;  //設置B群home路線為虛線
+                    polygonsoverlay.Routes.Add(Bhomeroute);  //畫B群home虛線
+                    Broute.Stroke = new Pen(Color.Red, 4);  //設置B群路線為紅色，粗度為4
+                    Broute.Stroke.DashStyle = DashStyle.Custom;   // 設置B群路線為實線
+                    polygonsoverlay.Routes.Add(Broute);  //畫B群路線
+
+
+                    Chomeroute.Stroke = new Pen(Color.Cyan, 2); //設置C群home路線為亮藍色，粗度為2
                     // if we have a large distance between home and the first/last point, it hangs on the draw of a the dashed line.
                     if (homepoint.GetDistance(lastpoint) < 5000 && homepoint.GetDistance(firstpoint) < 5000)
-                    Bhomeroute.Stroke.DashStyle = DashStyle.Dash;  //set Bhomeroute overlay to dash
-                    polygonsoverlay.Routes.Add(Bhomeroute);  //draw Bhomeroute overlay
-                    Broute.Stroke = new Pen(Color.Red, 4);  //set Broute overlay color to Red and width 4
-                    Broute.Stroke.DashStyle = DashStyle.Custom;   //set Broute overlay to line
-                    polygonsoverlay.Routes.Add(Broute);  //draw Broute overlay
+                        Chomeroute.Stroke.DashStyle = DashStyle.Dash;  //設置C群home路線為虛線
+                    polygonsoverlay.Routes.Add(Chomeroute);  //畫C群home虛線
+                    Croute.Stroke = new Pen(Color.Cyan, 4);  //設置C群路線為亮藍色，粗度為4
+                    Croute.Stroke.DashStyle = DashStyle.Custom;  // 設置C群路線為實線
+                    polygonsoverlay.Routes.Add(Croute);  //畫C群路線
 
-                    /*Group Cpath route,Cpath=Chomeroute+Croute*/
 
-                    Chomeroute.Stroke = new Pen(Color.Cyan, 2); //set Chomeroute overlay color to Cyan and width 2
+                    Dhomeroute.Stroke = new Pen(Color.Tomato, 2); //設置D群home路線為橘色，粗度為2
                     // if we have a large distance between home and the first/last point, it hangs on the draw of a the dashed line.
                     if (homepoint.GetDistance(lastpoint) < 5000 && homepoint.GetDistance(firstpoint) < 5000)
-                        Chomeroute.Stroke.DashStyle = DashStyle.Dash;  //set Chomeroute overlay to dash
-                    polygonsoverlay.Routes.Add(Chomeroute);  //draw Chomeroute overlay
-                    Croute.Stroke = new Pen(Color.Cyan, 4); //set Croute overlay color to Cyan and width 4
-                    Croute.Stroke.DashStyle = DashStyle.Custom;  //set Croute overlay to line
-                    polygonsoverlay.Routes.Add(Croute);  //draw Croute overlay
+                        Dhomeroute.Stroke.DashStyle = DashStyle.Dash;  //設置D群home路線為虛線
+                    polygonsoverlay.Routes.Add(Dhomeroute);  //畫D群home虛線
+                    Droute.Stroke = new Pen(Color.Tomato, 4);  //設置D群路線為橘色，粗度為4
+                    Droute.Stroke.DashStyle = DashStyle.Custom;  //設置D群路線為實線
+                    polygonsoverlay.Routes.Add(Droute);  //畫D群路線
 
-                    /*Group Dpath route,Dpath=Dhomeroute+Droute*/
 
-                    Dhomeroute.Stroke = new Pen(Color.Tomato, 2); //set Dhomeroute overlay color to Tomato and width 2
+                    Ehomeroute.Stroke = new Pen(Color.DeepPink, 2); //設置E群home路線為粉紅色，粗度為2
                     // if we have a large distance between home and the first/last point, it hangs on the draw of a the dashed line.
                     if (homepoint.GetDistance(lastpoint) < 5000 && homepoint.GetDistance(firstpoint) < 5000)
-                        Dhomeroute.Stroke.DashStyle = DashStyle.Dash;  //set Ahomeroute overlay to dash
-                    polygonsoverlay.Routes.Add(Dhomeroute);  //draw Ahomeroute overlay
-                    Droute.Stroke = new Pen(Color.Tomato, 4);  //set Droute overlay color to Tomato and width 4
-                    Droute.Stroke.DashStyle = DashStyle.Custom;  //set Droute overlay to line
-                    polygonsoverlay.Routes.Add(Droute);  //draw Droute overlay
-
-                    /*Group Epath route,Epath=Ehomeroute+Eroute*/
-
-                    Ehomeroute.Stroke = new Pen(Color.DeepPink, 2); //set Ehomeroute overlay color to DeepPink and width 2
-                    // if we have a large distance between home and the first/last point, it hangs on the draw of a the dashed line.
-                    if (homepoint.GetDistance(lastpoint) < 5000 && homepoint.GetDistance(firstpoint) < 5000)
-                        Ehomeroute.Stroke.DashStyle = DashStyle.Dash;  //set Ahomeroute overlay to dash
-                    polygonsoverlay.Routes.Add(Ehomeroute);  //draw Ahomeroute overlay
-                    Eroute.Stroke = new Pen(Color.DeepPink, 4);  //set Eroute overlay color to DeepPink and width 4
-                    Eroute.Stroke.DashStyle = DashStyle.Custom;  //set Eroute overlay to line
-                    polygonsoverlay.Routes.Add(Eroute);  //draw Eroute overlay
+                        Ehomeroute.Stroke.DashStyle = DashStyle.Dash;  //設置E群home路線為虛線
+                    polygonsoverlay.Routes.Add(Ehomeroute);  //畫E群home虛線
+                    Eroute.Stroke = new Pen(Color.DeepPink, 4);  //設置E群路線為粉紅色，粗度為4
+                    Eroute.Stroke.DashStyle = DashStyle.Custom;  //設置E群路線為實線
+                    polygonsoverlay.Routes.Add(Eroute);  //畫E群路線
 
             }
-                /*calculate path distance*/
+                /****計算來源群航程距離****/
                 double homedist = 0;
                 string home = string.Format("{0},{1},{2}\r\n", TXT_homelng.Text, TXT_homelat.Text, TXT_DefaultAlt.Text);
-                if (home.Length > 5) //if home has been set
+                if (home.Length > 5) //home點有被設置時
                 {
                     homedist = MainMap.MapProvider.Projection.GetDistance(sourcepointlist[sourcepointlist.Count - 1],
-                        sourcepointlist[0]);  //calculate last waypoint and home distance
+                        sourcepointlist[0]);  //計算最後一個導航點與home點距離
                 }
 
                 double dist = 0;
 
-                for (int a = 1; a < sourcepointlist.Count; a++)  //calculate each two point distance 
+                for (int a = 1; a < sourcepointlist.Count; a++)  //計算兩個導航點間的距離
                 {
-                    if (sourcepointlist[a - 1] == null)
+                    if (sourcepointlist[a - 1] == null)    
                         continue;
 
                     if (sourcepointlist[a] == null)
                         continue;
 
-                    dist += MainMap.MapProvider.Projection.GetDistance(sourcepointlist[a - 1], sourcepointlist[a]);  //add each two point distance to dist
+                    dist += MainMap.MapProvider.Projection.GetDistance(sourcepointlist[a - 1], sourcepointlist[a]);  //加總導航點與導航點間的距離，函式為此點與上一點
                 }
 
-                distance = dist + homedist;  //total the dist and homedist 
-            
-            
-        }
+                distance = dist + homedist;  //來源群總航程=home點與最後一個導航點之距離+導航點與導航點間的距離加總
 
+
+        }
+        public void Getwpdata(int wpnumber)
+        {
+            //if (wpnumber < Commands.RowCount)
+            //{
+            double WPLat = double.Parse(Commands.Rows[wpnumber].Cells[Lat.Index].Value.ToString());
+            double WPLng = double.Parse(Commands.Rows[wpnumber].Cells[Lon.Index].Value.ToString());
+            double WPAlt = double.Parse(Commands.Rows[wpnumber].Cells[Alt.Index].Value.ToString());
+            int RowCount = Commands.RowCount;
+            AutoGuide.getwpdata(WPLat, WPLng, WPAlt, RowCount);
+            //double lat = double.Parse(Commands.Rows[wpnumber].Cells[Lat.Index].Value.ToString());
+            //AutoGuide.getwpdata(lat);
+            // }
+        }
+        public void autoguideform()
+        {
+            AutoGuide = new Auto_Guide.Auto_Guide(this);
+            AutoGuide.Show();
+        }
     }
         
-    }
+ }

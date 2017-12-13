@@ -362,7 +362,7 @@ namespace MissionPlanner.Auto_Guide
                         return;
                 bool Aans = Acopter.doARM(!Acopter.MAV.cs.armed);
                 bool Bans = Bcopter.doARM(!Acopter.MAV.cs.armed);
-                 bool Cans = Ccopter.doARM(!Acopter.MAV.cs.armed);
+                bool Cans = Ccopter.doARM(!Acopter.MAV.cs.armed);
                 if (Aans == false)
                     CustomMessageBox.Show(Strings.ErrorRejectedByMAV, Strings.ERROR);
                 if (Bans == false)
@@ -373,7 +373,7 @@ namespace MissionPlanner.Auto_Guide
             catch
             {
                 CustomMessageBox.Show(Strings.ErrorNoResponce, Strings.ERROR);
-            }   
+            }
         }
 
         private void Takeoff_All_Click(object sender, EventArgs e)
@@ -397,9 +397,9 @@ namespace MissionPlanner.Auto_Guide
         {
             try
             {
-               Acopter.setMode("Stabilize");
-               Bcopter.setMode("Stabilize");
-               Ccopter.setMode("Stabilize");
+                Acopter.setMode("Stabilize");
+                Bcopter.setMode("Stabilize");
+                Ccopter.setMode("Stabilize");
                 if (Acopter.doARM(true))
                 {
                     Acopter.setMode("GUIDED");

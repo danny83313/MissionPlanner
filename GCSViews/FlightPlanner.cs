@@ -41,11 +41,13 @@ using System.Text.RegularExpressions;
 using MissionPlanner.Plugin;
 using PathProgram;
 
+
 namespace MissionPlanner.GCSViews
 {
     public partial class FlightPlanner : MyUserControl, IDeactivate, IActivate
     {
         Auto_Guide.Auto_Guide AutoGuide;
+       
         private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         int selectedrow;
         public bool quickadd;
@@ -65,12 +67,12 @@ namespace MissionPlanner.GCSViews
         public List<PointLatLngAlt> fullpointlist = new List<PointLatLngAlt>();
 
         public List<PointLatLngAlt> Allpointlist = new List<PointLatLngAlt>(); //宣告Allpointlist，是給DLL的清單
-        public List<PointLatLngAlt> Apointlist = new List<PointLatLngAlt>(); //宣告Apointlist，是DLL輸出運算後A群路徑航點清單
-        public List<PointLatLngAlt> Bpointlist = new List<PointLatLngAlt>(); //宣告Bpointlist，是DLL輸出運算後A群路徑航點清單
-        public List<PointLatLngAlt> Cpointlist = new List<PointLatLngAlt>(); //宣告Cpointlist，是DLL輸出運算後A群路徑航點清單
-        public List<PointLatLngAlt> Dpointlist = new List<PointLatLngAlt>(); //宣告Dpointlist，是DLL輸出運算後A群路徑航點清單
-        public List<PointLatLngAlt> Epointlist = new List<PointLatLngAlt>(); //宣告Epointlist，是DLL輸出運算後A群路徑航點清單
-        public List<PointLatLngAlt> noflypointlist = new List<PointLatLngAlt>(); //宣告noflypointlist，是給DLL的禁航區座標清單
+        public static List<PointLatLngAlt> Apointlist = new List<PointLatLngAlt>(); //宣告Apointlist，是DLL輸出運算後A群路徑航點清單
+        public static List<PointLatLngAlt> Bpointlist = new List<PointLatLngAlt>(); //宣告Bpointlist，是DLL輸出運算後A群路徑航點清單
+        public static List<PointLatLngAlt> Cpointlist = new List<PointLatLngAlt>(); //宣告Cpointlist，是DLL輸出運算後A群路徑航點清單
+        public static List<PointLatLngAlt> Dpointlist = new List<PointLatLngAlt>(); //宣告Dpointlist，是DLL輸出運算後A群路徑航點清單
+        public static List<PointLatLngAlt> Epointlist = new List<PointLatLngAlt>(); //宣告Epointlist，是DLL輸出運算後A群路徑航點清單
+        public static List<PointLatLngAlt> noflypointlist = new List<PointLatLngAlt>(); //宣告noflypointlist，是給DLL的禁航區座標清單
         public GMapRoute route = new GMapRoute("wp route");
         public GMapRoute Aroute = new GMapRoute("Awp route");//A群路徑線路資料
         public GMapRoute Broute = new GMapRoute("Bwp route");//B群路徑線路資料
@@ -7101,6 +7103,7 @@ Column 1: Field type (RALLY is the only one at the moment -- may have RALLY_LAND
                 lbl_distance_A.Text = rm.GetString("lbl_distance_A.Text") + ": " + FormatDistance(distance, false); //A群路徑長度以KM為單位做表示
                 lbl_distance_A.ForeColor = System.Drawing.Color.Yellow; //A群路徑長度以黃色表示
                 totaldistance += distance;  //總航程距離加上A群路徑長度
+                
             }
             else if (Apointlist.Count == 0)  //若A群清單無航點
             {
@@ -7443,7 +7446,7 @@ Column 1: Field type (RALLY is the only one at the moment -- may have RALLY_LAND
 
                 distance = dist + homedist;  //來源群總航程=home點與最後一個導航點之距離+導航點與導航點間的距離加總
 
-
+            
         }
         public void Getwpdata(int wpnumber)
         {
@@ -7462,6 +7465,18 @@ Column 1: Field type (RALLY is the only one at the moment -- may have RALLY_LAND
         {
             AutoGuide = new Auto_Guide.Auto_Guide(this);
             AutoGuide.Show();
+        }
+
+
+        public static void Receivelist(ref List<PointLatLngAlt> outputApointlist, ref List<PointLatLngAlt> outputBpointlist, ref List<PointLatLngAlt> outputCpointlist
+                                        , ref List<PointLatLngAlt> outputDpointlist,ref List<PointLatLngAlt> outputEpointlist, ref List<PointLatLngAlt> outputnoflypointlist)    
+        {
+            outputApointlist = new List<PointLatLngAlt> (Apointlist);
+            outputBpointlist = new List<PointLatLngAlt>(Bpointlist);
+            outputCpointlist = new List<PointLatLngAlt>(Cpointlist);
+            outputDpointlist = new List<PointLatLngAlt>(Dpointlist);
+            outputEpointlist = new List<PointLatLngAlt>(Epointlist);
+            outputnoflypointlist = new List<PointLatLngAlt>(noflypointlist);
         }
     }
         

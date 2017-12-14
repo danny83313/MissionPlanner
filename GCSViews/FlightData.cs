@@ -29,6 +29,7 @@ using WebCamService;
 using ZedGraph;
 using LogAnalyzer = MissionPlanner.Utilities.LogAnalyzer;
 
+
 // written by michael oborne
 
 namespace MissionPlanner.GCSViews
@@ -39,6 +40,13 @@ namespace MissionPlanner.GCSViews
 
         public static bool threadrun;
         int tickStart;
+        int wpnumber;
+        public List<PointLatLngAlt> Apointlist = new List<PointLatLngAlt>(); //宣告Apointlist，接收FlightPlanner的A群List
+        public List<PointLatLngAlt> Bpointlist = new List<PointLatLngAlt>(); //宣告Bpointlist，接收FlightPlanner的B群List
+        public List<PointLatLngAlt> Cpointlist = new List<PointLatLngAlt>(); //宣告Cpointlist，接收FlightPlanner的C群List
+        public List<PointLatLngAlt> Dpointlist = new List<PointLatLngAlt>(); //宣告Dpointlist，接收FlightPlanner的D群List
+        public List<PointLatLngAlt> Epointlist = new List<PointLatLngAlt>(); //宣告Epointlist，接收FlightPlanner的E群List
+        public List<PointLatLngAlt> noflypointlist = new List<PointLatLngAlt>(); //宣告noflypointlist，接收FlightPlanner的禁航區List
         RollingPointPairList list1 = new RollingPointPairList(1200);
         RollingPointPairList list2 = new RollingPointPairList(1200);
         RollingPointPairList list3 = new RollingPointPairList(1200);
@@ -164,7 +172,7 @@ namespace MissionPlanner.GCSViews
             }
         }
 
-        public FlightData()
+        public FlightData( )
         {
             log.Info("Ctor Start");
 
@@ -4509,6 +4517,151 @@ namespace MissionPlanner.GCSViews
                 GStreamer.Stop(gst);
             }
         }
+
+
+        private void UpdateMap_Button_Click(object sender, EventArgs e)
+        {
+            wpnumber = 0;    
+            FlightPlanner.Receivelist(ref Apointlist,ref Bpointlist, ref Cpointlist, ref Dpointlist, ref Epointlist, ref noflypointlist);
+            //addpolygonmarker("1", 149.1657972, -35.3626638, (int)10, Color.White,
+            //                            polygons);
+            addpolygonmarker("Home", Apointlist[0].Lng, Apointlist[0].Lat,
+                                    (int)Apointlist[0].Alt, Color.White, polygons);
+            WP_Marker_Route("A", Apointlist);
+            WP_Marker_Route("B", Bpointlist);
+            WP_Marker_Route("C", Cpointlist);
+            WP_Marker_Route("D", Dpointlist);
+            WP_Marker_Route("E", Epointlist);
+
+        }
+        private void WP_Marker_Route(string group, List<PointLatLngAlt> sourcepointlist)
+        {
+            for (int i = 0; i < sourcepointlist.Count - 2; i++)
+            {
+                addpolygonmarker((wpnumber + 1).ToString(), sourcepointlist[i + 1].Lng, sourcepointlist[i + 1].Lat,
+                                    (int)sourcepointlist[i + 1].Alt, Color.White, polygons);
+                wpnumber++;
+            }
+            GMapRoute Ahomeroute = new GMapRoute("homepath");
+            Ahomeroute.Stroke = new Pen(Color.Yellow, 2);
+            Ahomeroute.Stroke.DashStyle = DashStyle.Dash;
+            GMapRoute Awppath = new GMapRoute("wp path");
+            Awppath.Stroke = new Pen(Color.Yellow, 4);
+            Awppath.Stroke.DashStyle = DashStyle.Custom;
+
+            GMapRoute Bhomeroute = new GMapRoute("homepath");
+            Bhomeroute.Stroke = new Pen(Color.Red, 2);
+            Bhomeroute.Stroke.DashStyle = DashStyle.Dash;
+            GMapRoute Bwppath = new GMapRoute("wp path");
+            Bwppath.Stroke = new Pen(Color.Red, 4);
+            Bwppath.Stroke.DashStyle = DashStyle.Custom;
+
+            GMapRoute Chomeroute = new GMapRoute("homepath");
+            Chomeroute.Stroke = new Pen(Color.Cyan, 2);
+            Chomeroute.Stroke.DashStyle = DashStyle.Dash;
+            GMapRoute Cwppath = new GMapRoute("wp path");
+            Cwppath.Stroke = new Pen(Color.Cyan, 4);
+            Cwppath.Stroke.DashStyle = DashStyle.Custom;
+
+            GMapRoute Dhomeroute = new GMapRoute("homepath");
+            Dhomeroute.Stroke = new Pen(Color.Tomato, 2);
+            Dhomeroute.Stroke.DashStyle = DashStyle.Dash;
+            GMapRoute Dwppath = new GMapRoute("wp path");
+            Dwppath.Stroke = new Pen(Color.Tomato, 4);
+            Dwppath.Stroke.DashStyle = DashStyle.Custom;
+
+            GMapRoute Ehomeroute = new GMapRoute("homepath");
+            Ehomeroute.Stroke = new Pen(Color.DeepPink, 2);
+            Ehomeroute.Stroke.DashStyle = DashStyle.Dash;
+            GMapRoute Ewppath = new GMapRoute("wp path");
+            Ewppath.Stroke = new Pen(Color.DeepPink, 4);
+            Ewppath.Stroke.DashStyle = DashStyle.Custom;
+
+            if (group == "A")
+            { 
+                // add first point past home
+                Ahomeroute.Points.Add(sourcepointlist[1]);
+                // add home location
+                Ahomeroute.Points.Add(sourcepointlist[0]);
+                // add last point
+                Ahomeroute.Points.Add(sourcepointlist[sourcepointlist.Count - 2]);
+
+                for (int a = 1; a < sourcepointlist.Count - 1; a++)
+                {
+                    Awppath.Points.Add(sourcepointlist[a]);
+                }
+            }
+            if (group == "B")
+            {
+                // add first point past home
+                Bhomeroute.Points.Add(sourcepointlist[1]);
+                // add home location
+                Bhomeroute.Points.Add(sourcepointlist[0]);
+                // add last point
+                Bhomeroute.Points.Add(sourcepointlist[sourcepointlist.Count - 2]);
+
+                for (int a = 1; a < sourcepointlist.Count - 1; a++)
+                {
+                    Bwppath.Points.Add(sourcepointlist[a]);
+                }
+            }
+            if (group == "C")
+            {
+                // add first point past home
+                Chomeroute.Points.Add(sourcepointlist[1]);
+                // add home location
+                Chomeroute.Points.Add(sourcepointlist[0]);
+                // add last point
+                Chomeroute.Points.Add(sourcepointlist[sourcepointlist.Count - 2]);
+
+                for (int a = 1; a < sourcepointlist.Count - 1; a++)
+                {
+                    Cwppath.Points.Add(sourcepointlist[a]);
+                }
+            }
+            if (group == "D")
+            {
+                // add first point past home
+                Dhomeroute.Points.Add(sourcepointlist[1]);
+                // add home location
+                Dhomeroute.Points.Add(sourcepointlist[0]);
+                // add last point
+                Dhomeroute.Points.Add(sourcepointlist[sourcepointlist.Count - 2]);
+
+                for (int a = 1; a < sourcepointlist.Count - 1; a++)
+                {
+                    Dwppath.Points.Add(sourcepointlist[a]);
+                }
+            }
+            if (group == "E")
+            {
+                // add first point past home
+                Ehomeroute.Points.Add(sourcepointlist[1]);
+                // add home location
+                Ehomeroute.Points.Add(sourcepointlist[0]);
+                // add last point
+                Ehomeroute.Points.Add(sourcepointlist[sourcepointlist.Count - 2]);
+
+                for (int a = 1; a < sourcepointlist.Count - 1; a++)
+                {
+                    Ewppath.Points.Add(sourcepointlist[a]);
+                }
+            }
+            Invoke((MethodInvoker)delegate
+            {
+                polygons.Routes.Add(Ahomeroute);
+                polygons.Routes.Add(Awppath);
+                polygons.Routes.Add(Bhomeroute);
+                polygons.Routes.Add(Bwppath);
+                polygons.Routes.Add(Chomeroute);
+                polygons.Routes.Add(Cwppath);
+                polygons.Routes.Add(Dhomeroute);
+                polygons.Routes.Add(Dwppath);
+                polygons.Routes.Add(Ehomeroute);
+                polygons.Routes.Add(Ewppath);
+            });
+        }
     }
-}
+ }
+
  

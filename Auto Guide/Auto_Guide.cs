@@ -22,6 +22,7 @@ namespace MissionPlanner.Auto_Guide
         public delegate void mydalegate();
         public mydalegate change_text;
         static bool threadrun;
+        
         int wpnumber = 0;
         int Awpnumber = 0;
         int Bwpnumber = 0;
@@ -446,5 +447,7 @@ namespace MissionPlanner.Auto_Guide
             }
             ((Button)sender).Enabled = true;
         }
+
+     
     }
 }

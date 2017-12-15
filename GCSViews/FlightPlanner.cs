@@ -73,6 +73,8 @@ namespace MissionPlanner.GCSViews
         public static List<PointLatLngAlt> Dpointlist = new List<PointLatLngAlt>(); //宣告Dpointlist，是DLL輸出運算後A群路徑航點清單
         public static List<PointLatLngAlt> Epointlist = new List<PointLatLngAlt>(); //宣告Epointlist，是DLL輸出運算後A群路徑航點清單
         public static List<PointLatLngAlt> noflypointlist = new List<PointLatLngAlt>(); //宣告noflypointlist，是給DLL的禁航區座標清單
+        public GMapPolygon noflypolygon;
+       
         public GMapRoute route = new GMapRoute("wp route");
         public GMapRoute Aroute = new GMapRoute("Awp route");//A群路徑線路資料
         public GMapRoute Broute = new GMapRoute("Bwp route");//B群路徑線路資料
@@ -678,6 +680,12 @@ namespace MissionPlanner.GCSViews
             drawnpolygon = new GMapPolygon(polygonPoints2, "drawnpoly");
             drawnpolygon.Stroke = new Pen(Color.Red, 2);
             drawnpolygon.Fill = Brushes.Transparent;
+
+            // setup noflypolygon
+            //List<PointLatLng> polygonPoints = new List<PointLatLng>();
+            noflypolygon = new GMapPolygon(polygonPoints, "geofence");
+            noflypolygon.Stroke = new Pen(Color.Pink, 5);
+            noflypolygon.Fill = Brushes.Transparent;
 
             /*
             var timer = new System.Timers.Timer();
@@ -7163,6 +7171,20 @@ Column 1: Field type (RALLY is the only one at the moment -- may have RALLY_LAND
                 lbl_distance_E.ForeColor = System.Drawing.SystemColors.ControlText;  //E群路徑長度顯示為黑色
             }
             lbl_distance.Text = rm.GetString("lbl_distance.Text") + ": " + FormatDistance(totaldistance, false);  //總航程距離以KM為單位表示
+
+            /***參考4780行程式內容在FlightData畫geofence圖層代表禁航區***/
+            noflypolygon.Points.Clear();
+            noflypolygon.Points.AddRange(drawnpolygon.Points.ToArray());
+            //geofenceoverlay.Polygons.Add(geofencepolygon);   //在FlightPlanner下畫geofence圖層
+
+            // update flightdata
+            FlightData.geofence.Markers.Clear();
+            FlightData.geofence.Polygons.Clear();
+            FlightData.geofence.Polygons.Add(new GMapPolygon(noflypolygon.Points, "gf fd")
+            {
+                Stroke = noflypolygon.Stroke,
+                //Fill = Brushes.Transparent  //區域內填滿透明
+            });
         }
 
         /****建立航點、畫航線、新增DataGridView資料 副程式****/
@@ -7466,17 +7488,16 @@ Column 1: Field type (RALLY is the only one at the moment -- may have RALLY_LAND
             AutoGuide = new Auto_Guide.Auto_Guide(this);
             AutoGuide.Show();
         }
-
-
+  
         public static void Receivelist(ref List<PointLatLngAlt> outputApointlist, ref List<PointLatLngAlt> outputBpointlist, ref List<PointLatLngAlt> outputCpointlist
-                                        , ref List<PointLatLngAlt> outputDpointlist,ref List<PointLatLngAlt> outputEpointlist, ref List<PointLatLngAlt> outputnoflypointlist)    
+                                        , ref List<PointLatLngAlt> outputDpointlist,ref List<PointLatLngAlt> outputEpointlist)    
         {
             outputApointlist = new List<PointLatLngAlt> (Apointlist);
             outputBpointlist = new List<PointLatLngAlt>(Bpointlist);
             outputCpointlist = new List<PointLatLngAlt>(Cpointlist);
             outputDpointlist = new List<PointLatLngAlt>(Dpointlist);
             outputEpointlist = new List<PointLatLngAlt>(Epointlist);
-            outputnoflypointlist = new List<PointLatLngAlt>(noflypointlist);
+           
         }
     }
         

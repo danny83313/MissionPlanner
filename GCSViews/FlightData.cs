@@ -46,7 +46,6 @@ namespace MissionPlanner.GCSViews
         public List<PointLatLngAlt> Cpointlist = new List<PointLatLngAlt>(); //宣告Cpointlist，接收FlightPlanner的C群List
         public List<PointLatLngAlt> Dpointlist = new List<PointLatLngAlt>(); //宣告Dpointlist，接收FlightPlanner的D群List
         public List<PointLatLngAlt> Epointlist = new List<PointLatLngAlt>(); //宣告Epointlist，接收FlightPlanner的E群List
-        public List<PointLatLngAlt> noflypointlist = new List<PointLatLngAlt>(); //宣告noflypointlist，接收FlightPlanner的禁航區List
         RollingPointPairList list1 = new RollingPointPairList(1200);
         RollingPointPairList list2 = new RollingPointPairList(1200);
         RollingPointPairList list3 = new RollingPointPairList(1200);
@@ -86,7 +85,7 @@ namespace MissionPlanner.GCSViews
         internal static GMapOverlay rallypointoverlay;
         internal static GMapOverlay photosoverlay;
         internal static GMapOverlay poioverlay = new GMapOverlay("POI"); // poi layer
-
+        GMapPolygon geofencepolygon;
         List<TabPage> TabListOriginal = new List<TabPage>();
 
         bool huddropout;
@@ -4522,17 +4521,22 @@ namespace MissionPlanner.GCSViews
         private void UpdateMap_Button_Click(object sender, EventArgs e)
         {
             wpnumber = 0;    
-            FlightPlanner.Receivelist(ref Apointlist,ref Bpointlist, ref Cpointlist, ref Dpointlist, ref Epointlist, ref noflypointlist);
+            FlightPlanner.Receivelist(ref Apointlist,ref Bpointlist, ref Cpointlist, ref Dpointlist, ref Epointlist);
             //addpolygonmarker("1", 149.1657972, -35.3626638, (int)10, Color.White,
             //                            polygons);
             addpolygonmarker("Home", Apointlist[0].Lng, Apointlist[0].Lat,
                                     (int)Apointlist[0].Alt, Color.White, polygons);
-            WP_Marker_Route("A", Apointlist);
-            WP_Marker_Route("B", Bpointlist);
-            WP_Marker_Route("C", Cpointlist);
-            WP_Marker_Route("D", Dpointlist);
-            WP_Marker_Route("E", Epointlist);
-
+            if(Apointlist.Count!=0)
+                WP_Marker_Route("A", Apointlist);
+            if (Bpointlist.Count != 0)
+                WP_Marker_Route("B", Bpointlist);
+            if (Cpointlist.Count != 0)
+                WP_Marker_Route("C", Cpointlist);
+            if (Dpointlist.Count != 0)
+                WP_Marker_Route("D", Dpointlist);
+            if (Epointlist.Count != 0)
+                WP_Marker_Route("E", Epointlist);
+     
         }
         private void WP_Marker_Route(string group, List<PointLatLngAlt> sourcepointlist)
         {

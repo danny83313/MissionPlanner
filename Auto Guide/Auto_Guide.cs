@@ -18,6 +18,11 @@ namespace MissionPlanner.Auto_Guide
         FlightData FlightData = new FlightData();
         Locationwp gotohere = new Locationwp();
         FlightPlanner FlightPlanner = new FlightPlanner();
+        public List<PointLatLngAlt> Apointlist = new List<PointLatLngAlt>(); //宣告Apointlist，接收FlightPlanner的A群List
+        public List<PointLatLngAlt> Bpointlist = new List<PointLatLngAlt>(); //宣告Bpointlist，接收FlightPlanner的B群List
+        public List<PointLatLngAlt> Cpointlist = new List<PointLatLngAlt>(); //宣告Cpointlist，接收FlightPlanner的C群List
+        public List<PointLatLngAlt> Dpointlist = new List<PointLatLngAlt>(); //宣告Dpointlist，接收FlightPlanner的D群List
+        public List<PointLatLngAlt> Epointlist = new List<PointLatLngAlt>(); //宣告Epointlist，接收FlightPlanner的E群List
         PointLatLngAlt WP = new PointLatLngAlt();
         public delegate void mydalegate();
         public mydalegate change_text;
@@ -344,10 +349,20 @@ namespace MissionPlanner.Auto_Guide
                 break;
             }
         }
+        private void testA()
+        {
 
+        }
         private void Armed_All_Click(object sender, EventArgs e)
         {
-            try
+            foreach (var port in MainV2.Comports)
+            {
+                foreach (var MAV in port.MAVlist)
+                {
+                    MAV.parent.doARM(MAV.sysid, MAV.compid, true);
+                }
+            }
+            /*try
             {
                 if (Acopter.MAV.cs.armed)
                     if (CustomMessageBox.Show("Are you sure you want to Disarm?", "Disarm?", MessageBoxButtons.YesNo) !=
@@ -374,12 +389,21 @@ namespace MissionPlanner.Auto_Guide
             catch
             {
                 CustomMessageBox.Show(Strings.ErrorNoResponce, Strings.ERROR);
-            }
+            }*/
         }
 
         private void Takeoff_All_Click(object sender, EventArgs e)
         {
-            Acopter.setMode("GUIDED");
+            foreach (var port in MainV2.Comports)
+            {
+                foreach (var MAV in port.MAVlist)
+                {
+                    MAV.parent.setMode(MAV.sysid, MAV.compid, "GUIDED");
+
+                    MAV.parent.doCommand(MAV.sysid, MAV.compid, MAVLink.MAV_CMD.TAKEOFF, 0, 0, 0, 0, 0, 0, 5);
+                }
+            }
+            /*Acopter.setMode("GUIDED");
             Bcopter.setMode("GUIDED");
             Ccopter.setMode("GUIDED");
             try
@@ -391,12 +415,22 @@ namespace MissionPlanner.Auto_Guide
             catch
             {
                 CustomMessageBox.Show(Strings.CommandFailed, Strings.ERROR);
-            }
+            }*/
         }
 
         private void Armed_and_Takeoff_All_Click(object sender, EventArgs e)
         {
-            try
+            foreach (var port in MainV2.Comports)
+            {
+                foreach (var MAV in port.MAVlist)
+                {
+                    MAV.parent.doARM(MAV.sysid, MAV.compid, true);
+                    MAV.parent.setMode(MAV.sysid, MAV.compid, "GUIDED");
+
+                    MAV.parent.doCommand(MAV.sysid, MAV.compid, MAVLink.MAV_CMD.TAKEOFF, 0, 0, 0, 0, 0, 0, 5);
+                }
+            }
+            /*try
             {
                 Acopter.setMode("Stabilize");
                 Bcopter.setMode("Stabilize");
@@ -423,13 +457,13 @@ namespace MissionPlanner.Auto_Guide
 
                     //Thread.Sleep(300);
 
-                    Ccopter.doCommand(MAVLink.MAV_CMD.TAKEOFF, 0, 0, 0, 0, 0, 0, 10);
+                    Ccopter.doCommand(MAVLink.MAV_CMD.TAKEOFF, 0, 0, 0, 0, 0, 0, 5);
                 }
             }
             catch (Exception ex)
             {
                 CustomMessageBox.Show(ex.ToString());
-            }
+            }*/
         }
 
         private void RTL_All_Click(object sender, EventArgs e)
@@ -448,6 +482,9 @@ namespace MissionPlanner.Auto_Guide
             ((Button)sender).Enabled = true;
         }
 
-     
+        private void Get_Data_Button_Click(object sender, EventArgs e)
+        {
+            FlightPlanner.Receivelist(ref Apointlist, ref Bpointlist, ref Cpointlist, ref Dpointlist, ref Epointlist);
+        }
     }
 }

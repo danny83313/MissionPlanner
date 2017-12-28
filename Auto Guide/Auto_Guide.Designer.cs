@@ -40,6 +40,7 @@
             this.SetC = new MissionPlanner.Controls.MyButton();
             this.Armed_and_Takeoff_All = new MissionPlanner.Controls.MyButton();
             this.RTL_All = new MissionPlanner.Controls.MyButton();
+            this.Get_Data_Button = new MissionPlanner.Controls.MyButton();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -151,10 +152,21 @@
             this.RTL_All.UseVisualStyleBackColor = true;
             this.RTL_All.Click += new System.EventHandler(this.RTL_All_Click);
             // 
+            // Get_Data_Button
+            // 
+            this.Get_Data_Button.Location = new System.Drawing.Point(178, 183);
+            this.Get_Data_Button.Name = "Get_Data_Button";
+            this.Get_Data_Button.Size = new System.Drawing.Size(75, 23);
+            this.Get_Data_Button.TabIndex = 10;
+            this.Get_Data_Button.Text = "Get Data";
+            this.Get_Data_Button.UseVisualStyleBackColor = true;
+            this.Get_Data_Button.Click += new System.EventHandler(this.Get_Data_Button_Click);
+            // 
             // Auto_Guide
             // 
             this.BackgroundImage = global::MissionPlanner.Properties.Resources.bgdark;
             this.ClientSize = new System.Drawing.Size(384, 302);
+            this.Controls.Add(this.Get_Data_Button);
             this.Controls.Add(this.RTL_All);
             this.Controls.Add(this.Armed_and_Takeoff_All);
             this.Controls.Add(this.SetC);
@@ -184,5 +196,6 @@
         private Controls.MyButton SetC;
         private Controls.MyButton Armed_and_Takeoff_All;
         private Controls.MyButton RTL_All;
+        private Controls.MyButton Get_Data_Button;
     }
 }

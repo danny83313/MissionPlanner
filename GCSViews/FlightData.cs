@@ -41,11 +41,22 @@ namespace MissionPlanner.GCSViews
         public static bool threadrun;
         int tickStart;
         int wpnumber;
+        bool autoupdatemap, multiroute;
         public List<PointLatLngAlt> Apointlist = new List<PointLatLngAlt>(); //宣告Apointlist，接收FlightPlanner的A群List
         public List<PointLatLngAlt> Bpointlist = new List<PointLatLngAlt>(); //宣告Bpointlist，接收FlightPlanner的B群List
         public List<PointLatLngAlt> Cpointlist = new List<PointLatLngAlt>(); //宣告Cpointlist，接收FlightPlanner的C群List
         public List<PointLatLngAlt> Dpointlist = new List<PointLatLngAlt>(); //宣告Dpointlist，接收FlightPlanner的D群List
         public List<PointLatLngAlt> Epointlist = new List<PointLatLngAlt>(); //宣告Epointlist，接收FlightPlanner的E群List
+        GMapRoute Ahomeroute = new GMapRoute("homepath");
+        GMapRoute Awppath = new GMapRoute("wp path");
+        GMapRoute Bhomeroute = new GMapRoute("homepath");
+        GMapRoute Bwppath = new GMapRoute("wp path");
+        GMapRoute Chomeroute = new GMapRoute("homepath");
+        GMapRoute Cwppath = new GMapRoute("wp path");
+        GMapRoute Dhomeroute = new GMapRoute("homepath");
+        GMapRoute Dwppath = new GMapRoute("wp path");
+        GMapRoute Ehomeroute = new GMapRoute("homepath");
+        GMapRoute Ewppath = new GMapRoute("wp path");
         RollingPointPairList list1 = new RollingPointPairList(1200);
         RollingPointPairList list2 = new RollingPointPairList(1200);
         RollingPointPairList list3 = new RollingPointPairList(1200);
@@ -1107,18 +1118,18 @@ namespace MissionPlanner.GCSViews
                                 route.Points.Count - numTrackLength);
                         }
                         // add new route point
-                        if (MainV2.comPort.MAV.cs.lat != 0 && MainV2.comPort.MAV.cs.lng != 0)
+                        if (MainV2.comPort.MAV.cs.lat != 0 && MainV2.comPort.MAV.cs.lng != 0 && multiroute == false)
                         {
                             route.Points.Add(currentloc);
                         }
 
                         if (!this.IsHandleCreated)
                             continue;
-
+                     
                         updateRoutePosition();
 
                         // update programed wp course
-                        if (waypoints.AddSeconds(5) < DateTime.Now)
+                        if (waypoints.AddSeconds(5) < DateTime.Now && autoupdatemap==true)
                         {
                             //Console.WriteLine("Doing FD WP's");
                             updateClearMissionRouteMarkers();
@@ -4520,7 +4531,20 @@ namespace MissionPlanner.GCSViews
 
         private void UpdateMap_Button_Click(object sender, EventArgs e)
         {
-            wpnumber = 0;    
+           // new System.Threading.Thread(Track_Route) { IsBackground = true }.Start();
+            wpnumber = 0;
+            autoupdatemap = false;
+            multiroute = true;
+            Ahomeroute.Clear();
+            Awppath.Clear();
+            Bhomeroute.Clear();
+            Bwppath.Clear();
+            Chomeroute.Clear();
+            Cwppath.Clear();
+            Dhomeroute.Clear();
+            Dwppath.Clear();
+            Ehomeroute.Clear();
+            Ewppath.Clear();
             FlightPlanner.Receivelist(ref Apointlist,ref Bpointlist, ref Cpointlist, ref Dpointlist, ref Epointlist);
             //addpolygonmarker("1", 149.1657972, -35.3626638, (int)10, Color.White,
             //                            polygons);
@@ -4546,38 +4570,38 @@ namespace MissionPlanner.GCSViews
                                     (int)sourcepointlist[i + 1].Alt, Color.White, polygons);
                 wpnumber++;
             }
-            GMapRoute Ahomeroute = new GMapRoute("homepath");
+            //GMapRoute Ahomeroute = new GMapRoute("homepath");
             Ahomeroute.Stroke = new Pen(Color.Yellow, 2);
             Ahomeroute.Stroke.DashStyle = DashStyle.Dash;
-            GMapRoute Awppath = new GMapRoute("wp path");
+            //GMapRoute Awppath = new GMapRoute("wp path");
             Awppath.Stroke = new Pen(Color.Yellow, 4);
             Awppath.Stroke.DashStyle = DashStyle.Custom;
 
-            GMapRoute Bhomeroute = new GMapRoute("homepath");
+            //GMapRoute Bhomeroute = new GMapRoute("homepath");
             Bhomeroute.Stroke = new Pen(Color.Red, 2);
             Bhomeroute.Stroke.DashStyle = DashStyle.Dash;
-            GMapRoute Bwppath = new GMapRoute("wp path");
+            //GMapRoute Bwppath = new GMapRoute("wp path");
             Bwppath.Stroke = new Pen(Color.Red, 4);
             Bwppath.Stroke.DashStyle = DashStyle.Custom;
 
-            GMapRoute Chomeroute = new GMapRoute("homepath");
+            //GMapRoute Chomeroute = new GMapRoute("homepath");
             Chomeroute.Stroke = new Pen(Color.Cyan, 2);
             Chomeroute.Stroke.DashStyle = DashStyle.Dash;
-            GMapRoute Cwppath = new GMapRoute("wp path");
+            //GMapRoute Cwppath = new GMapRoute("wp path");
             Cwppath.Stroke = new Pen(Color.Cyan, 4);
             Cwppath.Stroke.DashStyle = DashStyle.Custom;
 
-            GMapRoute Dhomeroute = new GMapRoute("homepath");
+            //GMapRoute Dhomeroute = new GMapRoute("homepath");
             Dhomeroute.Stroke = new Pen(Color.Tomato, 2);
             Dhomeroute.Stroke.DashStyle = DashStyle.Dash;
-            GMapRoute Dwppath = new GMapRoute("wp path");
+            //GMapRoute Dwppath = new GMapRoute("wp path");
             Dwppath.Stroke = new Pen(Color.Tomato, 4);
             Dwppath.Stroke.DashStyle = DashStyle.Custom;
 
-            GMapRoute Ehomeroute = new GMapRoute("homepath");
+            //GMapRoute Ehomeroute = new GMapRoute("homepath");
             Ehomeroute.Stroke = new Pen(Color.DeepPink, 2);
             Ehomeroute.Stroke.DashStyle = DashStyle.Dash;
-            GMapRoute Ewppath = new GMapRoute("wp path");
+            //GMapRoute Ewppath = new GMapRoute("wp path");
             Ewppath.Stroke = new Pen(Color.DeepPink, 4);
             Ewppath.Stroke.DashStyle = DashStyle.Custom;
 
@@ -4665,6 +4689,55 @@ namespace MissionPlanner.GCSViews
                 polygons.Routes.Add(Ewppath);
             });
         }
+       /* private void Track_Route()
+        {
+            DateTime tracklast = DateTime.Now.AddSeconds(0);
+            if (tracklast.AddSeconds(1.2) < DateTime.Now)
+            {
+                // show disable joystick button
+                if (MainV2.joystick != null && MainV2.joystick.enabled)
+                {
+                    this.Invoke((MethodInvoker)delegate
+                    {
+                        but_disablejoystick.Visible = true;
+                    });
+                }
+
+                if (Settings.Instance.GetBoolean("CHK_maprotation"))
+                {
+                    // dont holdinvalidation here
+                    setMapBearing();
+                }
+
+                if (route == null)
+                {
+                    route = new GMapRoute(trackPoints, "track");
+                    routes.Routes.Add(route);
+                }
+
+                PointLatLng currentloc = new PointLatLng(MainV2.comPort.MAV.cs.lat, MainV2.comPort.MAV.cs.lng);
+
+                gMapControl1.HoldInvalidation = true;
+
+                int numTrackLength = Settings.Instance.GetInt32("NUM_tracklength");
+                // maintain route history length
+                if (route.Points.Count > numTrackLength)
+                {
+                    route.Points.RemoveRange(0,
+                        route.Points.Count - numTrackLength);
+                }
+                // add new route point
+                if (MainV2.comPort.MAV.cs.lat != 0 && MainV2.comPort.MAV.cs.lng != 0 && multiroute == false)
+                {
+                    route.Points.Add(currentloc);
+                }
+
+                if (!this.IsHandleCreated)
+                    continue;
+
+                updateRoutePosition();
+            }
+        }*/
     }
  }
 

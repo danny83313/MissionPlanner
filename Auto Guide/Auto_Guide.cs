@@ -27,7 +27,13 @@ namespace MissionPlanner.Auto_Guide
         public delegate void mydalegate();
         public mydalegate change_text;
         static bool threadrun;
-        
+        static bool Athread;
+        static bool Bthread;
+        static bool Cthread;
+        static bool Aend;
+        static bool Bend;
+        static bool Cend;
+
         int wpnumber = 0;
         int Awpnumber = 0;
         int Bwpnumber = 0;
@@ -97,7 +103,7 @@ namespace MissionPlanner.Auto_Guide
 
         private void Reset_Click(object sender, EventArgs e)
         {
-            wpnumber = 0;
+            /*wpnumber = 0;
             wpcount = 0;
             firstwp = false;
             newwp = false;
@@ -114,7 +120,7 @@ namespace MissionPlanner.Auto_Guide
             Cfirstwp = false;
             Anewwp = false;
             Bnewwp = false;
-            Cnewwp = false;
+            Cnewwp = false;*/
         }
 
         private void Button_start_Click(object sender, EventArgs e)
@@ -130,13 +136,16 @@ namespace MissionPlanner.Auto_Guide
             {
                 new System.Threading.Thread(Mainthread) { IsBackground = true }.Start();
                 Button_start.Text = Strings.Stop;
-
-                ((FlightPlanner)this.Tag).Getwpdata(Awpnumber);
+                Athread = false;
+                Bthread = false;
+                Cthread = false;
+                FlightPlanner.Receivelist(ref Apointlist, ref Bpointlist, ref Cpointlist, ref Dpointlist, ref Epointlist);
+                /*((FlightPlanner)this.Tag).Getwpdata(Awpnumber);
                 Bwpnumber = wpcount / 3;
                 Cwpnumber = (wpcount / 3) * 2;
                 Aendwpnum = Bwpnumber;
                 Bendwpnum = Cwpnumber;
-                Cendwpnum = wpcount;
+                Cendwpnum = wpcount;*/
             }
         }
 
@@ -146,14 +155,34 @@ namespace MissionPlanner.Auto_Guide
 
             while (threadrun)
             {
-                new System.Threading.Thread(ACopter) { IsBackground = true }.Start();
-                new System.Threading.Thread(BCopter) { IsBackground = true }.Start();
-                new System.Threading.Thread(CCopter) { IsBackground = true }.Start();
+                if (Athread == false)
+                {
+                    Athread = true;
+                    new System.Threading.Thread(ACopter) { IsBackground = true }.Start(); 
+                }
+                if (Bthread == false)
+                {
+                    Bthread = true;
+                    new System.Threading.Thread(BCopter) { IsBackground = true }.Start();
+                }
+                if (Cthread == false)
+                {
+                    Cthread = true;
+                    new System.Threading.Thread(CCopter) { IsBackground = true }.Start();
+                }
+                //new System.Threading.Thread(ACopter) { IsBackground = true }.Start();
+                //new System.Threading.Thread(BCopter) { IsBackground = true }.Start();
+                //new System.Threading.Thread(CCopter) { IsBackground = true }.Start();
                 //ACopter();
                 //BCopter();
                 //CCopter();
                 System.Threading.Thread.Sleep(450);
-                if (Awpnumber == Aendwpnum && Bwpnumber == Bendwpnum && Cwpnumber == Cendwpnum)
+                /*if (Awpnumber == Aendwpnum && Bwpnumber == Bendwpnum && Cwpnumber == Cendwpnum)
+                {
+                    threadrun = false;
+                    Invoke(change_text);
+                }*/
+                if(Aend==true && Bend==true && Cend==true)
                 {
                     threadrun = false;
                     Invoke(change_text);
@@ -163,6 +192,37 @@ namespace MissionPlanner.Auto_Guide
         private void ACopter()
         {
             if (!MainV2.comPort.BaseStream.IsOpen)
+            {
+                CustomMessageBox.Show(Strings.PleaseConnect, Strings.ERROR);
+                return;
+            }
+
+            for (int i = 0; i < Apointlist.Count - 2; i++)
+            {
+                gotohere.id = (ushort)MAVLink.MAV_CMD.WAYPOINT;
+                gotohere.alt = (float)Apointlist[i + 1].Alt;  //List第0點是Home點
+                gotohere.lat = Apointlist[i + 1].Lat;
+                gotohere.lng = Apointlist[i + 1].Lng;
+                try
+                {
+                    Acopter.setGuidedModeWP(gotohere);
+                    Thread.Sleep(450);
+                }
+                catch (Exception ex)
+                {
+                    Acopter.giveComport = false;
+                    CustomMessageBox.Show(Strings.CommandFailed + ex.Message, Strings.ERROR);
+                }
+                float wpdistance = Acopter.MAV.cs.wp_dist;
+                do
+                {
+                    wpdistance = Acopter.MAV.cs.wp_dist;
+                    Thread.Sleep(450);
+                } while (wpdistance >= 2);
+            }
+            Acopter.setMode("RTL");
+            Aend = true;
+            /*if (!MainV2.comPort.BaseStream.IsOpen)
             {
                 CustomMessageBox.Show(Strings.PleaseConnect, Strings.ERROR);
                 return;
@@ -221,11 +281,42 @@ namespace MissionPlanner.Auto_Guide
             {
                 Acopter.setMode("RTL");
                 break;
-            }
+            }*/
         }
         private void BCopter()
         {
             if (!MainV2.comPort.BaseStream.IsOpen)
+            {
+                CustomMessageBox.Show(Strings.PleaseConnect, Strings.ERROR);
+                return;
+            }
+
+            for (int i = 0; i < Bpointlist.Count - 2; i++)   //到第一點之後會亂跳
+            {
+                gotohere.id = (ushort)MAVLink.MAV_CMD.WAYPOINT;
+                gotohere.alt = (float)Bpointlist[i + 1].Alt;
+                gotohere.lat = Bpointlist[i + 1].Lat;
+                gotohere.lng = Bpointlist[i + 1].Lng;
+                try
+                {
+                    Bcopter.setGuidedModeWP(gotohere);
+                    Thread.Sleep(450);
+                }
+                catch (Exception ex)
+                {
+                    Bcopter.giveComport = false;
+                    CustomMessageBox.Show(Strings.CommandFailed + ex.Message, Strings.ERROR);
+                }
+                float wpdistance = Bcopter.MAV.cs.wp_dist;
+                do
+                {
+                    wpdistance = Bcopter.MAV.cs.wp_dist;
+                    Thread.Sleep(450);
+                } while (wpdistance >= 2);
+            }
+            Bcopter.setMode("RTL");
+            Bend = true;
+            /*if (!MainV2.comPort.BaseStream.IsOpen)
             {
                 CustomMessageBox.Show(Strings.PleaseConnect, Strings.ERROR);
                 return;
@@ -284,11 +375,42 @@ namespace MissionPlanner.Auto_Guide
             {
                 Bcopter.setMode("RTL");
                 break;
-            }
+            }*/
         }
         private void CCopter()
         {
             if (!MainV2.comPort.BaseStream.IsOpen)
+            {
+                CustomMessageBox.Show(Strings.PleaseConnect, Strings.ERROR);
+                return;
+            }
+
+            for (int i = 0; i < Cpointlist.Count - 2; i++)
+            {
+                gotohere.id = (ushort)MAVLink.MAV_CMD.WAYPOINT;
+                gotohere.alt = (float)Cpointlist[i + 1].Alt;  //List第0點是Home點
+                gotohere.lat = Cpointlist[i + 1].Lat;
+                gotohere.lng = Cpointlist[i + 1].Lng;
+                try
+                {
+                    Ccopter.setGuidedModeWP(gotohere);
+                    Thread.Sleep(450);
+                }
+                catch (Exception ex)
+                {
+                    Ccopter.giveComport = false;
+                    CustomMessageBox.Show(Strings.CommandFailed + ex.Message, Strings.ERROR);
+                }
+                float wpdistance = Ccopter.MAV.cs.wp_dist;
+                do
+                {
+                    wpdistance = Ccopter.MAV.cs.wp_dist;
+                    Thread.Sleep(450);
+                } while (wpdistance >= 2);
+            }
+            Ccopter.setMode("RTL");
+            Cend = true;
+            /*if (!MainV2.comPort.BaseStream.IsOpen)
             {
                 CustomMessageBox.Show(Strings.PleaseConnect, Strings.ERROR);
                 return;
@@ -347,13 +469,9 @@ namespace MissionPlanner.Auto_Guide
             {
                 Ccopter.setMode("RTL");
                 break;
-            }
+            }*/
         }
-        private void testA()
-        {
-
-        }
-        private void Armed_All_Click(object sender, EventArgs e)
+            private void Armed_All_Click(object sender, EventArgs e)
         {
             foreach (var port in MainV2.Comports)
             {
@@ -480,11 +598,6 @@ namespace MissionPlanner.Auto_Guide
                 CustomMessageBox.Show(Strings.CommandFailed, Strings.ERROR);
             }
             ((Button)sender).Enabled = true;
-        }
-
-        private void Get_Data_Button_Click(object sender, EventArgs e)
-        {
-            FlightPlanner.Receivelist(ref Apointlist, ref Bpointlist, ref Cpointlist, ref Dpointlist, ref Epointlist);
         }
     }
 }

@@ -41,7 +41,7 @@ namespace MissionPlanner.GCSViews
         public static bool threadrun;
         int tickStart;
         int wpnumber;
-        bool autoupdatemap, multiroute;
+        bool autoupdatemap=true, multiroute=false;
         public List<PointLatLngAlt> Apointlist = new List<PointLatLngAlt>(); //宣告Apointlist，接收FlightPlanner的A群List
         public List<PointLatLngAlt> Bpointlist = new List<PointLatLngAlt>(); //宣告Bpointlist，接收FlightPlanner的B群List
         public List<PointLatLngAlt> Cpointlist = new List<PointLatLngAlt>(); //宣告Cpointlist，接收FlightPlanner的C群List
@@ -1084,12 +1084,13 @@ namespace MissionPlanner.GCSViews
                     }
 
                     // update map
-                    if (tracklast.AddSeconds(1.2) < DateTime.Now)
+                    if (tracklast.AddSeconds(1.2) < DateTime.Now && multiroute==false)
                     {
                         // show disable joystick button
                         if (MainV2.joystick != null && MainV2.joystick.enabled)
                         {
-                            this.Invoke((MethodInvoker) delegate {
+                            this.Invoke((MethodInvoker)delegate
+                            {
                                 but_disablejoystick.Visible = true;
                             });
                         }
@@ -1107,27 +1108,28 @@ namespace MissionPlanner.GCSViews
                         }
 
                         PointLatLng currentloc = new PointLatLng(MainV2.comPort.MAV.cs.lat, MainV2.comPort.MAV.cs.lng);
-
+                        
                         gMapControl1.HoldInvalidation = true;
 
                         int numTrackLength = Settings.Instance.GetInt32("NUM_tracklength");
                         // maintain route history length
-                        if (route.Points.Count > numTrackLength)
+                        if (route.Points.Count > numTrackLength )
                         {
                             route.Points.RemoveRange(0,
-                                route.Points.Count - numTrackLength);
+                            route.Points.Count - numTrackLength);
                         }
                         // add new route point
-                        if (MainV2.comPort.MAV.cs.lat != 0 && MainV2.comPort.MAV.cs.lng != 0 && multiroute == false)
+                        if (MainV2.comPort.MAV.cs.lat != 0 && MainV2.comPort.MAV.cs.lng != 0 )
                         {
                             route.Points.Add(currentloc);
                         }
 
                         if (!this.IsHandleCreated)
                             continue;
-                     
+                        
                         updateRoutePosition();
-
+                        
+                       
                         // update programed wp course
                         if (waypoints.AddSeconds(5) < DateTime.Now && autoupdatemap==true)
                         {
@@ -4531,7 +4533,6 @@ namespace MissionPlanner.GCSViews
 
         private void UpdateMap_Button_Click(object sender, EventArgs e)
         {
-           // new System.Threading.Thread(Track_Route) { IsBackground = true }.Start();
             wpnumber = 0;
             autoupdatemap = false;
             multiroute = true;
@@ -4545,6 +4546,8 @@ namespace MissionPlanner.GCSViews
             Dwppath.Clear();
             Ehomeroute.Clear();
             Ewppath.Clear();
+            updateClearMissionRouteMarkers();    //清除航點
+            new System.Threading.Thread(Track_Route) { IsBackground = true }.Start();
             FlightPlanner.Receivelist(ref Apointlist,ref Bpointlist, ref Cpointlist, ref Dpointlist, ref Epointlist);
             //addpolygonmarker("1", 149.1657972, -35.3626638, (int)10, Color.White,
             //                            polygons);
@@ -4689,55 +4692,219 @@ namespace MissionPlanner.GCSViews
                 polygons.Routes.Add(Ewppath);
             });
         }
-       /* private void Track_Route()
+        private void Track_Route()
         {
+            bool thread = true;
             DateTime tracklast = DateTime.Now.AddSeconds(0);
-            if (tracklast.AddSeconds(1.2) < DateTime.Now)
+            DateTime mapupdate = DateTime.Now.AddSeconds(0);
+            while (thread)
             {
-                // show disable joystick button
-                if (MainV2.joystick != null && MainV2.joystick.enabled)
+                
+                if (tracklast.AddSeconds(1.2) < DateTime.Now)
                 {
-                    this.Invoke((MethodInvoker)delegate
+                    // show disable joystick button
+                    if (MainV2.joystick != null && MainV2.joystick.enabled)
                     {
-                        but_disablejoystick.Visible = true;
-                    });
-                }
+                        this.Invoke((MethodInvoker)delegate
+                        {
+                            but_disablejoystick.Visible = true;
+                        });
+                    }
 
-                if (Settings.Instance.GetBoolean("CHK_maprotation"))
+                    if (Settings.Instance.GetBoolean("CHK_maprotation"))
+                    {
+                        // dont holdinvalidation here
+                        setMapBearing();
+                    }
+
+                    if (route == null)
+                    {
+                        route = new GMapRoute(trackPoints, "track");
+                        routes.Routes.Add(route);
+                    }
+
+                    PointLatLng currentloc = new PointLatLng(MainV2.comPort.MAV.cs.lat, MainV2.comPort.MAV.cs.lng);
+
+                    gMapControl1.HoldInvalidation = true;
+
+                    int numTrackLength = Settings.Instance.GetInt32("NUM_tracklength");
+                    // maintain route history length
+                    if (route.Points.Count > numTrackLength)
+                    {
+                        route.Points.RemoveRange(0,
+                        route.Points.Count - numTrackLength);
+                    }
+                    // add new route point
+                    if (MainV2.comPort.MAV.cs.lat != 0 && MainV2.comPort.MAV.cs.lng != 0 )
+                    {
+                        route.Points.Add(currentloc);
+                    }
+
+                    if (!this.IsHandleCreated)
+                        continue;
+
+                    updateRoutePosition();
+
+
+                    // update programed wp course
+                   
+
+                    updateClearRoutesMarkers();
+
+                    // add this after the mav icons are drawn
+                    if (MainV2.comPort.MAV.cs.MovingBase != null)
+                    {
+                        addMissionRouteMarker(new GMarkerGoogle(currentloc, GMarkerGoogleType.blue_dot)
+                        {
+                            Position = MainV2.comPort.MAV.cs.MovingBase,
+                            ToolTipText = "Moving Base",
+                            ToolTipMode = MarkerTooltipMode.OnMouseOver
+                        });
+                    }
+
+
+                    /*lock (MainV2.instance.adsblock)
+                    {
+                        foreach (adsb.PointLatLngAltHdg plla in MainV2.instance.adsbPlanes.Values)
+                        {
+                            // 30 seconds history
+                            if (((DateTime)plla.Time) > DateTime.Now.AddSeconds(-30))
+                            {
+                                var adsbplane = new GMapMarkerADSBPlane(plla, plla.Heading)
+                                {
+                                    ToolTipText = "ICAO: " + plla.Tag + " " + plla.Alt.ToString("0"),
+                                    ToolTipMode = MarkerTooltipMode.OnMouseOver,
+                                    Tag = plla
+                                };
+
+                                if (plla.DisplayICAO)
+                                    adsbplane.ToolTipMode = MarkerTooltipMode.Always;
+
+                                switch (plla.ThreatLevel)
+                                {
+                                    case MAVLink.MAV_COLLISION_THREAT_LEVEL.NONE:
+                                        adsbplane.AlertLevel = GMapMarkerADSBPlane.AlertLevelOptions.Green;
+                                        break;
+                                    case MAVLink.MAV_COLLISION_THREAT_LEVEL.LOW:
+                                        adsbplane.AlertLevel = GMapMarkerADSBPlane.AlertLevelOptions.Orange;
+                                        break;
+                                    case MAVLink.MAV_COLLISION_THREAT_LEVEL.HIGH:
+                                        adsbplane.AlertLevel = GMapMarkerADSBPlane.AlertLevelOptions.Red;
+                                        break;
+                                }
+
+                                addMissionRouteMarker(adsbplane);
+                            }
+                        }
+                    }*/
+
+
+                    if (route.Points.Count > 0)
+                    {
+                        // add primary route icon
+
+                        // draw guide mode point for only main mav
+                        if (MainV2.comPort.MAV.cs.mode.ToLower() == "guided" && MainV2.comPort.MAV.GuidedMode.x != 0)
+                        {
+                            addpolygonmarker("Guided Mode", MainV2.comPort.MAV.GuidedMode.y,
+                                MainV2.comPort.MAV.GuidedMode.x, (int)MainV2.comPort.MAV.GuidedMode.z, Color.Blue,
+                                routes);
+                        }
+
+                        // draw all icons for all connected mavs
+                        foreach (var port in MainV2.Comports.ToArray())
+                        {
+                            // draw the mavs seen on this port
+                            foreach (var MAV in port.MAVlist)
+                            {
+                                var marker = Common.getMAVMarker(MAV);
+
+                                if (marker.Position.Lat == 0 && marker.Position.Lng == 0)
+                                    continue;
+
+                                addMissionRouteMarker(marker);
+                            }
+                        }
+
+                        if (route.Points.Count == 0 || route.Points[route.Points.Count - 1].Lat != 0 &&
+                            (mapupdate.AddSeconds(3) < DateTime.Now) && CHK_autopan.Checked)
+                        {
+                            updateMapPosition(currentloc);
+                            mapupdate = DateTime.Now;
+                        }
+
+                        if (route.Points.Count == 1 && gMapControl1.Zoom == 3) // 3 is the default load zoom
+                        {
+                            updateMapPosition(currentloc);
+                            updateMapZoom(17);
+                        }
+                    }
+
+                    gMapControl1.HoldInvalidation = false;
+
+                    if (gMapControl1.Visible)
+                    {
+                        gMapControl1.Invalidate();
+                    }
+
+                    tracklast = DateTime.Now;
+                }
+                /* if (tracklast.AddSeconds(1.2) < DateTime.Now)
                 {
-                    // dont holdinvalidation here
-                    setMapBearing();
-                }
+                    // show disable joystick button
+                    if (MainV2.joystick != null && MainV2.joystick.enabled)
+                    {
+                        this.Invoke((MethodInvoker)delegate
+                        {
+                            but_disablejoystick.Visible = true;
+                        });
+                    }
 
-                if (route == null)
-                {
-                    route = new GMapRoute(trackPoints, "track");
-                    routes.Routes.Add(route);
-                }
+                    if (Settings.Instance.GetBoolean("CHK_maprotation"))
+                    {
+                        // dont holdinvalidation here
+                        setMapBearing();
+                    }
 
-                PointLatLng currentloc = new PointLatLng(MainV2.comPort.MAV.cs.lat, MainV2.comPort.MAV.cs.lng);
+                    if (route == null)
+                    {
+                        route = new GMapRoute(trackPoints, "track");
+                        routes.Routes.Add(route);
+                    }
 
-                gMapControl1.HoldInvalidation = true;
+                    PointLatLng currentloc = new PointLatLng(MainV2.comPort.MAV.cs.lat, MainV2.comPort.MAV.cs.lng);
 
+                    gMapControl1.HoldInvalidation = true;
+
+                    int numTrackLength = Settings.Instance.GetInt32("NUM_tracklength");
+                    // maintain route history length
+                    if (route.Points.Count > numTrackLength)
+                    {
+                        route.Points.RemoveRange(0,
+                            route.Points.Count - numTrackLength);
+                    }
+                    // add new route point
+                    if (MainV2.comPort.MAV.cs.lat != 0 && MainV2.comPort.MAV.cs.lng != 0)
+                    {
+                        route.Points.Add(currentloc);
+                    }
+
+                    updateRoutePosition();
+                }*/
+                /*PointLatLng currentloc = new PointLatLng(MainV2.comPort.MAV.cs.lat, MainV2.comPort.MAV.cs.lng);
                 int numTrackLength = Settings.Instance.GetInt32("NUM_tracklength");
-                // maintain route history length
                 if (route.Points.Count > numTrackLength)
                 {
                     route.Points.RemoveRange(0,
-                        route.Points.Count - numTrackLength);
+                    route.Points.Count - numTrackLength);
                 }
-                // add new route point
-                if (MainV2.comPort.MAV.cs.lat != 0 && MainV2.comPort.MAV.cs.lng != 0 && multiroute == false)
+                if (MainV2.comPort.MAV.cs.lat != 0 && MainV2.comPort.MAV.cs.lng != 0)
                 {
                     route.Points.Add(currentloc);
-                }
-
-                if (!this.IsHandleCreated)
-                    continue;
-
-                updateRoutePosition();
+                }*/
+                Thread.Sleep(400);
             }
-        }*/
+        }
     }
  }
 

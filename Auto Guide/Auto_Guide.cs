@@ -30,9 +30,13 @@ namespace MissionPlanner.Auto_Guide
         static bool Athread;
         static bool Bthread;
         static bool Cthread;
+        static bool Dthread;
+        static bool Ethread;
         static bool Aend;
         static bool Bend;
         static bool Cend;
+        static bool Dend;
+        static bool Eend;
 
         int wpnumber = 0;
         int Awpnumber = 0;
@@ -53,6 +57,8 @@ namespace MissionPlanner.Auto_Guide
         internal MAVLinkInterface Acopter = null;
         internal MAVLinkInterface Bcopter = null;
         internal MAVLinkInterface Ccopter = null;
+        internal MAVLinkInterface Dcopter = null;
+        internal MAVLinkInterface Ecopter = null;
         public Auto_Guide(FlightPlanner flightplannerform)
         {
             InitializeComponent();
@@ -101,6 +107,16 @@ namespace MissionPlanner.Auto_Guide
             Ccopter = MainV2.comPort;
         }
 
+        private void SetD_Click(object sender, EventArgs e)
+        {
+            Dcopter = MainV2.comPort;
+        }
+
+        private void SetE_Click(object sender, EventArgs e)
+        {
+            Ecopter = MainV2.comPort;
+        }
+
         private void Reset_Click(object sender, EventArgs e)
         {
             /*wpnumber = 0;
@@ -139,6 +155,8 @@ namespace MissionPlanner.Auto_Guide
                 Athread = false;
                 Bthread = false;
                 Cthread = false;
+                Dthread = false;
+                Ethread = false;
                 FlightPlanner.Receivelist(ref Apointlist, ref Bpointlist, ref Cpointlist, ref Dpointlist, ref Epointlist);
                 /*((FlightPlanner)this.Tag).Getwpdata(Awpnumber);
                 Bwpnumber = wpcount / 3;
@@ -155,20 +173,30 @@ namespace MissionPlanner.Auto_Guide
 
             while (threadrun)
             {
-                if (Athread == false)
+                if (Athread == false && Acopter != null)
                 {
                     Athread = true;
                     new System.Threading.Thread(ACopter) { IsBackground = true }.Start(); 
                 }
-                if (Bthread == false)
+                if (Bthread == false && Bcopter != null)
                 {
                     Bthread = true;
                     new System.Threading.Thread(BCopter) { IsBackground = true }.Start();
                 }
-                if (Cthread == false)
+                if (Cthread == false && Ccopter != null)
                 {
                     Cthread = true;
                     new System.Threading.Thread(CCopter) { IsBackground = true }.Start();
+                }
+                if (Dthread == false && Dcopter != null)
+                {
+                    Dthread = true;
+                    new System.Threading.Thread(DCopter) { IsBackground = true }.Start();
+                }
+                if (Ethread == false && Ecopter != null)
+                {
+                    Ethread = true;
+                    new System.Threading.Thread(ECopter) { IsBackground = true }.Start();
                 }
                 //new System.Threading.Thread(ACopter) { IsBackground = true }.Start();
                 //new System.Threading.Thread(BCopter) { IsBackground = true }.Start();
@@ -182,7 +210,7 @@ namespace MissionPlanner.Auto_Guide
                     threadrun = false;
                     Invoke(change_text);
                 }*/
-                if(Aend==true && Bend==true && Cend==true)
+                if(Aend==true && Bend==true && Cend==true && Dend==true && Eend==true)
                 {
                     threadrun = false;
                     Invoke(change_text);
@@ -206,7 +234,7 @@ namespace MissionPlanner.Auto_Guide
                 try
                 {
                     Acopter.setGuidedModeWP(gotohere);
-                    Thread.Sleep(450);
+                    Thread.Sleep(550);
                 }
                 catch (Exception ex)
                 {
@@ -291,16 +319,16 @@ namespace MissionPlanner.Auto_Guide
                 return;
             }
 
-            for (int i = 0; i < Bpointlist.Count - 2; i++)   //到第一點之後會亂跳
+            for (int i = 0; i < Bpointlist.Count - 2; i++)   
             {
                 gotohere.id = (ushort)MAVLink.MAV_CMD.WAYPOINT;
-                gotohere.alt = (float)Bpointlist[i + 1].Alt;
+                gotohere.alt = (float)Bpointlist[i + 1].Alt;  //List第0點是Home點
                 gotohere.lat = Bpointlist[i + 1].Lat;
                 gotohere.lng = Bpointlist[i + 1].Lng;
                 try
                 {
                     Bcopter.setGuidedModeWP(gotohere);
-                    Thread.Sleep(450);
+                    Thread.Sleep(550);
                 }
                 catch (Exception ex)
                 {
@@ -394,7 +422,7 @@ namespace MissionPlanner.Auto_Guide
                 try
                 {
                     Ccopter.setGuidedModeWP(gotohere);
-                    Thread.Sleep(450);
+                    Thread.Sleep(550);
                 }
                 catch (Exception ex)
                 {
@@ -471,7 +499,75 @@ namespace MissionPlanner.Auto_Guide
                 break;
             }*/
         }
-            private void Armed_All_Click(object sender, EventArgs e)
+        private void DCopter()
+        {
+            if (!MainV2.comPort.BaseStream.IsOpen)
+            {
+                CustomMessageBox.Show(Strings.PleaseConnect, Strings.ERROR);
+                return;
+            }
+
+            for (int i = 0; i < Dpointlist.Count - 2; i++)
+            {
+                gotohere.id = (ushort)MAVLink.MAV_CMD.WAYPOINT;
+                gotohere.alt = (float)Dpointlist[i + 1].Alt;  //List第0點是Home點
+                gotohere.lat = Dpointlist[i + 1].Lat;
+                gotohere.lng = Dpointlist[i + 1].Lng;
+                try
+                {
+                    Dcopter.setGuidedModeWP(gotohere);
+                    Thread.Sleep(550);
+                }
+                catch (Exception ex)
+                {
+                    Dcopter.giveComport = false;
+                    CustomMessageBox.Show(Strings.CommandFailed + ex.Message, Strings.ERROR);
+                }
+                float wpdistance = Dcopter.MAV.cs.wp_dist;
+                do
+                {
+                    wpdistance = Dcopter.MAV.cs.wp_dist;
+                    Thread.Sleep(450);
+                } while (wpdistance >= 2);
+            }
+            Dcopter.setMode("RTL");
+            Dend = true;
+        }
+        private void ECopter()
+        {
+            if (!MainV2.comPort.BaseStream.IsOpen)
+            {
+                CustomMessageBox.Show(Strings.PleaseConnect, Strings.ERROR);
+                return;
+            }
+
+            for (int i = 0; i < Epointlist.Count - 2; i++)
+            {
+                gotohere.id = (ushort)MAVLink.MAV_CMD.WAYPOINT;
+                gotohere.alt = (float)Epointlist[i + 1].Alt;  //List第0點是Home點
+                gotohere.lat = Epointlist[i + 1].Lat;
+                gotohere.lng = Epointlist[i + 1].Lng;
+                try
+                {
+                    Ecopter.setGuidedModeWP(gotohere);
+                    Thread.Sleep(550);
+                }
+                catch (Exception ex)
+                {
+                    Ecopter.giveComport = false;
+                    CustomMessageBox.Show(Strings.CommandFailed + ex.Message, Strings.ERROR);
+                }
+                float wpdistance = Ecopter.MAV.cs.wp_dist;
+                do
+                {
+                    wpdistance = Ecopter.MAV.cs.wp_dist;
+                    Thread.Sleep(450);
+                } while (wpdistance >= 2);
+            }
+            Ecopter.setMode("RTL");
+            Eend = true;
+        }
+        private void Armed_All_Click(object sender, EventArgs e)
         {
             foreach (var port in MainV2.Comports)
             {
@@ -599,5 +695,7 @@ namespace MissionPlanner.Auto_Guide
             }
             ((Button)sender).Enabled = true;
         }
+
+        
     }
 }

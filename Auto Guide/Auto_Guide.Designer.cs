@@ -40,6 +40,8 @@
             this.SetC = new MissionPlanner.Controls.MyButton();
             this.Armed_and_Takeoff_All = new MissionPlanner.Controls.MyButton();
             this.RTL_All = new MissionPlanner.Controls.MyButton();
+            this.SetD = new MissionPlanner.Controls.MyButton();
+            this.SetE = new MissionPlanner.Controls.MyButton();
             ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -151,10 +153,34 @@
             this.RTL_All.UseVisualStyleBackColor = true;
             this.RTL_All.Click += new System.EventHandler(this.RTL_All_Click);
             // 
+            // SetD
+            // 
+            this.SetD.Font = new System.Drawing.Font("Arial", 9F);
+            this.SetD.Location = new System.Drawing.Point(178, 128);
+            this.SetD.Name = "SetD";
+            this.SetD.Size = new System.Drawing.Size(75, 23);
+            this.SetD.TabIndex = 10;
+            this.SetD.Text = "Set to D";
+            this.SetD.UseVisualStyleBackColor = true;
+            this.SetD.Click += new System.EventHandler(this.SetD_Click);
+            // 
+            // SetE
+            // 
+            this.SetE.Font = new System.Drawing.Font("Arial", 9F);
+            this.SetE.Location = new System.Drawing.Point(178, 157);
+            this.SetE.Name = "SetE";
+            this.SetE.Size = new System.Drawing.Size(75, 23);
+            this.SetE.TabIndex = 11;
+            this.SetE.Text = "Set to E";
+            this.SetE.UseVisualStyleBackColor = true;
+            this.SetE.Click += new System.EventHandler(this.SetE_Click);
+            // 
             // Auto_Guide
             // 
             this.BackgroundImage = global::MissionPlanner.Properties.Resources.bgdark;
             this.ClientSize = new System.Drawing.Size(384, 302);
+            this.Controls.Add(this.SetE);
+            this.Controls.Add(this.SetD);
             this.Controls.Add(this.RTL_All);
             this.Controls.Add(this.Armed_and_Takeoff_All);
             this.Controls.Add(this.SetC);
@@ -184,5 +210,7 @@
         private Controls.MyButton SetC;
         private Controls.MyButton Armed_and_Takeoff_All;
         private Controls.MyButton RTL_All;
+        private Controls.MyButton SetD;
+        private Controls.MyButton SetE;
     }
 }

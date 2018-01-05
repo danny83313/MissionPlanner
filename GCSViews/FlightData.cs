@@ -30,15 +30,16 @@ using ZedGraph;
 using LogAnalyzer = MissionPlanner.Utilities.LogAnalyzer;
 
 
+
 // written by michael oborne
 
 namespace MissionPlanner.GCSViews
 {
     public partial class FlightData : MyUserControl, IActivate, IDeactivate
     {
-        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-
+        private static readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);  
         public static bool threadrun;
+        Auto_Guide.Auto_Guide AutoGuide;
         int tickStart;
         int wpnumber;
         bool autoupdatemap=true, multiroute=false;
@@ -57,6 +58,16 @@ namespace MissionPlanner.GCSViews
         GMapRoute Dwppath = new GMapRoute("wp path");
         GMapRoute Ehomeroute = new GMapRoute("homepath");
         GMapRoute Ewppath = new GMapRoute("wp path");
+        GMapRoute Atrackroute;
+        GMapRoute Btrackroute;
+        GMapRoute Ctrackroute;
+        GMapRoute Dtrackroute;
+        GMapRoute Etrackroute;
+        GMapOverlay Aroutes;
+        GMapOverlay Broutes;
+        GMapOverlay Croutes;
+        GMapOverlay Droutes;
+        GMapOverlay Eroutes;
         RollingPointPairList list1 = new RollingPointPairList(1200);
         RollingPointPairList list2 = new RollingPointPairList(1200);
         RollingPointPairList list3 = new RollingPointPairList(1200);
@@ -189,7 +200,7 @@ namespace MissionPlanner.GCSViews
             InitializeComponent();
 
             log.Info("Components Done");
-
+            
             instance = this;
             //    _serializer = new DockStateSerializer(dockContainer1);
             //    _serializer.SavePath = Application.StartupPath + Path.DirectorySeparatorChar + "FDscreen.xml";
@@ -1518,6 +1529,16 @@ namespace MissionPlanner.GCSViews
             Invoke((MethodInvoker) delegate
             {
                 routes.Markers.Clear();
+                if(Aroutes != null)
+                   Aroutes.Markers.Clear();
+                if (Broutes != null)
+                    Broutes.Markers.Clear();
+                if (Croutes != null)
+                    Croutes.Markers.Clear();
+                if (Droutes != null)
+                    Droutes.Markers.Clear();
+                if (Eroutes != null)
+                    Eroutes.Markers.Clear();
             });
         }
 
@@ -1555,6 +1576,16 @@ namespace MissionPlanner.GCSViews
             Invoke((MethodInvoker) delegate
             {
                 gMapControl1.UpdateRouteLocalPosition(route);
+                if(Atrackroute != null)
+                 gMapControl1.UpdateRouteLocalPosition(Atrackroute);
+                if (Btrackroute != null)
+                    gMapControl1.UpdateRouteLocalPosition(Btrackroute);
+                if (Ctrackroute != null)
+                    gMapControl1.UpdateRouteLocalPosition(Ctrackroute);
+                if (Dtrackroute != null)
+                    gMapControl1.UpdateRouteLocalPosition(Dtrackroute);
+                if (Etrackroute != null)
+                    gMapControl1.UpdateRouteLocalPosition(Etrackroute);
             });
         }
 
@@ -4529,7 +4560,11 @@ namespace MissionPlanner.GCSViews
                 GStreamer.Stop(gst);
             }
         }
-
+        public void autoguideform()
+        {
+            AutoGuide = new Auto_Guide.Auto_Guide();
+            AutoGuide.Show();
+        }
 
         private void UpdateMap_Button_Click(object sender, EventArgs e)
         {
@@ -4562,8 +4597,7 @@ namespace MissionPlanner.GCSViews
             if (Dpointlist.Count != 0)
                 WP_Marker_Route("D", Dpointlist);
             if (Epointlist.Count != 0)
-                WP_Marker_Route("E", Epointlist);
-     
+                WP_Marker_Route("E", Epointlist);         
         }
         private void WP_Marker_Route(string group, List<PointLatLngAlt> sourcepointlist)
         {
@@ -4573,38 +4607,29 @@ namespace MissionPlanner.GCSViews
                                     (int)sourcepointlist[i + 1].Alt, Color.White, polygons);
                 wpnumber++;
             }
-            //GMapRoute Ahomeroute = new GMapRoute("homepath");
+
             Ahomeroute.Stroke = new Pen(Color.Yellow, 2);
             Ahomeroute.Stroke.DashStyle = DashStyle.Dash;
-            //GMapRoute Awppath = new GMapRoute("wp path");
             Awppath.Stroke = new Pen(Color.Yellow, 4);
             Awppath.Stroke.DashStyle = DashStyle.Custom;
 
-            //GMapRoute Bhomeroute = new GMapRoute("homepath");
             Bhomeroute.Stroke = new Pen(Color.Red, 2);
             Bhomeroute.Stroke.DashStyle = DashStyle.Dash;
-            //GMapRoute Bwppath = new GMapRoute("wp path");
             Bwppath.Stroke = new Pen(Color.Red, 4);
             Bwppath.Stroke.DashStyle = DashStyle.Custom;
 
-            //GMapRoute Chomeroute = new GMapRoute("homepath");
             Chomeroute.Stroke = new Pen(Color.Cyan, 2);
             Chomeroute.Stroke.DashStyle = DashStyle.Dash;
-            //GMapRoute Cwppath = new GMapRoute("wp path");
             Cwppath.Stroke = new Pen(Color.Cyan, 4);
             Cwppath.Stroke.DashStyle = DashStyle.Custom;
 
-            //GMapRoute Dhomeroute = new GMapRoute("homepath");
             Dhomeroute.Stroke = new Pen(Color.Tomato, 2);
             Dhomeroute.Stroke.DashStyle = DashStyle.Dash;
-            //GMapRoute Dwppath = new GMapRoute("wp path");
             Dwppath.Stroke = new Pen(Color.Tomato, 4);
             Dwppath.Stroke.DashStyle = DashStyle.Custom;
 
-            //GMapRoute Ehomeroute = new GMapRoute("homepath");
             Ehomeroute.Stroke = new Pen(Color.DeepPink, 2);
             Ehomeroute.Stroke.DashStyle = DashStyle.Dash;
-            //GMapRoute Ewppath = new GMapRoute("wp path");
             Ewppath.Stroke = new Pen(Color.DeepPink, 4);
             Ewppath.Stroke.DashStyle = DashStyle.Custom;
 
@@ -4697,6 +4722,16 @@ namespace MissionPlanner.GCSViews
             bool thread = true;
             DateTime tracklast = DateTime.Now.AddSeconds(0);
             DateTime mapupdate = DateTime.Now.AddSeconds(0);
+            Aroutes = new GMapOverlay("routes");
+            gMapControl1.Overlays.Add(Aroutes);
+            Broutes = new GMapOverlay("routes");
+            gMapControl1.Overlays.Add(Broutes);
+            Croutes = new GMapOverlay("routes");
+            gMapControl1.Overlays.Add(Croutes);
+            Droutes = new GMapOverlay("routes");
+            gMapControl1.Overlays.Add(Droutes);
+            Eroutes = new GMapOverlay("routes");
+            gMapControl1.Overlays.Add(Eroutes);
             while (thread)
             {
                 
@@ -4717,34 +4752,90 @@ namespace MissionPlanner.GCSViews
                         setMapBearing();
                     }
 
-                    if (route == null)
+                    if(Atrackroute == null)
                     {
-                        route = new GMapRoute(trackPoints, "track");
-                        routes.Routes.Add(route);
+                        Atrackroute = new GMapRoute(trackPoints, "track");
+                        Aroutes.Routes.Add(Atrackroute);
                     }
-
-                    PointLatLng currentloc = new PointLatLng(MainV2.comPort.MAV.cs.lat, MainV2.comPort.MAV.cs.lng);
-
+                    if (Btrackroute == null)
+                    {
+                        Btrackroute = new GMapRoute(trackPoints, "track");
+                        Broutes.Routes.Add(Btrackroute);
+                    }
+                    if (Ctrackroute == null)
+                    {
+                        Ctrackroute = new GMapRoute(trackPoints, "track");
+                        Croutes.Routes.Add(Ctrackroute);
+                    }
+                    if (Dtrackroute == null)
+                    {
+                        Dtrackroute = new GMapRoute(trackPoints, "track");
+                        Droutes.Routes.Add(Dtrackroute);
+                    }
+                    if (Etrackroute == null)
+                    {
+                        Etrackroute = new GMapRoute(trackPoints, "track");
+                        Eroutes.Routes.Add(Etrackroute);
+                    }
+                    PointLatLng Acurrentloc = new PointLatLng(AutoGuide.Acopter.MAV.cs.lat, AutoGuide.Acopter.MAV.cs.lng);
+                    PointLatLng Bcurrentloc = new PointLatLng(AutoGuide.Bcopter.MAV.cs.lat, AutoGuide.Bcopter.MAV.cs.lng);
+                    PointLatLng Ccurrentloc = new PointLatLng(AutoGuide.Ccopter.MAV.cs.lat, AutoGuide.Ccopter.MAV.cs.lng);
+                    PointLatLng Dcurrentloc = new PointLatLng(AutoGuide.Dcopter.MAV.cs.lat, AutoGuide.Dcopter.MAV.cs.lng);
+                    PointLatLng Ecurrentloc = new PointLatLng(AutoGuide.Ecopter.MAV.cs.lat, AutoGuide.Ecopter.MAV.cs.lng);
                     gMapControl1.HoldInvalidation = true;
-
                     int numTrackLength = Settings.Instance.GetInt32("NUM_tracklength");
                     // maintain route history length
-                    if (route.Points.Count > numTrackLength)
+                    if (Atrackroute.Points.Count > numTrackLength)
                     {
-                        route.Points.RemoveRange(0,
-                        route.Points.Count - numTrackLength);
+                        Atrackroute.Points.RemoveRange(0,
+                        Atrackroute.Points.Count - numTrackLength);
+                    }
+                    if (Btrackroute.Points.Count > numTrackLength)
+                    {
+                        Btrackroute.Points.RemoveRange(0,
+                        Btrackroute.Points.Count - numTrackLength);
+                    }
+                    if (Ctrackroute.Points.Count > numTrackLength)
+                    {
+                        Ctrackroute.Points.RemoveRange(0,
+                        Ctrackroute.Points.Count - numTrackLength);
+                    }
+                    if (Dtrackroute.Points.Count > numTrackLength)
+                    {
+                        Dtrackroute.Points.RemoveRange(0,
+                        Dtrackroute.Points.Count - numTrackLength);
+                    }
+                    if (Etrackroute.Points.Count > numTrackLength)
+                    {
+                        Etrackroute.Points.RemoveRange(0,
+                        Etrackroute.Points.Count - numTrackLength);
                     }
                     // add new route point
-                    if (MainV2.comPort.MAV.cs.lat != 0 && MainV2.comPort.MAV.cs.lng != 0 )
+                    if (AutoGuide.Acopter.MAV.cs.lat != 0 && AutoGuide.Acopter.MAV.cs.lng != 0)
                     {
-                        route.Points.Add(currentloc);
+                        Atrackroute.Points.Add(Acurrentloc);
                     }
-
+                    if (AutoGuide.Bcopter.MAV.cs.lat != 0 && AutoGuide.Bcopter.MAV.cs.lng != 0)
+                    {
+                        Btrackroute.Points.Add(Bcurrentloc);
+                    }
+                    if (AutoGuide.Ccopter.MAV.cs.lat != 0 && AutoGuide.Ccopter.MAV.cs.lng != 0)
+                    {
+                        Ctrackroute.Points.Add(Ccurrentloc);
+                    }
+                    if (AutoGuide.Dcopter.MAV.cs.lat != 0 && AutoGuide.Dcopter.MAV.cs.lng != 0)
+                    {
+                        Dtrackroute.Points.Add(Dcurrentloc);
+                    }
+                    if (AutoGuide.Ecopter.MAV.cs.lat != 0 && AutoGuide.Ecopter.MAV.cs.lng != 0)
+                    {
+                        Etrackroute.Points.Add(Ecurrentloc);
+                    }
                     if (!this.IsHandleCreated)
                         continue;
 
                     updateRoutePosition();
-
+                    
 
                     // update programed wp course
                    
@@ -4752,7 +4843,7 @@ namespace MissionPlanner.GCSViews
                     updateClearRoutesMarkers();
 
                     // add this after the mav icons are drawn
-                    if (MainV2.comPort.MAV.cs.MovingBase != null)
+                    /*if (MainV2.comPort.MAV.cs.MovingBase != null)
                     {
                         addMissionRouteMarker(new GMarkerGoogle(currentloc, GMarkerGoogleType.blue_dot)
                         {
@@ -4760,8 +4851,7 @@ namespace MissionPlanner.GCSViews
                             ToolTipText = "Moving Base",
                             ToolTipMode = MarkerTooltipMode.OnMouseOver
                         });
-                    }
-
+                    }*/
 
                     /*lock (MainV2.instance.adsblock)
                     {
@@ -4798,48 +4888,135 @@ namespace MissionPlanner.GCSViews
                         }
                     }*/
 
-
-                    if (route.Points.Count > 0)
+                    if (Atrackroute.Points.Count > 0)
                     {
                         // add primary route icon
-
                         // draw guide mode point for only main mav
-                        if (MainV2.comPort.MAV.cs.mode.ToLower() == "guided" && MainV2.comPort.MAV.GuidedMode.x != 0)
+                        if (AutoGuide.Acopter.MAV.cs.mode.ToLower() == "guided" && AutoGuide.Acopter.MAV.GuidedMode.x != 0)
                         {
-                            addpolygonmarker("Guided Mode", MainV2.comPort.MAV.GuidedMode.y,
-                                MainV2.comPort.MAV.GuidedMode.x, (int)MainV2.comPort.MAV.GuidedMode.z, Color.Blue,
-                                routes);
+                            addpolygonmarker("Guided Mode", AutoGuide.Acopter.MAV.GuidedMode.y,
+                                AutoGuide.Acopter.MAV.GuidedMode.x, (int)AutoGuide.Acopter.MAV.GuidedMode.z, Color.Blue,
+                                Aroutes);
                         }
-
-                        // draw all icons for all connected mavs
-                        foreach (var port in MainV2.Comports.ToArray())
-                        {
-                            // draw the mavs seen on this port
-                            foreach (var MAV in port.MAVlist)
-                            {
-                                var marker = Common.getMAVMarker(MAV);
-
-                                if (marker.Position.Lat == 0 && marker.Position.Lng == 0)
-                                    continue;
-
-                                addMissionRouteMarker(marker);
-                            }
-                        }
-
-                        if (route.Points.Count == 0 || route.Points[route.Points.Count - 1].Lat != 0 &&
+                        if (Atrackroute.Points.Count == 0 || Atrackroute.Points[Atrackroute.Points.Count - 1].Lat != 0 &&
                             (mapupdate.AddSeconds(3) < DateTime.Now) && CHK_autopan.Checked)
                         {
-                            updateMapPosition(currentloc);
+                            updateMapPosition(Acurrentloc);
                             mapupdate = DateTime.Now;
                         }
 
-                        if (route.Points.Count == 1 && gMapControl1.Zoom == 3) // 3 is the default load zoom
+                        if (Atrackroute.Points.Count == 1 && gMapControl1.Zoom == 3) // 3 is the default load zoom
                         {
-                            updateMapPosition(currentloc);
+                            updateMapPosition(Acurrentloc);
                             updateMapZoom(17);
                         }
                     }
+                    if (Btrackroute.Points.Count > 0)
+                    {
+                        // add primary route icon
+                        // draw guide mode point for only main mav
+                        if (AutoGuide.Bcopter.MAV.cs.mode.ToLower() == "guided" && AutoGuide.Bcopter.MAV.GuidedMode.x != 0)
+                        {
+                            addpolygonmarker("Guided Mode", AutoGuide.Bcopter.MAV.GuidedMode.y,
+                                AutoGuide.Bcopter.MAV.GuidedMode.x, (int)AutoGuide.Bcopter.MAV.GuidedMode.z, Color.Blue,
+                                Aroutes);
+                        }
+                        if (Btrackroute.Points.Count == 0 || Btrackroute.Points[Btrackroute.Points.Count - 1].Lat != 0 &&
+                            (mapupdate.AddSeconds(3) < DateTime.Now) && CHK_autopan.Checked)
+                        {
+                            updateMapPosition(Bcurrentloc);
+                            mapupdate = DateTime.Now;
+                        }
 
+                        if (Btrackroute.Points.Count == 1 && gMapControl1.Zoom == 3) // 3 is the default load zoom
+                        {
+                            updateMapPosition(Bcurrentloc);
+                            updateMapZoom(17);
+                        }
+                    }
+                    if (Ctrackroute.Points.Count > 0)
+                    {
+                        // add primary route icon
+                        // draw guide mode point for only main mav
+                        if (AutoGuide.Ccopter.MAV.cs.mode.ToLower() == "guided" && AutoGuide.Ccopter.MAV.GuidedMode.x != 0)
+                        {
+                            addpolygonmarker("Guided Mode", AutoGuide.Ccopter.MAV.GuidedMode.y,
+                                AutoGuide.Ccopter.MAV.GuidedMode.x, (int)AutoGuide.Ccopter.MAV.GuidedMode.z, Color.Blue,
+                                Aroutes);
+                        }
+                        if (Ctrackroute.Points.Count == 0 || Ctrackroute.Points[Ctrackroute.Points.Count - 1].Lat != 0 &&
+                            (mapupdate.AddSeconds(3) < DateTime.Now) && CHK_autopan.Checked)
+                        {
+                            updateMapPosition(Ccurrentloc);
+                            mapupdate = DateTime.Now;
+                        }
+
+                        if (Ctrackroute.Points.Count == 1 && gMapControl1.Zoom == 3) // 3 is the default load zoom
+                        {
+                            updateMapPosition(Ccurrentloc);
+                            updateMapZoom(17);
+                        }
+                    }
+                    if (Dtrackroute.Points.Count > 0)
+                    {
+                        // add primary route icon
+                        // draw guide mode point for only main mav
+                        if (AutoGuide.Dcopter.MAV.cs.mode.ToLower() == "guided" && AutoGuide.Dcopter.MAV.GuidedMode.x != 0)
+                        {
+                            addpolygonmarker("Guided Mode", AutoGuide.Dcopter.MAV.GuidedMode.y,
+                                AutoGuide.Dcopter.MAV.GuidedMode.x, (int)AutoGuide.Dcopter.MAV.GuidedMode.z, Color.Blue,
+                                Aroutes);
+                        }
+                        if (Dtrackroute.Points.Count == 0 || Dtrackroute.Points[Dtrackroute.Points.Count - 1].Lat != 0 &&
+                            (mapupdate.AddSeconds(3) < DateTime.Now) && CHK_autopan.Checked)
+                        {
+                            updateMapPosition(Dcurrentloc);
+                            mapupdate = DateTime.Now;
+                        }
+
+                        if (Dtrackroute.Points.Count == 1 && gMapControl1.Zoom == 3) // 3 is the default load zoom
+                        {
+                            updateMapPosition(Dcurrentloc);
+                            updateMapZoom(17);
+                        }
+                    }
+                    if (Etrackroute.Points.Count > 0)
+                    {
+                        // add primary route icon
+                        // draw guide mode point for only main mav
+                        if (AutoGuide.Ecopter.MAV.cs.mode.ToLower() == "guided" && AutoGuide.Ecopter.MAV.GuidedMode.x != 0)
+                        {
+                            addpolygonmarker("Guided Mode", AutoGuide.Ecopter.MAV.GuidedMode.y,
+                                AutoGuide.Ecopter.MAV.GuidedMode.x, (int)AutoGuide.Ecopter.MAV.GuidedMode.z, Color.Blue,
+                                Aroutes);
+                        }
+                        if (Etrackroute.Points.Count == 0 || Etrackroute.Points[Etrackroute.Points.Count - 1].Lat != 0 &&
+                            (mapupdate.AddSeconds(3) < DateTime.Now) && CHK_autopan.Checked)
+                        {
+                            updateMapPosition(Ecurrentloc);
+                            mapupdate = DateTime.Now;
+                        }
+
+                        if (Etrackroute.Points.Count == 1 && gMapControl1.Zoom == 3) // 3 is the default load zoom
+                        {
+                            updateMapPosition(Ecurrentloc);
+                            updateMapZoom(17);
+                        }
+                    }
+                    // draw all icons for all connected mavs
+                    foreach (var port in MainV2.Comports.ToArray())
+                    {
+                        // draw the mavs seen on this port
+                        foreach (var MAV in port.MAVlist)
+                        {
+                            var marker = Common.getMAVMarker(MAV);
+
+                            if (marker.Position.Lat == 0 && marker.Position.Lng == 0)
+                                continue;
+
+                            addMissionRouteMarker(marker);
+                        }
+                    }
                     gMapControl1.HoldInvalidation = false;
 
                     if (gMapControl1.Visible)
@@ -4849,60 +5026,8 @@ namespace MissionPlanner.GCSViews
 
                     tracklast = DateTime.Now;
                 }
-                /* if (tracklast.AddSeconds(1.2) < DateTime.Now)
-                {
-                    // show disable joystick button
-                    if (MainV2.joystick != null && MainV2.joystick.enabled)
-                    {
-                        this.Invoke((MethodInvoker)delegate
-                        {
-                            but_disablejoystick.Visible = true;
-                        });
-                    }
-
-                    if (Settings.Instance.GetBoolean("CHK_maprotation"))
-                    {
-                        // dont holdinvalidation here
-                        setMapBearing();
-                    }
-
-                    if (route == null)
-                    {
-                        route = new GMapRoute(trackPoints, "track");
-                        routes.Routes.Add(route);
-                    }
-
-                    PointLatLng currentloc = new PointLatLng(MainV2.comPort.MAV.cs.lat, MainV2.comPort.MAV.cs.lng);
-
-                    gMapControl1.HoldInvalidation = true;
-
-                    int numTrackLength = Settings.Instance.GetInt32("NUM_tracklength");
-                    // maintain route history length
-                    if (route.Points.Count > numTrackLength)
-                    {
-                        route.Points.RemoveRange(0,
-                            route.Points.Count - numTrackLength);
-                    }
-                    // add new route point
-                    if (MainV2.comPort.MAV.cs.lat != 0 && MainV2.comPort.MAV.cs.lng != 0)
-                    {
-                        route.Points.Add(currentloc);
-                    }
-
-                    updateRoutePosition();
-                }*/
-                /*PointLatLng currentloc = new PointLatLng(MainV2.comPort.MAV.cs.lat, MainV2.comPort.MAV.cs.lng);
-                int numTrackLength = Settings.Instance.GetInt32("NUM_tracklength");
-                if (route.Points.Count > numTrackLength)
-                {
-                    route.Points.RemoveRange(0,
-                    route.Points.Count - numTrackLength);
-                }
-                if (MainV2.comPort.MAV.cs.lat != 0 && MainV2.comPort.MAV.cs.lng != 0)
-                {
-                    route.Points.Add(currentloc);
-                }*/
-                Thread.Sleep(400);
+               
+                Thread.Sleep(200);
             }
         }
     }

@@ -7485,10 +7485,10 @@ Column 1: Field type (RALLY is the only one at the moment -- may have RALLY_LAND
         }
         public void autoguideform()
         {
-            AutoGuide = new Auto_Guide.Auto_Guide(this);
-            AutoGuide.Show();
+            // AutoGuide = new Auto_Guide.Auto_Guide(this);
+            AutoGuide = new Auto_Guide.Auto_Guide();
+            //AutoGuide.Show();
         }
-  
         public static void Receivelist(ref List<PointLatLngAlt> outputApointlist, ref List<PointLatLngAlt> outputBpointlist, ref List<PointLatLngAlt> outputCpointlist
                                         , ref List<PointLatLngAlt> outputDpointlist,ref List<PointLatLngAlt> outputEpointlist)    
         {

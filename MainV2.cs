@@ -3676,7 +3676,8 @@ namespace MissionPlanner
 
         private void AutoGuide_Click(object sender, EventArgs e)
         {
-            FlightPlanner.autoguideform();
+            FlightData.autoguideform();
+            //FlightPlanner.autoguideform();
         }
     }
 }

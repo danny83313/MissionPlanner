@@ -91,7 +91,6 @@
             // 
             // Connection_Select
             // 
-            this.Connection_Select.DataSource = this.bindingSource1;
             this.Connection_Select.FormattingEnabled = true;
             this.Connection_Select.Location = new System.Drawing.Point(155, 12);
             this.Connection_Select.Name = "Connection_Select";

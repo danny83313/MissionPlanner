@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using MissionPlanner.Utilities; // Locationwp function
-using MissionPlanner.GCSViews;  // FlightPlanner.cs function
+using MissionPlanner.GCSViews;  // FlightPlanner.cs FlightData.cs function
 using GMap.NET;   // PointLatLng function
 using System.Threading;
 
@@ -59,10 +59,12 @@ namespace MissionPlanner.Auto_Guide
         internal MAVLinkInterface Ccopter = null;
         internal MAVLinkInterface Dcopter = null;
         internal MAVLinkInterface Ecopter = null;
-        public Auto_Guide(FlightPlanner flightplannerform)
+        public Auto_Guide()
+        //public Auto_Guide(FlightPlanner flightplannerform)
         {
             InitializeComponent();
-            this.Tag = flightplannerform;
+            //this.Tag = flightplannerform;
+            
             bindingSource1.DataSource = MainV2.Comports;
 
             Connection_Select.DataSource = bindingSource1;
@@ -695,7 +697,5 @@ namespace MissionPlanner.Auto_Guide
             }
             ((Button)sender).Enabled = true;
         }
-
-        
     }
 }

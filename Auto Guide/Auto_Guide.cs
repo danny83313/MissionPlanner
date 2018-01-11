@@ -146,6 +146,11 @@ namespace MissionPlanner.Auto_Guide
             if (threadrun == true)
             {
                 threadrun = false;
+                Athread = false;
+                Bthread = false;
+                Cthread = false;
+                Dthread = false;
+                Ethread = false;
                 Button_start.Text = Strings.Start;
                 return;
             }
@@ -175,37 +180,31 @@ namespace MissionPlanner.Auto_Guide
 
             while (threadrun)
             {
-                if (Athread == false && Acopter != null)
+                if (Athread == false && Acopter != null && Acopter.MAV.cs.mode != "Brake")
                 {
                     Athread = true;
                     new System.Threading.Thread(ACopter) { IsBackground = true }.Start(); 
                 }
-                if (Bthread == false && Bcopter != null)
+                if (Bthread == false && Bcopter != null && Bcopter.MAV.cs.mode != "Brake")
                 {
                     Bthread = true;
                     new System.Threading.Thread(BCopter) { IsBackground = true }.Start();
                 }
-                if (Cthread == false && Ccopter != null)
+                if (Cthread == false && Ccopter != null && Ccopter.MAV.cs.mode != "Brake")
                 {
                     Cthread = true;
                     new System.Threading.Thread(CCopter) { IsBackground = true }.Start();
                 }
-                if (Dthread == false && Dcopter != null)
+                if (Dthread == false && Dcopter != null && Dcopter.MAV.cs.mode != "Brake")
                 {
                     Dthread = true;
                     new System.Threading.Thread(DCopter) { IsBackground = true }.Start();
                 }
-                if (Ethread == false && Ecopter != null)
+                if (Ethread == false && Ecopter != null && Ecopter.MAV.cs.mode != "Brake")
                 {
                     Ethread = true;
                     new System.Threading.Thread(ECopter) { IsBackground = true }.Start();
                 }
-                //new System.Threading.Thread(ACopter) { IsBackground = true }.Start();
-                //new System.Threading.Thread(BCopter) { IsBackground = true }.Start();
-                //new System.Threading.Thread(CCopter) { IsBackground = true }.Start();
-                //ACopter();
-                //BCopter();
-                //CCopter();
                 System.Threading.Thread.Sleep(450);
                 /*if (Awpnumber == Aendwpnum && Bwpnumber == Bendwpnum && Cwpnumber == Cendwpnum)
                 {
@@ -215,6 +214,11 @@ namespace MissionPlanner.Auto_Guide
                 if(Aend==true && Bend==true && Cend==true && Dend==true && Eend==true)
                 {
                     threadrun = false;
+                    Athread = false;
+                    Bthread = false;
+                    Cthread = false;
+                    Dthread = false;
+                    Ethread = false;
                     Invoke(change_text);
                 }
             }
@@ -226,7 +230,6 @@ namespace MissionPlanner.Auto_Guide
                 CustomMessageBox.Show(Strings.PleaseConnect, Strings.ERROR);
                 return;
             }
-
             for (int i = 0; i < Apointlist.Count - 2; i++)
             {
                 gotohere.id = (ushort)MAVLink.MAV_CMD.WAYPOINT;
@@ -249,69 +252,16 @@ namespace MissionPlanner.Auto_Guide
                     wpdistance = Acopter.MAV.cs.wp_dist;
                     Thread.Sleep(450);
                 } while (wpdistance >= 2);
+                if (Acopter.MAV.cs.mode == "Brake")
+                    Athread = false;
+                if (Athread == false)
+                    break;
             }
-            Acopter.setMode("RTL");
-            Aend = true;
-            /*if (!MainV2.comPort.BaseStream.IsOpen)
-            {
-                CustomMessageBox.Show(Strings.PleaseConnect, Strings.ERROR);
-                return;
-            }
-            while (Afirstwp == false && Awpnumber == 0)
-            {
-                ((FlightPlanner)this.Tag).Getwpdata(Awpnumber);
-                gotohere.id = (ushort)MAVLink.MAV_CMD.WAYPOINT;
-                //gotohere.alt = MainV2.comPort.MAV.GuidedMode.z; // back to m
-                gotohere.alt = (float)WP.Alt;
-                gotohere.lat = WP.Lat;
-                gotohere.lng = WP.Lng;
-                try
-                {
-                    Acopter.setGuidedModeWP(gotohere);
-                    Afirstwp = true;
-                }
-                catch (Exception ex)
-                {
-                    Acopter.giveComport = false;
-                    CustomMessageBox.Show(Strings.CommandFailed + ex.Message, Strings.ERROR);
-                }
-                return;
-            }
-
-            while (Awpnumber != 0 && Awpnumber < Aendwpnum && Anewwp == true)
-            {
-                ((FlightPlanner)this.Tag).Getwpdata(Awpnumber);
-                gotohere.id = (ushort)MAVLink.MAV_CMD.WAYPOINT;
-                //gotohere.alt = MainV2.comPort.MAV.GuidedMode.z; // back to m
-                gotohere.alt = (float)WP.Alt;
-                gotohere.lat = WP.Lat;
-                gotohere.lng = WP.Lng;
-
-                try
-                {
-                    Acopter.setGuidedModeWP(gotohere);
-                    Anewwp = false;
-
-                }
-                catch (Exception ex)
-                {
-                    Acopter.giveComport = false;
-                    CustomMessageBox.Show(Strings.CommandFailed + ex.Message, Strings.ERROR);
-                }
-                return;
-            }
-            float wpdistance = Acopter.MAV.cs.wp_dist;
-            while (Afirstwp == true && wpdistance <= 2 && wpdistance > 0 && Awpnumber < Aendwpnum)
-            {
-                Awpnumber++;
-                Anewwp = true;
-                break;
-            }
-            while (Awpnumber == Aendwpnum)
+            if (Athread == true)
             {
                 Acopter.setMode("RTL");
-                break;
-            }*/
+                Aend = true;
+            }
         }
         private void BCopter()
         {
@@ -343,69 +293,17 @@ namespace MissionPlanner.Auto_Guide
                     wpdistance = Bcopter.MAV.cs.wp_dist;
                     Thread.Sleep(450);
                 } while (wpdistance >= 2);
+                if (Bcopter.MAV.cs.mode == "Brake")
+                    Bthread = false;
+                if (Bthread == false)
+                    break;
             }
-            Bcopter.setMode("RTL");
-            Bend = true;
-            /*if (!MainV2.comPort.BaseStream.IsOpen)
-            {
-                CustomMessageBox.Show(Strings.PleaseConnect, Strings.ERROR);
-                return;
-            }
-            while (Bfirstwp == false && Bwpnumber != 0)
-            {
-                ((FlightPlanner)this.Tag).Getwpdata(Bwpnumber);
-                gotohere.id = (ushort)MAVLink.MAV_CMD.WAYPOINT;
-                //gotohere.alt = MainV2.comPort.MAV.GuidedMode.z; // back to m
-                gotohere.alt = (float)WP.Alt;
-                gotohere.lat = WP.Lat;
-                gotohere.lng = WP.Lng;
-                try
-                {
-                    Bcopter.setGuidedModeWP(gotohere);
-                    Bfirstwp = true;
-                }
-                catch (Exception ex)
-                {
-                    Bcopter.giveComport = false;
-                    CustomMessageBox.Show(Strings.CommandFailed + ex.Message, Strings.ERROR);
-                }
-                return;
-            }
-
-            while (Bwpnumber != 0 && Bwpnumber < Bendwpnum && Bnewwp == true)
-            {
-                ((FlightPlanner)this.Tag).Getwpdata(Bwpnumber);
-                gotohere.id = (ushort)MAVLink.MAV_CMD.WAYPOINT;
-                //gotohere.alt = MainV2.comPort.MAV.GuidedMode.z; // back to m
-                gotohere.alt = (float)WP.Alt;
-                gotohere.lat = WP.Lat;
-                gotohere.lng = WP.Lng;
-
-                try
-                {
-                    Bcopter.setGuidedModeWP(gotohere);
-                    Bnewwp = false;
-
-                }
-                catch (Exception ex)
-                {
-                    Bcopter.giveComport = false;
-                    CustomMessageBox.Show(Strings.CommandFailed + ex.Message, Strings.ERROR);
-                }
-                return;
-            }
-            float wpdistance = Bcopter.MAV.cs.wp_dist;
-            while (Bfirstwp == true && wpdistance <= 2 && wpdistance > 0 && Bwpnumber < Bendwpnum)
-            {
-                Bwpnumber++;
-                Bnewwp = true;
-                break;
-            }
-            while (Bwpnumber == Bendwpnum)
+            if (Bthread == true)
             {
                 Bcopter.setMode("RTL");
-                break;
-            }*/
+                Bend = true;
+            }
+           
         }
         private void CCopter()
         {
@@ -437,69 +335,17 @@ namespace MissionPlanner.Auto_Guide
                     wpdistance = Ccopter.MAV.cs.wp_dist;
                     Thread.Sleep(450);
                 } while (wpdistance >= 2);
+                if (Ccopter.MAV.cs.mode == "Brake")
+                    Cthread = false;
+                if (Cthread == false)
+                    break;
             }
-            Ccopter.setMode("RTL");
-            Cend = true;
-            /*if (!MainV2.comPort.BaseStream.IsOpen)
-            {
-                CustomMessageBox.Show(Strings.PleaseConnect, Strings.ERROR);
-                return;
-            }
-            while (Cfirstwp == false && Cwpnumber != 0)
-            {
-                ((FlightPlanner)this.Tag).Getwpdata(Cwpnumber);
-                gotohere.id = (ushort)MAVLink.MAV_CMD.WAYPOINT;
-                //gotohere.alt = MainV2.comPort.MAV.GuidedMode.z; // back to m
-                gotohere.alt = (float)WP.Alt;
-                gotohere.lat = WP.Lat;
-                gotohere.lng = WP.Lng;
-                try
-                {
-                    Ccopter.setGuidedModeWP(gotohere);
-                    Cfirstwp = true;
-                }
-                catch (Exception ex)
-                {
-                    Ccopter.giveComport = false;
-                    CustomMessageBox.Show(Strings.CommandFailed + ex.Message, Strings.ERROR);
-                }
-                return;
-            }
-
-            while (Cwpnumber != 0 && Cwpnumber < Cendwpnum && Cnewwp == true)
-            {
-                ((FlightPlanner)this.Tag).Getwpdata(Cwpnumber);
-                gotohere.id = (ushort)MAVLink.MAV_CMD.WAYPOINT;
-                //gotohere.alt = MainV2.comPort.MAV.GuidedMode.z; // back to m
-                gotohere.alt = (float)WP.Alt;
-                gotohere.lat = WP.Lat;
-                gotohere.lng = WP.Lng;
-
-                try
-                {
-                    Ccopter.setGuidedModeWP(gotohere);
-                    Cnewwp = false;
-
-                }
-                catch (Exception ex)
-                {
-                    Ccopter.giveComport = false;
-                    CustomMessageBox.Show(Strings.CommandFailed + ex.Message, Strings.ERROR);
-                }
-                return;
-            }
-            float wpdistance = Ccopter.MAV.cs.wp_dist;
-            while (Cfirstwp == true && wpdistance <= 2 && wpdistance > 0 && Cwpnumber < Cendwpnum)
-            {
-                Cwpnumber++;
-                Cnewwp = true;
-                break;
-            }
-            while (Cwpnumber == Cendwpnum)
+            if (Cthread == true)
             {
                 Ccopter.setMode("RTL");
-                break;
-            }*/
+                Cend = true;
+            }
+          
         }
         private void DCopter()
         {
@@ -531,9 +377,16 @@ namespace MissionPlanner.Auto_Guide
                     wpdistance = Dcopter.MAV.cs.wp_dist;
                     Thread.Sleep(450);
                 } while (wpdistance >= 2);
+                if (Dcopter.MAV.cs.mode == "Brake")
+                    Dthread = false;
+                if (Dthread == false)
+                    break;
             }
-            Dcopter.setMode("RTL");
-            Dend = true;
+            if (Dthread == true)
+            {
+                Dcopter.setMode("RTL");
+                Dend = true;
+            }
         }
         private void ECopter()
         {
@@ -565,9 +418,16 @@ namespace MissionPlanner.Auto_Guide
                     wpdistance = Ecopter.MAV.cs.wp_dist;
                     Thread.Sleep(450);
                 } while (wpdistance >= 2);
+                if (Ecopter.MAV.cs.mode == "Brake")
+                    Ethread = false;
+                if (Ethread == false)
+                    break;
             }
-            Ecopter.setMode("RTL");
-            Eend = true;
+            if (Ethread == true)
+            {
+                Ecopter.setMode("RTL");
+                Eend = true;
+            }
         }
         private void Armed_All_Click(object sender, EventArgs e)
         {
@@ -578,34 +438,7 @@ namespace MissionPlanner.Auto_Guide
                     MAV.parent.doARM(MAV.sysid, MAV.compid, true);
                 }
             }
-            /*try
-            {
-                if (Acopter.MAV.cs.armed)
-                    if (CustomMessageBox.Show("Are you sure you want to Disarm?", "Disarm?", MessageBoxButtons.YesNo) !=
-                        DialogResult.Yes)
-                        return;
-                if (Bcopter.MAV.cs.armed)
-                    if (CustomMessageBox.Show("Are you sure you want to Disarm?", "Disarm?", MessageBoxButtons.YesNo) !=
-                        DialogResult.Yes)
-                        return;
-                if (Ccopter.MAV.cs.armed)
-                    if (CustomMessageBox.Show("Are you sure you want to Disarm?", "Disarm?", MessageBoxButtons.YesNo) !=
-                        DialogResult.Yes)
-                        return;
-                bool Aans = Acopter.doARM(!Acopter.MAV.cs.armed);
-                bool Bans = Bcopter.doARM(!Acopter.MAV.cs.armed);
-                bool Cans = Ccopter.doARM(!Acopter.MAV.cs.armed);
-                if (Aans == false)
-                    CustomMessageBox.Show(Strings.ErrorRejectedByMAV, Strings.ERROR);
-                if (Bans == false)
-                    CustomMessageBox.Show(Strings.ErrorRejectedByMAV, Strings.ERROR);
-                if (Cans == false)
-                    CustomMessageBox.Show(Strings.ErrorRejectedByMAV, Strings.ERROR);
-            }
-            catch
-            {
-                CustomMessageBox.Show(Strings.ErrorNoResponce, Strings.ERROR);
-            }*/
+          
         }
 
         private void Takeoff_All_Click(object sender, EventArgs e)
@@ -646,40 +479,7 @@ namespace MissionPlanner.Auto_Guide
                     MAV.parent.doCommand(MAV.sysid, MAV.compid, MAVLink.MAV_CMD.TAKEOFF, 0, 0, 0, 0, 0, 0, 5);
                 }
             }
-            /*try
-            {
-                Acopter.setMode("Stabilize");
-                Bcopter.setMode("Stabilize");
-                Ccopter.setMode("Stabilize");
-                if (Acopter.doARM(true))
-                {
-                    Acopter.setMode("GUIDED");
-
-                    //Thread.Sleep(300);
-
-                    Acopter.doCommand(MAVLink.MAV_CMD.TAKEOFF, 0, 0, 0, 0, 0, 0, 5);
-                }
-                if (Bcopter.doARM(true))
-                {
-                    Bcopter.setMode("GUIDED");
-
-                    //Thread.Sleep(300);
-
-                    Bcopter.doCommand(MAVLink.MAV_CMD.TAKEOFF, 0, 0, 0, 0, 0, 0, 5);
-                }
-                if (Ccopter.doARM(true))
-                {
-                    Ccopter.setMode("GUIDED");
-
-                    //Thread.Sleep(300);
-
-                    Ccopter.doCommand(MAVLink.MAV_CMD.TAKEOFF, 0, 0, 0, 0, 0, 0, 5);
-                }
-            }
-            catch (Exception ex)
-            {
-                CustomMessageBox.Show(ex.ToString());
-            }*/
+           
         }
 
         private void RTL_All_Click(object sender, EventArgs e)

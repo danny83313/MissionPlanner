@@ -4777,11 +4777,31 @@ namespace MissionPlanner.GCSViews
                         Etrackroute = new GMapRoute(trackPoints, "track");
                         Eroutes.Routes.Add(Etrackroute);
                     }
-                    PointLatLng Acurrentloc = new PointLatLng(AutoGuide.Acopter.MAV.cs.lat, AutoGuide.Acopter.MAV.cs.lng);
-                    PointLatLng Bcurrentloc = new PointLatLng(AutoGuide.Bcopter.MAV.cs.lat, AutoGuide.Bcopter.MAV.cs.lng);
-                    PointLatLng Ccurrentloc = new PointLatLng(AutoGuide.Ccopter.MAV.cs.lat, AutoGuide.Ccopter.MAV.cs.lng);
-                    PointLatLng Dcurrentloc = new PointLatLng(AutoGuide.Dcopter.MAV.cs.lat, AutoGuide.Dcopter.MAV.cs.lng);
-                    PointLatLng Ecurrentloc = new PointLatLng(AutoGuide.Ecopter.MAV.cs.lat, AutoGuide.Ecopter.MAV.cs.lng);
+                    PointLatLng Acurrentloc = new PointLatLng();
+                    PointLatLng Bcurrentloc = new PointLatLng();
+                    PointLatLng Ccurrentloc = new PointLatLng();
+                    PointLatLng Dcurrentloc = new PointLatLng();
+                    PointLatLng Ecurrentloc = new PointLatLng();
+                    if (AutoGuide.Acopter != null)
+                    {
+                        Acurrentloc = new PointLatLng(AutoGuide.Acopter.MAV.cs.lat, AutoGuide.Acopter.MAV.cs.lng);
+                    }
+                    if (AutoGuide.Bcopter != null)
+                    {
+                        Bcurrentloc = new PointLatLng(AutoGuide.Bcopter.MAV.cs.lat, AutoGuide.Bcopter.MAV.cs.lng);
+                    }
+                    if (AutoGuide.Ccopter != null)
+                    {
+                        Ccurrentloc = new PointLatLng(AutoGuide.Ccopter.MAV.cs.lat, AutoGuide.Ccopter.MAV.cs.lng);
+                    }
+                    if (AutoGuide.Dcopter != null)
+                    {
+                        Dcurrentloc = new PointLatLng(AutoGuide.Dcopter.MAV.cs.lat, AutoGuide.Dcopter.MAV.cs.lng);
+                    }
+                    if (AutoGuide.Ecopter != null)
+                    {
+                        Ecurrentloc = new PointLatLng(AutoGuide.Ecopter.MAV.cs.lat, AutoGuide.Ecopter.MAV.cs.lng);
+                    }
                     gMapControl1.HoldInvalidation = true;
                     int numTrackLength = Settings.Instance.GetInt32("NUM_tracklength");
                     // maintain route history length
@@ -4811,25 +4831,40 @@ namespace MissionPlanner.GCSViews
                         Etrackroute.Points.Count - numTrackLength);
                     }
                     // add new route point
-                    if (AutoGuide.Acopter.MAV.cs.lat != 0 && AutoGuide.Acopter.MAV.cs.lng != 0)
+                    if (AutoGuide.Acopter != null)
                     {
-                        Atrackroute.Points.Add(Acurrentloc);
+                        if (AutoGuide.Acopter.MAV.cs.lat != 0 && AutoGuide.Acopter.MAV.cs.lng != 0)
+                        {
+                            Atrackroute.Points.Add(Acurrentloc);
+                        }
                     }
-                    if (AutoGuide.Bcopter.MAV.cs.lat != 0 && AutoGuide.Bcopter.MAV.cs.lng != 0)
+                    if (AutoGuide.Bcopter != null)
                     {
-                        Btrackroute.Points.Add(Bcurrentloc);
+                        if (AutoGuide.Bcopter.MAV.cs.lat != 0 && AutoGuide.Bcopter.MAV.cs.lng != 0)
+                        {
+                            Btrackroute.Points.Add(Bcurrentloc);
+                        }
                     }
-                    if (AutoGuide.Ccopter.MAV.cs.lat != 0 && AutoGuide.Ccopter.MAV.cs.lng != 0)
+                    if (AutoGuide.Ccopter != null)
                     {
-                        Ctrackroute.Points.Add(Ccurrentloc);
+                        if (AutoGuide.Ccopter.MAV.cs.lat != 0 && AutoGuide.Ccopter.MAV.cs.lng != 0)
+                        {
+                            Ctrackroute.Points.Add(Ccurrentloc);
+                        }
                     }
-                    if (AutoGuide.Dcopter.MAV.cs.lat != 0 && AutoGuide.Dcopter.MAV.cs.lng != 0)
+                    if (AutoGuide.Dcopter != null)
                     {
-                        Dtrackroute.Points.Add(Dcurrentloc);
+                        if (AutoGuide.Dcopter.MAV.cs.lat != 0 && AutoGuide.Dcopter.MAV.cs.lng != 0)
+                        {
+                            Dtrackroute.Points.Add(Dcurrentloc);
+                        }
                     }
-                    if (AutoGuide.Ecopter.MAV.cs.lat != 0 && AutoGuide.Ecopter.MAV.cs.lng != 0)
+                    if (AutoGuide.Ecopter != null)
                     {
-                        Etrackroute.Points.Add(Ecurrentloc);
+                        if (AutoGuide.Ecopter.MAV.cs.lat != 0 && AutoGuide.Ecopter.MAV.cs.lng != 0)
+                        {
+                            Etrackroute.Points.Add(Ecurrentloc);
+                        }
                     }
                     if (!this.IsHandleCreated)
                         continue;

@@ -151,6 +151,11 @@ namespace MissionPlanner.Auto_Guide
                 Cthread = false;
                 Dthread = false;
                 Ethread = false;
+                Acopter.setMode("Brake");
+                Bcopter.setMode("Brake");
+                Ccopter.setMode("Brake");
+                Dcopter.setMode("Brake");
+                Ecopter.setMode("Brake");
                 Button_start.Text = Strings.Start;
                 return;
             }
@@ -497,5 +502,7 @@ namespace MissionPlanner.Auto_Guide
             }
             ((Button)sender).Enabled = true;
         }
+
+ 
     }
 }
